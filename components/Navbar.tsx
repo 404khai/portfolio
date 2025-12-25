@@ -19,7 +19,7 @@ export const Navbar = () => {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-zinc/80 hover:text-zinc transition-colors duration-200 text-md font-medium"
+                  className="font-figtree text-zinc/80 hover:text-zinc transition-colors duration-200 text-md font-medium"
                 >
                   /{item.name}
                 </a>

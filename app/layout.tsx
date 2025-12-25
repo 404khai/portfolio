@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Doto } from "next/font/google";
+import { Figtree, Doto, Micro_5 } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 
@@ -12,6 +12,14 @@ const doto = Doto({
   variable: "--font-doto",
   subsets: ["latin"],
 });
+
+const micro_5 = Micro_5({
+  variable: "--font-micro-5",
+  subsets: ["latin"],
+  weight: "400"
+});
+
+
 
 export const metadata: Metadata = {
   title: "ᔦꝊᔦ𐌊𐋅𐌀𐌉 - 𐌔Ꝋ𐌅𐌕Ꮤ𐌀𐌓𐌄 𐌄𐌍Ᏽ𐌉𐌍𐌄𐌄𐌓",
@@ -26,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${figtree.variable} ${doto.variable} antialiased flex flex-col items-center `}
+        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} antialiased flex flex-col items-center `}
       >
         <Navbar/>
         {children}
