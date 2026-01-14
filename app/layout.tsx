@@ -43,6 +43,9 @@ const denkOne = Denk_One({
 export const metadata: Metadata = {
   title: "404KHAI.DEV",
   description: "Creative Systems Engineer.",
+  icons: {
+    icon: '/404khai.jpeg',
+  },
 };
 
 export default function RootLayout({
