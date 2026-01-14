@@ -9,10 +9,10 @@ export const Navbar = () => {
     ];
 
   return (
-    <nav className='font-doto w-2xl h-15 flex items-center justify-between border border-dashed border-[#27272a]'>
-        <div className="border-r border-[#27272a] border-dashed p-3 h-full w-[30%] flex items-center">
+    <nav className='sticky top-0 z-50 bg-[#09090b]/80 backdrop-blur-md font-doto w-2xl h-15 flex items-center justify-between border border-dashed border-[#27272a]'>
+        <a href="/" className="border-r border-[#27272a] border-dashed p-3 h-full w-[30%] flex items-center hover:bg-zinc-900/50 transition-colors">
             <h1 className="font-irish-grover text-xl font-black tracking-tighter md:text-2xl">404KHAI</h1>
-        </div>
+        </a>
 
         <div className="flex w-[70%] h-full justify-around items-center">
             {navItems.map((item) => (
