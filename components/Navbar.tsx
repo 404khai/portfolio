@@ -5,13 +5,13 @@ export const Navbar = () => {
         { name: "Skills", href:"#home" },
         { name: "Projects", href: "#features" },
         { name: "Exp", href: "#how-it-works" },
-        { name: "Blog", href: "#pricing" },
+        { name: "Blog", href: "/blog" },
     ];
 
   return (
     <nav className='font-doto w-2xl h-15 flex items-center justify-between border border-dashed border-[#27272a]'>
         <div className="border-r border-[#27272a] border-dashed p-3 h-full w-[30%] flex items-center">
-            <h1 className="font-doto text-xl font-black tracking-tighter md:text-2xl">404KHAI</h1>
+            <h1 className="font-irish-grover text-xl font-black tracking-tighter md:text-2xl">404KHAI</h1>
         </div>
 
         <div className="flex w-[70%] h-full justify-around items-center">

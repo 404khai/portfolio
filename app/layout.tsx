@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Doto, Micro_5 } from "next/font/google";
+import { Figtree, Doto, Micro_5, Irish_Grover } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 
@@ -13,6 +13,12 @@ const doto = Doto({
   subsets: ["latin"],
 });
 
+const irishGrover = Irish_Grover({
+  variable: "--font-irish-grover",
+  subsets: ["latin"],
+  weight: "400"
+});
+
 const micro_5 = Micro_5({
   variable: "--font-micro-5",
   subsets: ["latin"],
@@ -22,8 +28,8 @@ const micro_5 = Micro_5({
 
 
 export const metadata: Metadata = {
-  title: "ᔦꝊᔦ𐌊𐋅𐌀𐌉 - 𐌔Ꝋ𐌅𐌕Ꮤ𐌀𐌓𐌄 𐌄𐌍Ᏽ𐌉𐌍𐌄𐌄𐌓",
-  description: "Built with Next.js, Tailwind CSS, and TypeScript.",
+  title: "404KHAI.DEV",
+  description: "Creative Systems Engineer.",
 };
 
 export default function RootLayout({
@@ -34,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} antialiased flex flex-col items-center `}
+        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} ${irishGrover.variable} antialiased flex flex-col items-center `}
       >
         <Navbar/>
         {children}
