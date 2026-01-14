@@ -46,7 +46,7 @@ export default function Home() {
       {/* Featured Projects Section */}
       <div className="w-full flex flex-col gap-12" id="features">
         <div className="flex flex-col gap-2">
-            <h2 className="font-doto text-5xl md:text-6xl font-bold text-white tracking-tight">
+            <h2 className="font-irish-grover text-5xl md:text-6xl font-bold text-white tracking-tight">
               Featured Projects
             </h2>
             <p className="font-figtree text-zinc-400 text-lg">
