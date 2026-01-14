@@ -5,7 +5,7 @@ export const Navbar = () => {
         { name: "Skills", href:"#home" },
         { name: "Projects", href: "#features" },
         { name: "Exp", href: "#how-it-works" },
-        { name: "Blog", href: "#pricing" },
+        { name: "Blog", href: "/blog" },
     ];
 
   return (
