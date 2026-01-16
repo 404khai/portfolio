@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Doto, Micro_5, Irish_Grover, Calistoga, Denk_One } from "next/font/google";
+import { Figtree, Doto, Micro_5, Irish_Grover, Calistoga, Denk_One, Henny_Penny, Exo_2 } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 
@@ -38,6 +38,18 @@ const denkOne = Denk_One({
   weight: "400"
 });
 
+const hennyPenny = Henny_Penny({
+  variable: "--font-henny-penny",
+  subsets: ["latin"],
+  weight: "400"
+});
+
+const exo2 = Exo_2({
+  variable: "--font-exo-2",
+  subsets: ["latin"],
+  weight: "400"
+});
+
 
 
 export const metadata: Metadata = {
@@ -56,7 +68,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} ${irishGrover.variable} ${calistoga.variable} ${denkOne.variable} antialiased flex flex-col items-center `}
+        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} ${irishGrover.variable} ${calistoga.variable} ${denkOne.variable} ${hennyPenny.variable} ${exo2.variable} antialiased flex flex-col items-center `}
       >
         <Navbar/>
         {children}

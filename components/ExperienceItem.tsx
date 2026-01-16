@@ -7,7 +7,7 @@ interface ExperienceItemProps {
   role: string;
   period: string;
   type: string; // e.g. "Remote | Full-time"
-  logo: React.ReactNode;
+  logo: string;
   contributions: string[];
   skills: string[];
 }
@@ -34,16 +34,17 @@ export const ExperienceItem: React.FC<ExperienceItemProps> = ({
       >
         <div className="flex items-start gap-4 md:items-center">
             {/* Logo Box */}
-            <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-zinc-800 rounded-lg border border-zinc-700 group-hover:border-zinc-500 transition-colors">
-                {logo}
+            <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-zinc-800 rounded-lg border border-zinc-700 group-hover:border-zinc-500 transition-colors overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={logo} alt={company} className="w-full h-full object-cover" />
             </div>
 
             <div className="flex flex-col gap-1">
-                <h3 className="font-doto text-2xl text-white tracking-wide group-hover:text-zinc-200 transition-colors">
+                <h3 className="font-irish-grover text-2xl text-white tracking-wide group-hover:text-zinc-200 transition-colors">
                     {company}
                 </h3>
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                     <span className="font-figtree text-zinc-100 font-semibold text-lg">
+                     <span className="font-calistoga text-zinc-500 font-semibold text-lg">
                         {role}
                      </span>
                      <span className="hidden md:block w-1 h-1 bg-zinc-600 rounded-full"></span>

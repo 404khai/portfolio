@@ -3,14 +3,6 @@
 import React from 'react';
 import { ExperienceItem } from '@/components/ExperienceItem';
 
-const NexproveLogo = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-orange-500"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
-);
-
-const KemukoLogo = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-blue-500"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M12 4v16"/><path d="M4 12h16"/></svg>
-);
-
 export default function ExperiencePage() {
   return (
     <div className="min-h-screen bg-[#09090b] text-white p-8 md:p-16 flex flex-col items-center">
@@ -29,32 +21,33 @@ export default function ExperiencePage() {
         {/* Experience List */}
         <div className="flex flex-col gap-0 border-t border-[#27272a] border-dashed">
             <ExperienceItem 
-                company="Nexprove"
-                role="Senior Software Engineer & Web3 Developer"
-                type="Remote | Full-time"
-                period="04.2024 - Present"
-                logo={<NexproveLogo />}
+                company="HNG Tech"
+                role="Backend Developer"
+                type="Remote"
+                period="Oct 2025 - Dec 2025"
+                logo="/hng.jpeg"
                 contributions={[
-                    "Architected and deployed high-performance smart contracts on Ethereum and Polygon networks, handling over $5M in transaction volume.",
-                    "Led a team of 4 engineers in developing a decentralized identity solution, reducing user onboarding time by 40%.",
-                    "Optimized gas usage for core protocol functions, resulting in a 25% reduction in transaction costs for users.",
-                    "Integrated Chainlink oracles for real-time price feeds and automated execution of DeFi strategies."
+                    "Led a team of 3 engineers in developing a distributed microservices notification system ",
+                    "Contributed to Legal WatchDog, an AI-powered regulatory intelligence platform for enterprises that reduces manual compliance efforts by 50%.",
+                    "Integrated two A2A-compliant AI agents (a riddle agent and a real-time news update agent) into Telex.im",
+                    "Created an AI agent slack bot that helped interns for task deliverables summarization.",
+                    "Developed RESTful API projects with Django and FastAPI implementing NLP search.",
+                    "Built a document analyzer & summarization tool with OpenRouter."
                 ]}
-                skills={["Solidity", "React", "Node.js", "Web3.js", "Hardhat", "TypeScript"]}
+                skills={["Team Leadership & Management", "Prompt engineering", "Collaboration", "AI Agents", "Mastra", "Python", "Nest.js", "Microservices", "Distributed Systems", "TypeScript", "Docker", "Minio", "Redis"]}
             />
             <ExperienceItem 
-                company="Kemuko"
-                role="Full-stack Developer"
-                type="Remote | Full-time"
-                period="08.2022 - 03.2024"
-                logo={<KemukoLogo />}
+                company="SnapiLabs"
+                role="Frontend Developer"
+                type="Remote"
+                period="Aug 2024 - Nov 2024"
+                logo="/snapilabs.jpeg"
                 contributions={[
-                    "Developed and maintained a scalable e-commerce platform serving 50k+ monthly active users.",
-                    "Implemented real-time inventory management utilizing Redis and WebSockets, preventing overselling during high-traffic events.",
-                    "Migrated legacy monolithic architecture to microservices using Docker and Kubernetes, improving system reliability by 99.9%.",
+                    "Developed a landing page for a concept design for an AI workspace for notes and tasks called SupaNote.",
+                    "Built a clone of the Krea AI website from scratch using an image reference",
                     "Collaborated with UX designers to implement a responsive, mobile-first design system using Tailwind CSS."
                 ]}
-                skills={["Next.js", "PostgreSQL", "Docker", "AWS", "Redis", "Tailwind CSS"]}
+                skills={["Next.js", "Tailwind CSS", "Javascript"]}
             />
         </div>
 
