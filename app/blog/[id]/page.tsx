@@ -103,6 +103,7 @@ export default function BlogPostPage() {
   const id = params?.id as string;
   const post = BLOG_CONTENT[id];
   const tocItems = BLOG_TOC[id] ?? [];
+  const hasToc = tocItems.length > 0;
   const index = POST_ORDER.indexOf(id);
   const prevId = index > 0 ? POST_ORDER[index - 1] : null;
   const nextId = index >= 0 && index < POST_ORDER.length - 1 ? POST_ORDER[index + 1] : null;
@@ -123,113 +124,141 @@ export default function BlogPostPage() {
 
   return (
     <article className="min-h-screen bg-[#09090b] text-white">
-      <div className="max-w-3xl mx-auto px-6 pt-24 pb-12">
+      <div className="max-w-6xl mx-auto px-6 pt-24 pb-12">
         <div className="flex items-center gap-3 text-zinc-500 font-mono text-sm mb-6">
             <span>{post.date}</span>
             <span>•</span>
             <span>{post.readTime}</span>
         </div>
-        
+
         <h1 className="font-figtree text-4xl md:text-6xl font-bold leading-tight tracking-tight text-white mb-8">
           {post.title}
         </h1>
 
         <div className="flex items-center gap-4 border-b border-zinc-800 pb-12 mb-12">
-             <div className="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/404khai.jpeg" alt="Author" className="w-full h-full object-cover" />
-             </div>
-             <div>
-                 <div className="text-white font-medium">Khai</div>
-                 <div className="text-zinc-500 text-sm">Creative Systems Engineer</div>
-             </div>
-        </div>
-
-        {tocItems.length > 0 && (
-          <div className="mb-10">
-            <div className="border border-zinc-900 bg-[#0a0a0a]">
-              <button
-                type="button"
-                onClick={() => setIsTocOpen(!isTocOpen)}
-                className="w-full flex items-center justify-between px-5 py-4 text-left mb-3"
-              >
-                <span className="text-zinc-300 text-xl font-calistoga">Table of Contents</span>
-                <span className="text-zinc-500 text-xs">
-                  {isTocOpen ? <CaretDownFill/> : <CaretUpFill className="rotate-180"/>}
-                </span>
-              </button>
-              {isTocOpen && (
-                <div className="px-5 pb-5 space-y-3">
-                  {tocItems.map((item) => (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      className="block text-zinc-400 text-sm md:text-base hover:text-white transition-colors"
-                    >
-                      {item.label}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
+          <div className="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/404khai.jpeg" alt="Author" className="w-full h-full object-cover" />
           </div>
-        )}
-
-        <div className="prose prose-invert prose-zinc max-w-none font-figtree">
-           {post.content}
+          <div>
+            <div className="text-white font-medium">Khai</div>
+            <div className="text-zinc-500 text-sm">Creative Systems Engineer</div>
+          </div>
         </div>
-        
-        <div className="mt-20 pt-10 border-t border-zinc-800 flex flex-col gap-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {prevPost && prevId ? (
-              <Link
-                href={`/blog/${prevId}`}
-                className="flex flex-col items-start justify-center rounded-2xl border border-zinc-900 bg-[#111111] px-6 py-4 hover:border-zinc-700 hover:bg-zinc-900/70 transition-colors"
-              >
-                <span className="text-zinc-500 text-xs mb-1 flex items-center gap-1">
-                  <ArrowLeft/>
-                  <span>Previous post</span>
-                </span>
-                <span className="text-zinc-100 font-figtree text-sm md:text-base leading-snug">
-                  {prevPost.title}
-                </span>
-              </Link>
-            ) : (
-              <div className="flex flex-col items-start justify-center rounded-2xl border border-zinc-900 bg-[#111111] px-6 py-4 opacity-60 cursor-default">
-                <span className="text-zinc-500 text-xs mb-1 flex items-center gap-1">
-                  <ArrowLeft/>
-                  <span>Previous post</span>
-                </span>
-                <span className="text-zinc-100 font-figtree text-sm md:text-base leading-snug">
-                  Coming soon
-                </span>
+
+        <div className="md:grid md:grid-cols-[minmax(0,1.3fr)_minmax(0,2.7fr)] md:gap-10">
+          {hasToc && (
+            <div className="hidden md:block">
+              <div className="sticky top-24">
+                <div className="border border-zinc-900 bg-[#0a0a0a]">
+                  <div className="px-5 py-4 border-b border-zinc-900">
+                    <span className="text-zinc-300 text-xl font-calistoga">Table of Contents</span>
+                  </div>
+                  <nav className="px-5 py-4 space-y-3">
+                    {tocItems.map((item) => (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        className="block text-zinc-400 text-sm md:text-base hover:text-white transition-colors"
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+                  </nav>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className={hasToc ? "md:col-span-1" : "md:col-span-2"}>
+            
+            {hasToc && (
+              <div className="mb-10 md:hidden">
+                <div className="border border-zinc-900 bg-[#0a0a0a]">
+                  <button
+                    type="button"
+                    onClick={() => setIsTocOpen(!isTocOpen)}
+                    className="w-full flex items-center justify-between px-5 py-4 text-left mb-3"
+                  >
+                    <span className="text-zinc-300 text-xl font-calistoga">Table of Contents</span>
+                    <span className="text-zinc-500 text-xs">
+                      {isTocOpen ? <CaretDownFill/> : <CaretUpFill className="rotate-180"/>}
+                    </span>
+                  </button>
+                  {isTocOpen && (
+                    <div className="px-5 pb-5 space-y-3">
+                      {tocItems.map((item) => (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          className="block text-zinc-400 text-sm md:text-base hover:text-white transition-colors"
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
-            {nextPost && nextId ? (
-              <Link
-                href={`/blog/${nextId}`}
-                className="flex flex-col items-start justify-center rounded-2xl border border-zinc-900 bg-[#111111] px-6 py-4 hover:border-zinc-700 hover:bg-zinc-900/70 transition-colors"
-              >
-                <span className="text-zinc-500 text-xs mb-1 flex items-center gap-1">
-                  <span>Next post</span>
-                  <ArrowRight/>
-                </span>
-                <span className="text-zinc-100 font-figtree text-sm md:text-base leading-snug">
-                  {nextPost.title}
-                </span>
-              </Link>
-            ) : (
-              <div className="flex flex-col items-start justify-center rounded-2xl border border-zinc-900 bg-[#111111] px-6 py-4 opacity-60 cursor-default">
-                <span className="text-zinc-500 text-xs mb-1 flex items-center gap-1">
-                  <span>Next post</span>
-                  <ArrowRight/>
-                </span>
-                <span className="text-zinc-100 font-figtree text-sm md:text-base leading-snug">
-                  Coming soon
-                </span>
+            <div className="prose prose-invert prose-zinc max-w-none font-figtree">
+              {post.content}
+            </div>
+
+            <div className="mt-20 pt-10 border-t border-zinc-800 flex flex-col gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {prevPost && prevId ? (
+                  <Link
+                    href={`/blog/${prevId}`}
+                    className="flex flex-col items-start justify-center rounded-2xl border border-zinc-900 bg-[#111111] px-6 py-4 hover:border-zinc-700 hover:bg-zinc-900/70 transition-colors"
+                  >
+                    <span className="text-zinc-500 text-xs mb-1 flex items-center gap-1">
+                      <ArrowLeft/>
+                      <span>Previous post</span>
+                    </span>
+                    <span className="text-zinc-100 font-figtree text-sm md:text-base leading-snug">
+                      {prevPost.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <div className="flex flex-col items-start justify-center rounded-2xl border border-zinc-900 bg-[#111111] px-6 py-4 opacity-60 cursor-default">
+                    <span className="text-zinc-500 text-xs mb-1 flex items-center gap-1">
+                      <ArrowLeft/>
+                      <span>Previous post</span>
+                    </span>
+                    <span className="text-zinc-100 font-figtree text-sm md:text-base leading-snug">
+                      Coming soon
+                    </span>
+                  </div>
+                )}
+
+                {nextPost && nextId ? (
+                  <Link
+                    href={`/blog/${nextId}`}
+                    className="flex flex-col items-start justify-center rounded-2xl border border-zinc-900 bg-[#111111] px-6 py-4 hover:border-zinc-700 hover:bg-zinc-900/70 transition-colors"
+                  >
+                    <span className="text-zinc-500 text-xs mb-1 flex items-center gap-1">
+                      <span>Next post</span>
+                      <ArrowRight/>
+                    </span>
+                    <span className="text-zinc-100 font-figtree text-sm md:text-base leading-snug">
+                      {nextPost.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <div className="flex flex-col items-start justify-center rounded-2xl border border-zinc-900 bg-[#111111] px-6 py-4 opacity-60 cursor-default">
+                    <span className="text-zinc-500 text-xs mb-1 flex items-center gap-1">
+                      <span>Next post</span>
+                      <ArrowRight/>
+                    </span>
+                    <span className="text-zinc-100 font-figtree text-sm md:text-base leading-snug">
+                      Coming soon
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

@@ -14,7 +14,7 @@ export const Navbar = () => {
 
   return (
     <>
-        <nav className='sticky top-0 z-50 bg-[#09090b]/80 backdrop-blur-md font-doto w-full max-w-[60rem] h-20 flex items-center justify-between border-b border-dashed border-[#27272a] md:border md:mx-auto md:w-[95%]'>
+        <nav className='sticky top-0 z-50 bg-[#09090b]/80 backdrop-blur-md font-doto w-full max-w-[70rem] h-20 flex items-center justify-between border-b border-dashed border-[#27272a] md:border md:mx-auto md:w-[95%]'>
             {/* Logo */}
             <a href="/" className="px-6 h-full flex items-center hover:bg-zinc-900/50 transition-colors border-r border-[#27272a] border-dashed md:border-none">
                 <h1 className="font-denk-one text-xl font-black tracking-tighter md:text-3xl text-white">404KHAI</h1>
