@@ -124,29 +124,9 @@ export default function BlogPostPage() {
 
   return (
     <article className="min-h-screen bg-[#09090b] text-white">
-      <div className="max-w-6xl mx-auto px-6 pt-24 pb-12">
-        <div className="flex items-center gap-3 text-zinc-500 font-mono text-sm mb-6">
-            <span>{post.date}</span>
-            <span>•</span>
-            <span>{post.readTime}</span>
-        </div>
-
-        <h1 className="font-figtree text-4xl md:text-6xl font-bold leading-tight tracking-tight text-white mb-8">
-          {post.title}
-        </h1>
-
-        <div className="flex items-center gap-4 border-b border-zinc-800 pb-12 mb-12">
-          <div className="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/404khai.jpeg" alt="Author" className="w-full h-full object-cover" />
-          </div>
-          <div>
-            <div className="text-white font-medium">Khai</div>
-            <div className="text-zinc-500 text-sm">Creative Systems Engineer</div>
-          </div>
-        </div>
-
-        <div className="md:grid md:grid-cols-[minmax(0,1.3fr)_minmax(0,2.7fr)] md:gap-10">
+      <div className="max-w-5xl mx-auto pt-24 pb-12">
+        
+        <div className="md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2.7fr)] md:gap-10">
           {hasToc && (
             <div className="hidden md:block">
               <div className="sticky top-24">
@@ -171,7 +151,27 @@ export default function BlogPostPage() {
           )}
 
           <div className={hasToc ? "md:col-span-1" : "md:col-span-2"}>
-            
+              <div className="flex items-center gap-3 text-zinc-500 font-mono text-sm mb-6">
+                <span>{post.date}</span>
+                <span>•</span>
+                <span>{post.readTime}</span>
+              </div>
+
+              <h1 className="font-figtree text-4xl font-bold leading-tight tracking-tight text-white mb-8">
+                {post.title}
+              </h1>
+
+              <div className="flex items-center gap-4 border-b border-zinc-800 pb-12 mb-12">
+                <div className="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/404khai.jpeg" alt="Author" className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <div className="text-white font-medium">Khai</div>
+                  <div className="text-zinc-500 text-sm">Creative Systems Engineer</div>
+                </div>
+              </div>
+
             {hasToc && (
               <div className="mb-10 md:hidden">
                 <div className="border border-zinc-900 bg-[#0a0a0a]">

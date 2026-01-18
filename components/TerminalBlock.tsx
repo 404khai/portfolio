@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { ClipboardFill } from 'react-bootstrap-icons';
+import React, { useState } from 'react';
+import { ClipboardFill, ClipboardCheckFill } from 'react-bootstrap-icons';
 
 interface TerminalBlockProps {
   command: string;
@@ -10,12 +10,15 @@ interface TerminalBlockProps {
 }
 
 export const TerminalBlock: React.FC<TerminalBlockProps> = ({ command, output, title = "terminal" }) => {
+  const [copied, setCopied] = useState(false);
+
   const handleCopy = async () => {
     try {
       const text = output ? `${command}\n${output}` : command;
       await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
     } catch {
-      // ignore clipboard errors
     }
   };
 
@@ -33,10 +36,14 @@ export const TerminalBlock: React.FC<TerminalBlockProps> = ({ command, output, t
         <button
           type="button"
           onClick={handleCopy}
-          className="inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-100 text-xs transition-colors"
+          className={`inline-flex items-center gap-2 text-xs transition-colors ${
+            copied ? 'text-emerald-400' : 'text-zinc-500 hover:text-zinc-100'
+          }`}
         >
-          <ClipboardFill/>
-          <span className="hidden sm:inline">Copy</span>
+          {copied ? <ClipboardCheckFill/> : <ClipboardFill/>}
+          <span className="hidden sm:inline">
+            {copied ? 'Copied' : 'Copy'}
+          </span>
         </button>
       </div>
 
