@@ -1,11 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 type Skill = {
   name: string;
-  iconLabel: string;
-  iconBg: string;
+  icon?: ReactNode;
 };
 
 type SkillSection = {
@@ -14,48 +13,62 @@ type SkillSection = {
   skills: Skill[];
 };
 
+const JavascriptIcon = () => (
+  <svg
+    stroke="currentColor"
+    fill="currentColor"
+    strokeWidth="0"
+    role="img"
+    viewBox="0 0 24 24"
+    className="h-5 w-5 text-yellow-400"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z" />
+  </svg>
+);
+
 const sections: SkillSection[] = [
   {
     title: '<Programming Languages />',
     description: 'Core languages I rely on to write maintainable, performant, and scalable code.',
     skills: [
-      { name: 'JavaScript', iconLabel: 'JS', iconBg: 'bg-[#f7df1e] text-black' },
-      { name: 'TypeScript', iconLabel: 'TS', iconBg: 'bg-[#3178c6]' },
-      { name: 'Python', iconLabel: 'Py', iconBg: 'bg-[#3776ab]' },
-      { name: 'Go (Golang)', iconLabel: 'Go', iconBg: 'bg-[#00add8] text-black' },
+      { name: 'JavaScript', icon: <JavascriptIcon /> },
+      { name: 'TypeScript', icon: <JavascriptIcon /> },
+      { name: 'Python', icon: <JavascriptIcon /> },
+      { name: 'Go (Golang)', icon: <JavascriptIcon /> },
     ],
   },
   {
     title: '<Libraries & Frameworks />',
     description: 'Frameworks and libraries that speed up development and provide structure.',
     skills: [
-      { name: 'CSS3', iconLabel: 'CSS', iconBg: 'bg-[#264de4]' },
-      { name: 'React.js', iconLabel: 'R', iconBg: 'bg-[#20232a] text-[#61dafb]' },
-      { name: 'Next.js', iconLabel: 'NX', iconBg: 'bg-black' },
-      { name: 'NestJS', iconLabel: 'N', iconBg: 'bg-[#e0234e]' },
-      { name: 'NextAuth.js', iconLabel: 'NA', iconBg: 'bg-[#111827]' },
-      { name: 'Better Auth', iconLabel: 'BA', iconBg: 'bg-emerald-700' },
-      { name: 'Express.js', iconLabel: 'EX', iconBg: 'bg-zinc-900' },
-      { name: 'Prisma', iconLabel: 'P', iconBg: 'bg-[#0c344b]' },
-      { name: 'Django', iconLabel: 'dj', iconBg: 'bg-[#092e20]' },
-      { name: 'Tailwind CSS', iconLabel: 'TW', iconBg: 'bg-[#0f172a]' },
-      { name: 'TanStack Query', iconLabel: 'TSQ', iconBg: 'bg-[#f97316]' },
-      { name: 'SASS', iconLabel: 'Sa', iconBg: 'bg-[#cc6699]' },
-      { name: 'FastAPI', iconLabel: 'FA', iconBg: 'bg-[#05998b]' },
-      { name: 'GSAP', iconLabel: 'G', iconBg: 'bg-[#1a1f1c]' },
-      { name: 'Firebase', iconLabel: 'Fb', iconBg: 'bg-[#ffca28] text-black' },
+      { name: 'CSS3', icon: <JavascriptIcon /> },
+      { name: 'React.js', icon: <JavascriptIcon /> },
+      { name: 'Next.js', icon: <JavascriptIcon /> },
+      { name: 'NestJS', icon: <JavascriptIcon /> },
+      { name: 'NextAuth.js', icon: <JavascriptIcon /> },
+      { name: 'Better Auth', icon: <JavascriptIcon /> },
+      { name: 'Express.js', icon: <JavascriptIcon /> },
+      { name: 'Prisma', icon: <JavascriptIcon /> },
+      { name: 'Django', icon: <JavascriptIcon /> },
+      { name: 'Tailwind CSS', icon: <JavascriptIcon /> },
+      { name: 'TanStack Query', icon: <JavascriptIcon /> },
+      { name: 'SASS', icon: <JavascriptIcon /> },
+      { name: 'FastAPI', icon: <JavascriptIcon /> },
+      { name: 'GSAP', icon: <JavascriptIcon /> },
+      { name: 'Firebase', icon: <JavascriptIcon /> },
     ],
   },
   {
     title: '<AI & Machine Learning />',
     description: 'Techniques and tools to build intelligent, data-driven applications.',
     skills: [
-      { name: 'Vercel AI SDK', iconLabel: 'VA', iconBg: 'bg-black' },
-      { name: 'Mastra AI', iconLabel: 'Ma', iconBg: 'bg-[#0f172a]' },
-      { name: 'Machine Learning', iconLabel: 'ML', iconBg: 'bg-indigo-700' },
-      { name: 'Deep Learning', iconLabel: 'DL', iconBg: 'bg-purple-700' },
-      { name: 'OpenCV', iconLabel: 'CV', iconBg: 'bg-[#0b3d91]' },
-      { name: 'OpenAI API', iconLabel: 'AI', iconBg: 'bg-[#0f172a]' },
+      { name: 'Vercel AI SDK', icon: <JavascriptIcon /> },
+      { name: 'Mastra AI', icon: <JavascriptIcon /> },
+      { name: 'Machine Learning', icon: <JavascriptIcon /> },
+      { name: 'Deep Learning', icon: <JavascriptIcon /> },
+      { name: 'OpenCV', icon: <JavascriptIcon /> },
+      { name: 'OpenAI API', icon: <JavascriptIcon /> },
     ],
   },
   {
@@ -63,13 +76,13 @@ const sections: SkillSection[] = [
     description:
       'SQL, NoSQL, caching, and ORM tools for robust, high-performance data management.',
     skills: [
-      { name: 'PostgreSQL', iconLabel: 'PG', iconBg: 'bg-[#336791]' },
-      { name: 'MySQL', iconLabel: 'My', iconBg: 'bg-[#00758f]' },
-      { name: 'MongoDB', iconLabel: 'Mg', iconBg: 'bg-[#001e2b]' },
-      { name: 'Redis', iconLabel: 'Rd', iconBg: 'bg-[#d82c20]' },
-      { name: 'Drizzle ORM', iconLabel: 'Dr', iconBg: 'bg-emerald-800' },
-      { name: 'NeonDB', iconLabel: 'Ne', iconBg: 'bg-[#0f172a]' },
-      { name: 'DataGrip', iconLabel: 'DG', iconBg: 'bg-[#21d789] text-black' },
+      { name: 'PostgreSQL', icon: <JavascriptIcon /> },
+      { name: 'MySQL', icon: <JavascriptIcon /> },
+      { name: 'MongoDB', icon: <JavascriptIcon /> },
+      { name: 'Redis', icon: <JavascriptIcon /> },
+      { name: 'Drizzle ORM', icon: <JavascriptIcon /> },
+      { name: 'NeonDB', icon: <JavascriptIcon /> },
+      { name: 'DataGrip', icon: <JavascriptIcon /> },
     ],
   },
   {
@@ -77,20 +90,20 @@ const sections: SkillSection[] = [
     description:
       'Infrastructure as code, CI/CD, and cloud platforms to deploy and scale applications reliably.',
     skills: [
-      { name: 'Node.js', iconLabel: 'Nd', iconBg: 'bg-[#303030]' },
-      { name: 'tRPC', iconLabel: 'tR', iconBg: 'bg-[#0f172a]' },
-      { name: 'Git', iconLabel: 'Git', iconBg: 'bg-[#f1502f]' },
-      { name: 'Docker', iconLabel: 'Dk', iconBg: 'bg-[#0db7ed]' },
-      { name: 'Kubernetes', iconLabel: 'K8s', iconBg: 'bg-[#326ce5]' },
-      { name: 'Terraform', iconLabel: 'Tf', iconBg: 'bg-[#563d7c]' },
-      { name: 'Apache Kafka', iconLabel: 'Kf', iconBg: 'bg-[#231f20]' },
-      { name: 'RESTful APIs', iconLabel: 'API', iconBg: 'bg-zinc-900' },
-      { name: 'JWT', iconLabel: 'JWT', iconBg: 'bg-[#1a202c]' },
-      { name: 'Webpack', iconLabel: 'Wp', iconBg: 'bg-[#1c78c0]' },
-      { name: 'Google Cloud Platform', iconLabel: 'GCP', iconBg: 'bg-[#1a73e8]' },
-      { name: 'AWS', iconLabel: 'AWS', iconBg: 'bg-[#ff9900] text-black' },
-      { name: 'Vercel', iconLabel: 'V', iconBg: 'bg-black' },
-      { name: 'GitHub Actions', iconLabel: 'GH', iconBg: 'bg-[#0d1117]' },
+      { name: 'Node.js', icon: <JavascriptIcon /> },
+      { name: 'tRPC', icon: <JavascriptIcon /> },
+      { name: 'Git', icon: <JavascriptIcon /> },
+      { name: 'Docker', icon: <JavascriptIcon /> },
+      { name: 'Kubernetes', icon: <JavascriptIcon /> },
+      { name: 'Terraform', icon: <JavascriptIcon /> },
+      { name: 'Apache Kafka', icon: <JavascriptIcon /> },
+      { name: 'RESTful APIs', icon: <JavascriptIcon /> },
+      { name: 'JWT', icon: <JavascriptIcon /> },
+      { name: 'Webpack', icon: <JavascriptIcon /> },
+      { name: 'Google Cloud Platform', icon: <JavascriptIcon /> },
+      { name: 'AWS', icon: <JavascriptIcon /> },
+      { name: 'Vercel', icon: <JavascriptIcon /> },
+      { name: 'GitHub Actions', icon: <JavascriptIcon /> },
     ],
   },
   {
@@ -98,21 +111,19 @@ const sections: SkillSection[] = [
     description:
       'The editors, IDEs, and design tools that fuel daily productivity and creativity.',
     skills: [
-      { name: 'Cursor', iconLabel: 'Cu', iconBg: 'bg-[#111827]' },
-      { name: 'VS Code', iconLabel: 'VS', iconBg: 'bg-[#007acc]' },
-      { name: 'JetBrains', iconLabel: 'JB', iconBg: 'bg-[#000000]' },
-      { name: 'Figma', iconLabel: 'Fg', iconBg: 'bg-[#1e1e1e]' },
+      { name: 'Cursor', icon: <JavascriptIcon /> },
+      { name: 'VS Code', icon: <JavascriptIcon /> },
+      { name: 'JetBrains', icon: <JavascriptIcon /> },
+      { name: 'Figma', icon: <JavascriptIcon /> },
     ],
   },
 ];
 
-const SkillBadge: React.FC<Skill> = ({ name, iconLabel, iconBg }) => {
+const SkillBadge: React.FC<Skill> = ({ name, icon }) => {
   return (
     <div className="inline-flex items-center gap-3 rounded-xl border border-zinc-800 bg-[#050509] px-3 py-2 shadow-sm">
-      <div
-        className={`flex h-8 w-8 items-center justify-center rounded-md text-[10px] font-semibold ${iconBg}`}
-      >
-        {iconLabel}
+      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#111827]">
+        {icon ?? <JavascriptIcon />}
       </div>
       <span className="font-figtree text-sm text-zinc-200">{name}</span>
     </div>
@@ -139,7 +150,7 @@ export default function SkillsPage() {
               className={index === 0 ? '' : 'pt-8 border-t border-dashed border-[#27272a]'}
             >
               <div className="flex flex-col gap-2 mb-4">
-                <h2 className="font-doto text-lg md:text-xl text-zinc-100">
+                <h2 className="font-calistoga text-lg md:text-xl text-zinc-100">
                   {section.title}
                 </h2>
                 <p className="font-figtree text-sm md:text-base text-zinc-400">
@@ -151,8 +162,7 @@ export default function SkillsPage() {
                   <SkillBadge
                     key={skill.name}
                     name={skill.name}
-                    iconLabel={skill.iconLabel}
-                    iconBg={skill.iconBg}
+                    icon={skill.icon}
                   />
                 ))}
               </div>
@@ -163,4 +173,3 @@ export default function SkillsPage() {
     </div>
   );
 }
-
