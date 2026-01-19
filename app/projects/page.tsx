@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ProjectListItem } from '@/components/ProjectListItem';
 
-// Logos
 const EllumLogo = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
 );
@@ -28,13 +27,88 @@ const NotDatabaseLogo = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-zinc-400"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
 );
 
+export type ProjectCategory =
+  | 'All'
+  | 'AI platforms'
+  | 'Web3 / dApps'
+  | 'EdTech'
+  | 'SaaS tools'
+  | 'DevTools';
+
+export type ProjectMeta = {
+  slug: string;
+  title: string;
+  description: string;
+  logo: React.ReactNode;
+  category: ProjectCategory;
+};
+
+export const PROJECTS: ProjectMeta[] = [
+  {
+    slug: 'ellum-ai',
+    title: 'Ellum Ai',
+    description: 'End-to-End AI Platform Revolution. Intelligent automation for business operations.',
+    logo: <EllumLogo />,
+    category: 'AI platforms',
+  },
+  {
+    slug: 'walpress',
+    title: 'WalPress',
+    description: 'Decentralized site-builder for creators. Censorship-resistant websites on the blockchain.',
+    logo: <WalPressLogo />,
+    category: 'Web3 / dApps',
+  },
+  {
+    slug: 'gradific',
+    title: 'Gradific',
+    description: 'AI-driven grading and classroom management for modern education.',
+    logo: <GradificLogo />,
+    category: 'EdTech',
+  },
+  {
+    slug: 'formdrop',
+    title: 'FormDrop',
+    description: 'Super simple headless form backend.',
+    logo: <FormDropLogo />,
+    category: 'SaaS tools',
+  },
+  {
+    slug: 'pathwatch',
+    title: 'PathWatch',
+    description: 'API observability and monitoring tool.',
+    logo: <PathWatchLogo />,
+    category: 'DevTools',
+  },
+  {
+    slug: 'notdatabase',
+    title: 'NotDatabase',
+    description: 'Type-safe document database for TypeScript.',
+    logo: <NotDatabaseLogo />,
+    category: 'DevTools',
+  },
+];
+
 
 export default function ProjectsPage() {
+  const [activeTab, setActiveTab] = useState<ProjectCategory>('All');
+
+  const TABS: ProjectCategory[] = [
+    'All',
+    'AI platforms',
+    'Web3 / dApps',
+    'EdTech',
+    'SaaS tools',
+    'DevTools',
+  ];
+
+  const filteredProjects =
+    activeTab === 'All'
+      ? PROJECTS
+      : PROJECTS.filter((project) => project.category === activeTab);
+
   return (
-    <div className="min-h-screen bg-[#09090b] text-white p-8 md:p-16 flex flex-col items-center">
-      <div className="max-w-3xl w-full flex flex-col gap-12">
-        
-        {/* Header */}
+    <div className="min-h-screen bg-[#09090b] text-white px-4 py-10 md:px-8 md:py-16 flex flex-col items-center">
+      <div className="w-full max-w-4xl flex flex-col gap-10">
         <div className="flex flex-col gap-4">
           <h1 className="font-irish-grover text-6xl md:text-8xl font-bold tracking-tight text-white">
             Projects
@@ -44,38 +118,39 @@ export default function ProjectsPage() {
           </p>
         </div>
 
-        {/* Projects List */}
+        <div className="flex flex-wrap gap-3 border-b border-zinc-800 pb-4">
+          {TABS.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              className={`font-figtree text-sm md:text-base font-medium px-3 md:px-4 py-2 rounded-md transition-all duration-200 ${
+                activeTab === tab
+                  ? 'bg-zinc-100 text-black'
+                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
         <div className="flex flex-col gap-4">
-            <ProjectListItem 
-                title="Ellum Ai"
-                description="End-to-End AI Platform Revolution. Intelligent automation for business operations."
-                logo={<EllumLogo />}
-            />
-            <ProjectListItem 
-                title="WalPress"
-                description="Decentralized site-builder for creators. Censorship-resistant websites on the blockchain."
-                logo={<WalPressLogo />}
-            />
-            <ProjectListItem 
-                title="Gradific"
-                description="AI-driven grading and classroom management for modern education."
-                logo={<GradificLogo />}
-            />
-             <ProjectListItem 
-                title="FormDrop"
-                description="Super simple headless form backend."
-                logo={<FormDropLogo />}
-            />
-             <ProjectListItem 
-                title="PathWatch"
-                description="API observability and monitoring tool."
-                logo={<PathWatchLogo />}
-            />
-             <ProjectListItem 
-                title="NotDatabase"
-                description="Type-safe document database for TypeScript."
-                logo={<NotDatabaseLogo />}
-            />
+          {filteredProjects.length > 0 ? (
+            filteredProjects.map((project) => (
+              <ProjectListItem
+                key={project.slug}
+                title={project.title}
+                description={project.description}
+                logo={project.logo}
+                href={`/projects/${project.slug}`}
+              />
+            ))
+          ) : (
+            <div className="text-zinc-500 font-figtree text-sm md:text-lg py-10 text-center border border-dashed border-zinc-800 rounded-lg">
+              No projects found for {activeTab}.
+            </div>
+          )}
         </div>
 
       </div>
