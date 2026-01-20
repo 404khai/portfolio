@@ -74,34 +74,126 @@ const MysqlIcon = () => (
 const RedisIcon = () => (
  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" role="img" viewBox="0 0 24 24" className="text-red-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M22.71 13.145c-1.66 2.092-3.452 4.483-7.038 4.483-3.203 0-4.397-2.825-4.48-5.12.701 1.484 2.073 2.685 4.214 2.63 4.117-.133 6.94-3.852 6.94-7.239 0-4.05-3.022-6.972-8.268-6.972-3.752 0-8.4 1.428-11.455 3.685C2.59 6.937 3.885 9.958 4.35 9.626c2.648-1.904 4.748-3.13 6.784-3.744C8.12 9.244.886 17.05 0 18.425c.1 1.261 1.66 4.648 2.424 4.648.232 0 .431-.133.664-.365a100.49 100.49 0 0 0 5.54-6.765c.222 3.104 1.748 6.898 6.014 6.898 3.819 0 7.604-2.756 9.33-8.965.2-.764-.73-1.361-1.261-.73zm-4.349-5.013c0 1.959-1.926 2.922-3.685 2.922-.941 0-1.664-.247-2.235-.568 1.051-1.592 2.092-3.225 3.21-4.973 1.972.334 2.71 1.43 2.71 2.619z"></path></svg>
 );
+
+const DockerIcon = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 640 512" className="text-blue-400 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M349.9 236.3h-66.1v-59.4h66.1v59.4zm0-204.3h-66.1v60.7h66.1V32zm78.2 144.8H362v59.4h66.1v-59.4zm-156.3-72.1h-66.1v60.1h66.1v-60.1zm78.1 0h-66.1v60.1h66.1v-60.1zm276.8 100c-14.4-9.7-47.6-13.2-73.1-8.4-3.3-24-16.7-44.9-41.1-63.7l-14-9.3-9.3 14c-18.4 27.8-23.4 73.6-3.7 103.8-8.7 4.7-25.8 11.1-48.4 10.7H2.4c-8.7 50.8 5.8 116.8 44 162.1 37.1 43.9 92.7 66.2 165.4 66.2 157.4 0 273.9-72.5 328.4-204.2 21.4.4 67.6.1 91.3-45.2 1.5-2.5 6.6-13.2 8.5-17.1l-13.3-8.9zm-511.1-27.9h-66v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1v-59.4zm78.1 0h-66.1v59.4h66.1v-59.4zm-78.1-72.1h-66.1v60.1h66.1v-60.1z"></path></svg>
+);
+
+const GitIcon = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 448 512" className="text-orange-600 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+);
+
+const TailwindIcon = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" role="img" viewBox="0 0 24 24" className="text-cyan-400 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z"></path></svg>
+);
+
+const NodejsIcon = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" role="img" viewBox="0 0 24 24" className="text-green-600 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M11.998,24c-0.321,0-0.641-0.084-0.922-0.247l-2.936-1.737c-0.438-0.245-0.224-0.332-0.08-0.383 c0.585-0.203,0.703-0.25,1.328-0.604c0.065-0.037,0.151-0.023,0.218,0.017l2.256,1.339c0.082,0.045,0.197,0.045,0.272,0l8.795-5.076 c0.082-0.047,0.134-0.141,0.134-0.238V6.921c0-0.099-0.053-0.192-0.137-0.242l-8.791-5.072c-0.081-0.047-0.189-0.047-0.271,0 L3.075,6.68C2.99,6.729,2.936,6.825,2.936,6.921v10.15c0,0.097,0.054,0.189,0.139,0.235l2.409,1.392 c1.307,0.654,2.108-0.116,2.108-0.89V7.787c0-0.142,0.114-0.253,0.256-0.253h1.115c0.139,0,0.255,0.112,0.255,0.253v10.021 c0,1.745-0.95,2.745-2.604,2.745c-0.508,0-0.909,0-2.026-0.551L2.28,18.675c-0.57-0.329-0.922-0.945-0.922-1.604V6.921 c0-0.659,0.353-1.275,0.922-1.603l8.795-5.082c0.557-0.315,1.296-0.315,1.848,0l8.794,5.082c0.57,0.329,0.924,0.944,0.924,1.603 v10.15c0,0.659-0.354,1.273-0.924,1.604l-8.794,5.078C12.643,23.916,12.324,24,11.998,24z M19.099,13.993 c0-1.9-1.284-2.406-3.987-2.763c-2.731-0.361-3.009-0.548-3.009-1.187c0-0.528,0.235-1.233,2.258-1.233 c1.807,0,2.473,0.389,2.747,1.607c0.024,0.115,0.129,0.199,0.247,0.199h1.141c0.071,0,0.138-0.031,0.186-0.081 c0.048-0.054,0.074-0.123,0.067-0.196c-0.177-2.098-1.571-3.076-4.388-3.076c-2.508,0-4.004,1.058-4.004,2.833 c0,1.925,1.488,2.457,3.895,2.695c2.88,0.282,3.103,0.703,3.103,1.269c0,0.983-0.789,1.402-2.642,1.402 c-2.327,0-2.839-0.584-3.011-1.742c-0.02-0.124-0.126-0.215-0.253-0.215h-1.137c-0.141,0-0.254,0.112-0.254,0.253 c0,1.482,0.806,3.248,4.655,3.248C17.501,17.007,19.099,15.91,19.099,13.993z"></path></svg>
+);
+
+const VercelIcon = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" role="img" viewBox="0 0 24 24" className="text-black dark:text-white h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M24 22.525H0l12-21.05 12 21.05z"></path></svg>
+);
+
+const GCPIcon = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" role="img" viewBox="0 0 24 24" className="text-yellow-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M12.19 2.38a9.344 9.344 0 0 0-9.234 6.893c.053-.02-.055.013 0 0-3.875 2.551-3.922 8.11-.247 10.941l.006-.007-.007.03a6.717 6.717 0 0 0 4.077 1.356h5.173l.03.03h5.192c6.687.053 9.376-8.605 3.835-12.35a9.365 9.365 0 0 0-2.821-4.552l-.043.043.006-.05A9.344 9.344 0 0 0 12.19 2.38zm-.358 4.146c1.244-.04 2.518.368 3.486 1.15a5.186 5.186 0 0 1 1.862 4.078v.518c3.53-.07 3.53 5.262 0 5.193h-5.193l-.008.009v-.04H6.785a2.59 2.59 0 0 1-1.067-.23h.001a2.597 2.597 0 1 1 3.437-3.437l3.013-3.012A6.747 6.747 0 0 0 8.11 8.24c.018-.01.04-.026.054-.023a5.186 5.186 0 0 1 3.67-1.69z"></path></svg>
+);
+
+const AWSIcon = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" role="img" viewBox="0 0 24 24" className="text-orange-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M21.757 15.4031a4.5796 4.5796 0 0 0-.8157-.3675h-.0038c-.0431-.015-.0863-.0244-.1294-.0375-.5081-.1556-2.4-.8494-3.4782-2.8126v.002l-1.9256-3.334c-.81-1.4212-.6732-3.6844-.585-4.5413a4.519 4.519 0 0 0 .0393-.3244.2659.2659 0 0 0 .0038-.0206h-.0019c.0056-.077.0113-.152.0113-.2307-.002-1.9388-1.5732-3.512-3.512-3.512s-3.512 1.5732-3.512 3.512c0 .0769.0075.1538.0113.2307h-.0038s.0019.0168.0056.045c.0075.09.0188.1762.032.2643.09.8363.2455 3.1876-.6057 4.624h.0018l-2.7582 4.7757v-.0037l-.0318.0581-.2588.45c-.0206.0375-.0356.0769-.0562.1144-.285.4931-.72 1.2057-1.1982 1.8507-.3994.54-1.0238 1.0725-1.637 1.4325l.0076.002c-.0563.028-.1144.0524-.1688.0862a2.3952 2.3952 0 0 0-.8625.8737c-.6694 1.1588-.2719 2.642.8869 3.3114.6056.3506 1.2975.4012 1.9182.2119l-.0038.0056c1.0688-.3732 2.237-.7014 2.8351-.8382 1.0032-.2288 2.4882-.285 3.332-.2963h.96c4.2845.0412 6.4558 1.8582 6.4558 1.8582l.0038-.0038c.1744.1387.3544.27.5531.3844 2.1451 1.2394 4.8902.5043 6.1277-1.6426 1.245-2.145.51-4.8901-1.637-6.1277zm-5.0308 2.267c-.4482.7743-1.0857 1.1568-2.1432 1.2375-1.0575.0806-1.2863.1425-3.2232.1425-1.937 0-2.2295-.06-3.2232-.1425-.992-.0825-1.695-.4632-2.1432-1.2376-.4482-.7744-.4107-1.6594 0-2.475.4106-.8157.6731-1.4457 1.4363-2.7676.7631-1.322 1.0669-1.8226 1.785-2.8145.72-.9919 1.2488-1.2375 2.1432-1.2375.8944 0 1.4644.3319 2.1432 1.2375.6788.9057.8719 1.2563 1.7138 2.7151s1.0556 1.952 1.5075 2.867c.4557.915.45 1.7006.0038 2.475z"></path></svg>
+);
+
+const GithubActions = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" role="img" viewBox="0 0 24 24" className="text-gray-700 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M10.984 13.836a.5.5 0 0 1-.353-.146l-.745-.743a.5.5 0 1 1 .706-.708l.392.391 1.181-1.18a.5.5 0 0 1 .708.707l-1.535 1.533a.504.504 0 0 1-.354.146zm9.353-.147l1.534-1.532a.5.5 0 0 0-.707-.707l-1.181 1.18-.392-.391a.5.5 0 1 0-.706.708l.746.743a.497.497 0 0 0 .706-.001zM4.527 7.452l2.557-1.585A1 1 0 0 0 7.09 4.17L4.533 2.56A1 1 0 0 0 3 3.406v3.196a1.001 1.001 0 0 0 1.527.85zm2.03-2.436L4 6.602V3.406l2.557 1.61zM24 12.5c0 1.93-1.57 3.5-3.5 3.5a3.503 3.503 0 0 1-3.46-3h-2.08a3.503 3.503 0 0 1-3.46 3 3.502 3.502 0 0 1-3.46-3h-.558c-.972 0-1.85-.399-2.482-1.042V17c0 1.654 1.346 3 3 3h.04c.244-1.693 1.7-3 3.46-3 1.93 0 3.5 1.57 3.5 3.5S13.43 24 11.5 24a3.502 3.502 0 0 1-3.46-3H8c-2.206 0-4-1.794-4-4V9.899A5.008 5.008 0 0 1 0 5c0-2.757 2.243-5 5-5s5 2.243 5 5a5.005 5.005 0 0 1-4.952 4.998A2.482 2.482 0 0 0 7.482 12h.558c.244-1.693 1.7-3 3.46-3a3.502 3.502 0 0 1 3.46 3h2.08a3.503 3.503 0 0 1 3.46-3c1.93 0 3.5 1.57 3.5 3.5zm-15 8c0 1.378 1.122 2.5 2.5 2.5s2.5-1.122 2.5-2.5-1.122-2.5-2.5-2.5S9 19.122 9 20.5zM5 9c2.206 0 4-1.794 4-4S7.206 1 5 1 1 2.794 1 5s1.794 4 4 4zm9 3.5c0-1.378-1.122-2.5-2.5-2.5S9 11.122 9 12.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5zm9 0c0-1.378-1.122-2.5-2.5-2.5S18 11.122 18 12.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5zm-13 8a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0zm2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0zm12 0c0 1.93-1.57 3.5-3.5 3.5a3.503 3.503 0 0 1-3.46-3.002c-.007.001-.013.005-.021.005l-.506.017h-.017a.5.5 0 0 1-.016-.999l.506-.017c.018-.002.035.006.052.007A3.503 3.503 0 0 1 20.5 17c1.93 0 3.5 1.57 3.5 3.5zm-1 0c0-1.378-1.122-2.5-2.5-2.5S18 19.122 18 20.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5z"></path></svg>
+);
+
+const FigmaIcon = () => (
+  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" role="img" viewBox="0 0 24 24" className="text-pink-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg"><path d="M15.852 8.981h-4.588V0h4.588c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.491-4.49 4.491zM12.735 7.51h3.117c1.665 0 3.019-1.355 3.019-3.019s-1.355-3.019-3.019-3.019h-3.117V7.51zm0 1.471H8.148c-2.476 0-4.49-2.014-4.49-4.49S5.672 0 8.148 0h4.588v8.981zm-4.587-7.51c-1.665 0-3.019 1.355-3.019 3.019s1.354 3.02 3.019 3.02h3.117V1.471H8.148zm4.587 15.019H8.148c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h4.588v8.98zM8.148 8.981c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h3.117V8.981H8.148zM8.172 24c-2.489 0-4.515-2.014-4.515-4.49s2.014-4.49 4.49-4.49h4.588v4.441c0 2.503-2.047 4.539-4.563 4.539zm-.024-7.51a3.023 3.023 0 0 0-3.019 3.019c0 1.665 1.365 3.019 3.044 3.019 1.705 0 3.093-1.376 3.093-3.068v-2.97H8.148zm7.704 0h-.098c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h.098c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.49-4.49 4.49zm-.097-7.509c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h.098c1.665 0 3.019-1.355 3.019-3.019s-1.355-3.019-3.019-3.019h-.098z"></path></svg>
+);
+
 const sections: SkillSection[] = [
   {
-    title: '<Programming Languages />',
+    title: '<Languages />',
     description: 'Core languages I rely on to write maintainable, performant, and scalable code.',
     skills: [
       { name: 'JavaScript', icon: <JavascriptIcon /> },
       { name: 'TypeScript', icon: <TypescriptIcon /> },
       { name: 'Python', icon: <PythonIcon /> },
+      { name: 'Lua', icon: <ReactIcon /> },
+      { name: 'ArkTs', icon: <ReactIcon /> },
+      { name: 'C#', icon: <ReactIcon /> },
+      { name: 'C++', icon: <ReactIcon /> },
       { name: 'Go (Golang)', icon: <GolangIcon /> },
+      { name: 'Java', icon: <ReactIcon /> },
+      { name: 'Dart', icon: <ReactIcon /> },
+      { name: 'C', icon: <ReactIcon /> },
+      { name: 'Rust', icon: <ReactIcon /> },
+      { name: 'Elixir', icon: <ReactIcon /> },
+      { name: 'Kotlin', icon: <ReactIcon /> },
+      { name: 'PHP', icon: <ReactIcon /> },
+      { name: 'Ruby', icon: <ReactIcon /> },
+      { name: 'Cangjie', icon: <ReactIcon /> },
+      { name: 'Swift', icon: <ReactIcon /> },
     ],
   },
   {
-    title: '<Frameworks />',
-    description: 'Frameworks that speed up development and provide structure.',
+    title: '<Frameworks & Libraries />',
+    description: 'Frameworks and tools that speed up development and provide structure.',
     skills: [
-      { name: 'CSS3', icon: <CssIcon /> },
-      { name: 'React.js', icon: <ReactIcon /> },
+      { name: 'React', icon: <ReactIcon /> },
       { name: 'Next.js', icon: <NextjsIcon /> },
-      { name: 'NestJS', icon: <NestjsIcon /> },
-      { name: 'Express.js', icon: <JavascriptIcon /> },
-      { name: 'Prisma', icon: <JavascriptIcon /> },
-      { name: 'Django', icon: <JavascriptIcon /> },
-      { name: 'Tailwind CSS', icon: <JavascriptIcon /> },
-      { name: 'TanStack Query', icon: <JavascriptIcon /> },
-      { name: 'SASS', icon: <JavascriptIcon /> },
+      { name: 'Vue', icon: <ReactIcon /> },
+      { name: 'Svelte', icon: <ReactIcon /> },
+      { name: 'Astro', icon: <ReactIcon /> },
+      { name: 'Express', icon: <ReactIcon /> },
+      { name: 'Nest.js', icon: <NestjsIcon /> },
+      { name: 'SpringBoot', icon: <ReactIcon /> },
       { name: 'FastAPI', icon: <FastapiIcon /> },
+      { name: 'Django', icon: <ReactIcon /> },
+      { name: 'Phoenix', icon: <ReactIcon /> },
+      { name: 'Rails', icon: <ReactIcon /> },
+      { name: 'Symphony', icon: <ReactIcon /> },
+      { name: 'Laravel', icon: <ReactIcon /> },
+      { name: '.NET', icon: <ReactIcon /> },
+      { name: 'Flutter', icon: <ReactIcon /> },
+      { name: 'Dioxus', icon: <ReactIcon /> },
+      { name: 'Tauri', icon: <ReactIcon /> },
+      { name: 'Electron', icon: <ReactIcon /> },
+      { name: 'Tailwind CSS', icon: <TailwindIcon /> },
+      { name: 'SASS', icon: <JavascriptIcon /> },
       { name: 'GSAP', icon: <JavascriptIcon /> },
-      { name: 'Firebase', icon: <JavascriptIcon /> },
+    ],
+  },
+  {
+    title: '<Databases />',
+    description:
+      'SQL, NoSQL, caching, and ORM tools for robust, high-performance data management.',
+    skills: [
+      { name: 'PostgreSQL', icon: <PostgresIcon /> },
+      { name: 'MySQL', icon: <MysqlIcon /> },
+      { name: 'MongoDB', icon: <MongoDBIcon /> },
+      { name: 'Redis', icon: <RedisIcon /> },
+      { name: 'Supabase', icon: <ReactIcon /> },
+      { name: 'Firebase', icon: <ReactIcon /> },
+    ],
+  },
+  {
+    title: '<DevOps & Cloud />',
+    description:
+      'Infrastructure as code, CI/CD, and cloud platforms to deploy and scale applications reliably.',
+    skills: [
+      { name: 'AWS', icon: <AWSIcon /> },
+      { name: 'GCP', icon: <GCPIcon /> },
+      { name: 'Supabase', icon: <ReactIcon /> },
+      { name: 'Firebase', icon: <ReactIcon /> },
+      { name: 'Docker', icon: <DockerIcon /> },
+      { name: 'Kubernetes', icon: <JavascriptIcon /> },
+      { name: 'Terraform', icon: <JavascriptIcon /> },
+      { name: 'Git', icon: <GitIcon /> },
+      { name: 'GitHub Actions', icon: <GithubActions /> },
+      { name: 'Vercel', icon: <VercelIcon /> },
+      { name: 'Apache Kafka', icon: <JavascriptIcon /> },
+      { name: 'Node.js', icon: <NodejsIcon /> },
     ],
   },
   {
@@ -117,46 +209,14 @@ const sections: SkillSection[] = [
     ],
   },
   {
-    title: '<Databases & Data Tools />',
+    title: '<Design & Creative skills />',
     description:
-      'SQL, NoSQL, caching, and ORM tools for robust, high-performance data management.',
+      'Other creative & design skills.',
     skills: [
-      { name: 'PostgreSQL', icon: <PostgresIcon /> },
-      { name: 'MySQL', icon: <MysqlIcon /> },
-      { name: 'MongoDB', icon: <MongoDBIcon /> },
-      { name: 'Redis', icon: <RedisIcon /> },
-    ],
-  },
-  {
-    title: '<DevOps & Cloud />',
-    description:
-      'Infrastructure as code, CI/CD, and cloud platforms to deploy and scale applications reliably.',
-    skills: [
-      { name: 'Node.js', icon: <JavascriptIcon /> },
-      { name: 'tRPC', icon: <JavascriptIcon /> },
-      { name: 'Git', icon: <JavascriptIcon /> },
-      { name: 'Docker', icon: <JavascriptIcon /> },
-      { name: 'Kubernetes', icon: <JavascriptIcon /> },
-      { name: 'Terraform', icon: <JavascriptIcon /> },
-      { name: 'Apache Kafka', icon: <JavascriptIcon /> },
-      { name: 'RESTful APIs', icon: <JavascriptIcon /> },
-      { name: 'JWT', icon: <JavascriptIcon /> },
-      { name: 'Webpack', icon: <JavascriptIcon /> },
-      { name: 'Google Cloud Platform', icon: <JavascriptIcon /> },
-      { name: 'AWS', icon: <JavascriptIcon /> },
-      { name: 'Vercel', icon: <JavascriptIcon /> },
-      { name: 'GitHub Actions', icon: <JavascriptIcon /> },
-    ],
-  },
-  {
-    title: '<IDEs & Creative Tools />',
-    description:
-      'The editors, IDEs, and design tools that fuel daily productivity and creativity.',
-    skills: [
-      { name: 'Trae', icon: <JavascriptIcon /> },
-      { name: 'VS Code', icon: <JavascriptIcon /> },
-      { name: 'Android Studio', icon: <JavascriptIcon /> },
-      { name: 'Figma', icon: <JavascriptIcon /> },
+      { name: 'UI Design', icon: <FigmaIcon /> },
+      { name: 'Game Environment Art', icon: <JavascriptIcon /> },
+      { name: 'Game Character Art', icon: <JavascriptIcon /> },
+      { name: 'Game Effects & Animations', icon: <JavascriptIcon /> },
     ],
   },
 ];

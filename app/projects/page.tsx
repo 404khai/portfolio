@@ -32,6 +32,8 @@ export type ProjectCategory =
   | 'AI platforms'
   | 'Web3 / dApps'
   | 'EdTech'
+  | 'Mobile Apps'
+  | 'Games'
   | 'SaaS tools'
   | 'DevTools';
 
@@ -118,7 +120,7 @@ export default function ProjectsPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3 border-b border-zinc-800 pb-4">
+        <div className="flex overflow-x-auto pb-4 gap-3 no-scrollbar border-b border-zinc-800 w-full -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap">
           {TABS.map((tab) => (
             <button
               key={tab}
