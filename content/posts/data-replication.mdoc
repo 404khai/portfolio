@@ -1,0 +1,32 @@
+---
+title: Data Replication in Distributed Systems
+date: November 29, 2025
+category: SWE
+readTime: 45 min read
+description: A comprehensive deep-dive into data replication strategies for distributed systems. Explore the CAP theorem, advanced consistency models, and replication topologies.
+tags:
+  - Distributed Systems
+  - Data Replication
+  - CAP Theorem
+  - Raft
+---
+Distributed systems are the backbone of modern software architecture. At the heart of these systems lies the challenge of data replication—ensuring that data is consistently and reliably copied across multiple nodes.
+
+## The Challenge of Consistency
+
+When we talk about replication, we immediately run into the CAP theorem. You can't have it all. Consistency, Availability, Partition Tolerance—pick two (well, really, pick between C and A in the presence of P).
+
+![Server Architecture](/fangfirelabs.jpeg)
+
+Figure 1: Visualizing data flow across region boundaries.
+
+## Implementing Raft Consensus
+
+One of the most popular algorithms for managing a replicated log is Raft. It's designed to be understandable. Here is how you might verify the status of a Raft node in a production cluster.
+
+{% TerminalBlock
+   command="curl -X GET http://localhost:8080/raft/status"
+   output="{\n  \"state\": \"Leader\",\n  \"term\": 42,\n  \"commit_index\": 1024,\n  \"applied_index\": 1024,\n  \"peers\": [\"10.0.0.2\", \"10.0.0.3\"]\n}"
+   title="terminal" /%}
+
+The output confirms that our node is currently the `Leader` for term 42. All entries up to index 1024 have been committed and applied to the state machine.
