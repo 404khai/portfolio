@@ -46,10 +46,13 @@ export default config({
                 output: fields.text({ label: 'Output', multiline: true }),
               },
               preview: (props) => {
-                 // We will define a preview later or use a simple representation
-                 return props.fields.command.value 
-                   ? `Terminal: ${props.fields.command.value}` 
-                   : 'Terminal Block';
+                 return (
+                   <div>
+                     {props.fields.command.value 
+                       ? `Terminal: ${props.fields.command.value}` 
+                       : 'Terminal Block'}
+                   </div>
+                 );
               },
             },
           },
