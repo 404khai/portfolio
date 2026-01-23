@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { CaretDownFill, CaretUpFill } from 'react-bootstrap-icons';
 
 interface MobileTOCProps {
-  items: { label: string; href: string }[];
+  items: { label: string; href: string; level: number }[];
 }
 
 export default function MobileTOC({ items }: MobileTOCProps) {
@@ -29,7 +29,9 @@ export default function MobileTOC({ items }: MobileTOCProps) {
               <a
                 key={item.href}
                 href={item.href}
-                className="block text-zinc-400 text-sm md:text-base hover:text-white transition-colors"
+                className={`block text-zinc-400 hover:text-white transition-colors ${
+                  item.level === 3 ? 'pl-4 text-xs md:text-sm' : 'text-sm md:text-base'
+                }`}
               >
                 {item.label}
               </a>

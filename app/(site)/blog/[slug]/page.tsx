@@ -40,16 +40,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // If TOC data isn't readily available, I will hide the TOC section or leave it empty/placeholder 
   // until a proper extraction utility is added. 
   
-  // Let's try to extract basic H2s if possible, or just leave TOC out for a moment if it's too complex for one go.
-  // Actually, let's create a helper to extract headings from the content JSON tree.
-  const tocItems: { label: string; href: string }[] = [];
+  // Let's try to extract basic H2s and H3s
+  const tocItems: { label: string; href: string; level: number }[] = [];
   
   // Simple recursive function to find headings
   const extractHeadings = (node: any) => {
-    if (node.type === 'heading' && node.level === 2) {
+    if (node.type === 'heading' && (node.level === 2 || node.level === 3)) {
       const text = node.children.map((c: any) => c.text).join('');
       const slug = text.toLowerCase().replace(/[^\w]+/g, '-');
-      tocItems.push({ label: text, href: `#${slug}` });
+      tocItems.push({ label: text, href: `#${slug}`, level: node.level });
     }
     if (node.children) {
       node.children.forEach(extractHeadings);
@@ -156,7 +155,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                       <a
                         key={item.href}
                         href={item.href}
-                        className="block text-zinc-400 text-sm md:text-base hover:text-white transition-colors"
+                        className={`block text-zinc-400 hover:text-white transition-colors ${
+                          item.level === 3 ? 'pl-4 text-xs md:text-sm' : 'text-sm md:text-base'
+                        }`}
                       >
                         {item.label}
                       </a>
