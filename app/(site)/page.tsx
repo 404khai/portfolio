@@ -32,7 +32,7 @@ export default function Home() {
         
         <ul className="flex flex-col gap-4 text-zinc-300 font-figtree text-lg list-disc pl-5 marker:text-zinc-600">
            <li>
-             I'm a <b className="text-[#ffff00] font-calistoga">Creative Systems Engineer</b> who is intrigued by Operating Systems, Game development, Animation and Interactive UI.
+             I'm a <b className="text-[#a8e64c] font-calistoga">Creative Systems Engineer</b> who is intrigued by Operating Systems, Game development, Animation and Interactive UI.
            </li>
            <li>
              <b>4+</b> years of experience in the industry, specializing in backend development with a focus on performance and scalability.
@@ -56,31 +56,31 @@ export default function Home() {
 
         {/* Hero Project */}
         <FeaturedProject 
-          title="End-to-End AI Platform Revolution"
-          subtitle="Oculus"
-          description="Oculus is a comprehensive AI platform that revolutionizes business operations through intelligent automation, helping companies streamline sales, marketing, and administrative tasks with advanced AI agents."
-          linkText="Read About Ellum"
+          title="Agentic AI Chatbot"
+          subtitle="Manticore"
+          description="Manticore is a semi-autonomous agentic AI that retains context across multiple devices and can independently operate using its knowledge base."
+          linkText="Try out Manticore"
           linkUrl="#"
-          logo={<EllumLogo />}
+          logo="/manticore.png"
           // Using a colored placeholder since we don't have the image
-          imageUrl="" 
+          imageUrl="/oculus.png" 
         />
 
         {/* Project Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <ProjectCard 
-            title="New gen manwha / manga reader app"
+            title="Social manwha / manga reader app"
             subtitle="Keihatsu"
             category="ENTERTAINMET"
             description="A social manwha reader app with over 2k users and a vibrant community."
-            logo={<WalPressLogo />}
+            logo="/keihatsu.jpeg"
           />
           <ProjectCard 
             title="AI-driven learning and exam practice for West Africa"
             subtitle="Revixor"
             category="EDTECH"
             description="Transforming your exam study sessions with intelligent prompts, AI-powered explanations & step-by-step solutions."
-            logo={<GradificLogo />}
+            logo="/revixor.png"
           />
         </div>
 

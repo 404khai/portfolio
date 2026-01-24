@@ -6,7 +6,7 @@ interface FeaturedProjectProps {
   description: string;
   linkText: string;
   linkUrl: string;
-  logo: React.ReactNode;
+  logo: React.ReactNode | string;
   imageUrl?: string; // Optional image URL
 }
 
@@ -25,13 +25,18 @@ export const FeaturedProject: React.FC<FeaturedProjectProps> = ({
       {/* Content Side */}
       <div className="flex flex-col gap-6 flex-1 z-10">
         <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 rounded-full border border-zinc-700">
-               {logo}
+            <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 border border-zinc-700">
+              {typeof logo === 'string' ? (
+              // eslint-disable-next-line @next/next/no-img-element
+                <img src={logo} alt={subtitle} className="w-full h-full object-cover" />
+                ) : (
+                  logo
+              )}
             </div>
-          <span className="font-doto text-xl text-white tracking-wide">{subtitle}</span>
+          <span className="font-irish-grover text-xl text-white tracking-wide">{subtitle}</span>
         </div>
 
-        <h2 className="font-figtree text-4xl md:text-5xl font-bold text-white leading-tight">
+        <h2 className="font-figtree text-4xl md:text-3xl font-bold text-white leading-tight">
           {title}
         </h2>
 
