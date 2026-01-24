@@ -5,7 +5,8 @@ import { reader } from '@/lib/keystatic';
 import { DocumentRenderer, DocumentRendererProps } from '@keystatic/core/renderer';
 import { TerminalBlock } from '@/components/TerminalBlock';
 import { ArrowLeft, ArrowRight, CaretDownFill, CaretUpFill } from 'react-bootstrap-icons';
-import MobileTOC from '@/components/MobileTOC'; // We'll create this component to handle state
+import TableOfContents from '@/components/TableOfContents';
+import MobileTOC from '@/components/MobileTOC';
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -81,7 +82,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         const className = level === 2 
           ? "text-3xl font-bold text-white mt-12 mb-6" 
           : level === 3 
-          ? "text-2xl font-bold text-white mt-8 mb-4" 
+          ? "text-md font-bold text-white mt-8 mb-4" 
           : "text-xl font-bold text-white mt-6 mb-3";
         
         // Generate ID for H2s for TOC linking
@@ -122,7 +123,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             />
             {alt && <p className="text-center text-zinc-500 text-sm mt-3">{alt}</p>}
         </div>
-      )
+      ),
+      list: ({ children, type }: { children: React.ReactNode; type: 'ordered' | 'unordered' }) => {
+        const Tag = type === 'ordered' ? 'ol' : 'ul';
+        const className = type === 'ordered' 
+          ? 'list-decimal pl-5 mb-6 text-zinc-400 space-y-2 marker:text-zinc-400' 
+          : 'list-disc pl-5 mb-6 text-zinc-400 space-y-2 marker:text-zinc-400';
+        return (
+          <Tag className={className}>
+            {React.Children.map(children, child => (
+              <li className="text-zinc-400 pl-1">{child}</li>
+            ))}
+          </Tag>
+        );
+      },
     },
   };
 
@@ -143,39 +157,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2.7fr)] md:gap-10">
           
           {/* Desktop TOC */}
-          {hasToc && (
-            <div className="hidden md:block">
-              <div className="sticky top-24">
-                <div className="border border-zinc-900 bg-[#0a0a0a]">
-                  <div className="px-5 py-4 border-b border-zinc-900">
-                    <span className="text-zinc-300 text-xl font-calistoga">Table of Contents</span>
-                  </div>
-                  <nav className="px-5 py-4 space-y-3">
-                    {tocItems.map((item) => (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        className={`block text-zinc-400 hover:text-white transition-colors ${
-                          item.level === 3 ? 'pl-4 text-xs md:text-sm' : 'text-sm md:text-base'
-                        }`}
-                      >
-                        {item.label}
-                      </a>
-                    ))}
-                  </nav>
-                </div>
-                
-                 <Link 
-                    href="/blog"
-                    className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mt-8"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Back to blog</span>
-                  </Link>
-              </div>
-            </div>
-          )}
-
+          {hasToc && <TableOfContents items={tocItems} />}
+          
            {/* If No TOC, keep the back link on the side or adjust layout? 
                The example.tsx hides the side column if no TOC. 
                But we usually want a back link. 

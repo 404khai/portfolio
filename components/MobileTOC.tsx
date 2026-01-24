@@ -30,7 +30,7 @@ export default function MobileTOC({ items }: MobileTOCProps) {
                 key={item.href}
                 href={item.href}
                 className={`block text-zinc-400 hover:text-white transition-colors ${
-                  item.level === 3 ? 'pl-4 text-xs md:text-sm' : 'text-sm md:text-base'
+                  item.level === 3 ? 'pl-4 text-xs' : 'text-sm md:text-base'
                 }`}
               >
                 {item.label}

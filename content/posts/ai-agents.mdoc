@@ -42,6 +42,14 @@ ChatGPT, Gemini and Claude are widely used applications built on / powered by LL
 
 If a user tells an LLM: "Everytime I ask for a personal event, perform a searcch query and fetch data from my calendar before responding", that is a simple AI Workflow.
 
+### Key Traits of AI Workflows
+
+- **Control Logic**: They can only follow pre-defined paths set by humans. The paths are called control logic e.g. If we ask a follow up question like "What will the weather be?" on said event day, the LLM will fail to respond because that is outside the scope of its workflow.
+
+Pushing this example further, if we allow the LLM to access the weather via an API and use a text-to-audio model to speak the answer:
+No matter how many steps is added, it is still an AI workflow
+Note: The human is still the decision maker, there is no AI agent involvement
+
 ![Server Architecture](/fangfirelabs.jpeg)
 
 Figure 1: Visualizing data flow across region boundaries.

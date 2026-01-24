@@ -5,7 +5,7 @@ interface ProjectCardProps {
   category: string;
   subtitle: string; // The "WalPress" or "Gradific" text
   description: string;
-  logo: React.ReactNode;
+  logo: React.ReactNode | string;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -20,10 +20,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 flex items-center justify-center bg-zinc-800/50 rounded-full border border-zinc-700/50 group-hover:border-zinc-500 transition-colors">
-            {logo}
+        <div className="w-10 h-10 flex items-center justify-center bg-zinc-800/50 border border-zinc-700/50 group-hover:border-zinc-500 transition-colors overflow-hidden">
+            {typeof logo === 'string' ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logo} alt={subtitle} className="w-full h-full object-contain" />
+            ) : (
+              logo
+            )}
         </div>
-        <span className="font-doto text-xl text-white tracking-wide group-hover:text-zinc-200 transition-colors">{subtitle}</span>
+        <span className="font-irish-grover text-xl text-white tracking-wide group-hover:text-zinc-200 transition-colors">{subtitle}</span>
       </div>
 
       {/* Content */}
