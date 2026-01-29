@@ -40,7 +40,13 @@ ChatGPT, Gemini and Claude are widely used applications built on / powered by LL
 
 ## AI Workflows
 
-If a user tells an LLM: "Everytime I ask for a personal event, perform a searcch query and fetch data from my calendar before responding", that is a simple AI Workflow.
+If a user tells an LLM: "Everytime I ask for a personal event, perform a search query on my calendar and fetch data from my calendar before responding", that is a simple AI Workflow.
+
+{% WorkflowDiagram
+   tools=[
+     { label: "Calendar" },
+   ]
+/%}
 
 ### Key Traits of AI Workflows
 
@@ -49,6 +55,13 @@ If a user tells an LLM: "Everytime I ask for a personal event, perform a searcch
 Pushing this example further, if we allow the LLM to access the weather via an API and use a text-to-audio model to speak the answer:
 No matter how many steps is added, it is still an AI workflow
 Note: The human is still the decision maker, there is no AI agent involvement
+
+{% WorkflowDiagram
+   tools=[
+     { label: "Calendar" },
+     { label: "Weather App" }
+   ]
+/%}
 
 ![Server Architecture](/fangfirelabs.jpeg)
 

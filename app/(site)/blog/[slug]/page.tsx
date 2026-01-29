@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { reader } from '@/lib/keystatic';
 import { DocumentRenderer, DocumentRendererProps } from '@keystatic/core/renderer';
 import { TerminalBlock } from '@/components/TerminalBlock';
+import { WorkflowDiagram } from '@/components/WorkflowDiagram';
 import { ArrowLeft, ArrowRight, CaretDownFill, CaretUpFill } from 'react-bootstrap-icons';
 import TableOfContents from '@/components/TableOfContents';
 import MobileTOC from '@/components/MobileTOC';
@@ -85,7 +86,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       heading: ({ level, children }: { level: number; children: React.ReactNode }) => {
         const HeadingTag = `h${level}` as keyof React.JSX.IntrinsicElements;
         const className = level === 2 
-          ? "text-4xl font-bold text-white mt-12 mb-6 font-denk-one" 
+          ? "text-4xl font-bold text-white mt-12 mb-6 font-denk-one text-center" 
           : level === 3 
           ? "text-md font-bold text-white mt-8 mb-4" 
           : "text-xl font-bold text-white mt-6 mb-3";
@@ -152,6 +153,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         output={props.output} 
         title={props.title} 
       />
+    ),
+    WorkflowDiagram: (props: { tools: { label: string; image?: string }[] }) => (
+      <WorkflowDiagram tools={props.tools.map(t => ({ ...t, imageSrc: t.image }))} />
     ),
   };
 

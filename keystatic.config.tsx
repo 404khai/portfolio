@@ -55,6 +55,30 @@ export default config({
                  );
               },
             },
+            WorkflowDiagram: {
+              label: 'Workflow Diagram',
+              schema: {
+                tools: fields.array(
+                  fields.object({
+                    label: fields.text({ label: 'Label' }),
+                    image: fields.image({
+                      label: 'Icon/Image',
+                      directory: 'public/images/diagrams',
+                      publicPath: '/images/diagrams',
+                    }),
+                  }),
+                  {
+                    label: 'Tools',
+                    itemLabel: (props) => props.fields.label.value || 'Tool',
+                  }
+                ),
+              },
+              preview: (props) => (
+                <div style={{ padding: '10px', background: '#333', color: '#fff', borderRadius: '4px' }}>
+                  Workflow Diagram ({props.fields.tools.elements.length} tools)
+                </div>
+              ),
+            },
           },
         }),
       },
