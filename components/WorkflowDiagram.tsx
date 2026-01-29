@@ -82,9 +82,13 @@ export const WorkflowDiagram: React.FC<WorkflowDiagramProps> = ({ tools }) => {
                       </div>
 
                       <div className="mt-3 w-20 h-20 rounded-2xl border border-zinc-700 bg-zinc-900 p-4 flex items-center justify-center transition-all hover:scale-105 hover:border-zinc-500 hover:shadow-xl hover:-translate-y-1">
-                          {tool.imageSrc ? (
+                          {(tool.imageSrc || tool.image) ? (
                               // eslint-disable-next-line @next/next/no-img-element
-                              <img src={tool.imageSrc} alt={tool.label} className="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
+                              <img 
+                                src={tool.imageSrc || tool.image} 
+                                alt={tool.label} 
+                                className="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity" 
+                              />
                           ) : (
                               <div className="text-3xl text-zinc-500 font-bold">?</div>
                           )}
