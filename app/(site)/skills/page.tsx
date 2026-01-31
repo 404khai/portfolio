@@ -135,6 +135,42 @@ const LuaIcon = () => (
   </g>
 </svg>
 )
+
+const RustIcon = () => (
+  <div className="flex items-center justify-center p-10 bg-white">
+  <svg 
+    viewBox="0 0 100 100" 
+    className="w-64 h-64 fill-black transition-colors duration-300 hover:fill-orange-700"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M50 5 a45 45 0 1 0 0 90 a45 45 0 1 0 0 -90 Z M50 15 a35 35 0 1 1 0 70 a35 35 0 1 1 0 -70 Z 
+             M50 2 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
+             M84 15 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
+             M98 50 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
+             M84 85 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
+             M50 98 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
+             M16 85 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
+             M2 50 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
+             M16 15 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z" 
+    />
+    
+    <path d="M32 30 h30 c10 0 15 5 15 12 s-5 12 -15 12 h-10 v16 h12 v10 h-32 v-10 h8 v-40 h-8 Z 
+             M44 40 v14 h14 c4 0 6 -2 6 -7 s-2 -7 -6 -7 Z" 
+    />
+    
+    <g className="origin-center">
+      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-0" />
+      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[45deg]" />
+      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[90deg]" />
+      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[135deg]" />
+      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[180deg]" />
+      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[225deg]" />
+      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[270deg]" />
+      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[315deg]" />
+    </g>
+  </svg>
+</div>
+)
 const sections: SkillSection[] = [
   {
     title: '<Languages />',
