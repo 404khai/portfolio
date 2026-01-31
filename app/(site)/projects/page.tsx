@@ -9,6 +9,7 @@ export type ProjectCategory =
   | 'AI'
   | 'Mobile Apps'
   | 'Frontend'
+  | 'Fullstack'
   | 'Backend'
   | 'EdTech'
   | 'Games'
@@ -32,11 +33,11 @@ export const PROJECTS: ProjectMeta[] = [
     category: 'Mobile Apps',
   },
   {
-    slug: 'walpress',
-    title: 'WalPress',
-    description: 'Decentralized site-builder for creators. Censorship-resistant websites on the blockchain.',
-    logo: '/keihatsu.png',
-    category: 'Frontend',
+    slug: 'hirecraft',
+    title: 'HireCraft',
+    description: 'Domestic Service Marketplace.',
+    logo: '/hirecraft.jpeg',
+    category: 'Fullstack',
   },
   {
     slug: 'oroshi',
@@ -46,11 +47,11 @@ export const PROJECTS: ProjectMeta[] = [
     category: 'Mobile Apps',
   },
   {
-    slug: 'formdrop',
-    title: 'FormDrop',
-    description: 'Super simple headless form backend.',
-    logo: '/keihatsu.png',
-    category: 'SaaS tools',
+    slug: 'supanote',
+    title: 'Supanote',
+    description: 'Concept AI note and task organizer.',
+    logo: '/supanote.png',
+    category: 'Frontend',
   },
   {
     slug: 'pathwatch',
@@ -78,6 +79,7 @@ export default function ProjectsPage() {
   'Mobile Apps',
   'Frontend',
   'Backend',
+  'Fullstack',
   'EdTech',
   'Games',
   'SaaS tools',
