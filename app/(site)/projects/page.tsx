@@ -32,11 +32,32 @@ export const PROJECTS: ProjectMeta[] = [
     category: 'Mobile Apps',
   },
   {
+    slug: 'farmintel',
+    title: 'FarmIntel',
+    description: 'Agricultural intelligence system designed to help farmers and agro-enterprises make smarter data-driven decisions and optimize farming operations',
+    logo: '/farmintel.png',
+    category: 'AI',
+  },
+  {
     slug: 'hirecraft',
     title: 'HireCraft',
     description: 'Domestic Service Marketplace.',
     logo: '/hirecraft.jpeg',
     category: 'Fullstack',
+  },
+  {
+    slug: 'atlas',
+    title: 'Atlas',
+    description: 'Agentic 2D Game Developer.',
+    logo: '/atlas.png',
+    category: 'Games',
+  },
+  {
+    slug: 'Revixor',
+    title: 'Revixor',
+    description: 'AI-driven learning and exam practice for West Africa.',
+    logo: '/revixor.png',
+    category: 'AI',
   },
   {
     slug: 'oroshi',
@@ -71,6 +92,13 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Wallet Service',
     description: 'Wallet service for managing user wallets, deposits & transactions using Paystack.',
     logo: '/wallet.jpg',
+    category: 'Backend / APIs',
+  },
+  {
+    slug: 'notification-service',
+    title: 'Notification Service',
+    description: 'Microservice notification system that sends emails and push notifications.',
+    logo: '/bell.png',
     category: 'Backend / APIs',
   },
 ];
