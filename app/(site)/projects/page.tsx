@@ -10,11 +10,10 @@ export type ProjectCategory =
   | 'Mobile Apps'
   | 'Frontend'
   | 'Fullstack'
-  | 'Backend'
+  | 'Backend / APIs'
   | 'EdTech'
   | 'Games'
-  | 'SaaS tools'
-  | 'DevTools';
+  | 'SaaS';
 
 export type ProjectMeta = {
   slug: string;
@@ -54,18 +53,25 @@ export const PROJECTS: ProjectMeta[] = [
     category: 'Frontend',
   },
   {
-    slug: 'pathwatch',
-    title: 'PathWatch',
-    description: 'API observability and monitoring tool.',
-    logo: '/keihatsu.png',
-    category: 'DevTools',
+    slug: 'krea-ai',
+    title: 'Krea AI',
+    description: 'Clone of KreaAI website',
+    logo: '/krea.png',
+    category: 'Frontend',
   },
   {
-    slug: 'notdatabase',
-    title: 'NotDatabase',
-    description: 'Type-safe document database for TypeScript.',
-    logo: '/keihatsu.png',
-    category: 'DevTools',
+    slug: 'mail-api',
+    title: 'Mail Integration API',
+    description: 'Mail integration API using Mailchimp and GetResponse.',
+    logo: '/mail.png',
+    category: 'Backend / APIs',
+  },
+  {
+    slug: 'wallet-service',
+    title: 'Wallet Service',
+    description: 'Wallet service for managing user wallets, deposits & transactions using Paystack.',
+    logo: '/wallet.jpg',
+    category: 'Backend / APIs',
   },
 ];
 
@@ -78,12 +84,11 @@ export default function ProjectsPage() {
   'AI',
   'Mobile Apps',
   'Frontend',
-  'Backend',
+  'Backend / APIs',
   'Fullstack',
   'EdTech',
   'Games',
-  'SaaS tools',
-  'DevTools'
+  'SaaS'
   ];
 
   const filteredProjects =
