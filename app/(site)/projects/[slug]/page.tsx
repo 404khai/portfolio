@@ -15,12 +15,12 @@ type ProjectDetail = ProjectMeta & {
 
 const PROJECT_DETAILS: ProjectDetail[] = [
   {
-    ...PROJECTS.find((p) => p.slug === 'ellum-ai')!,
+    ...PROJECTS.find((p) => p.slug === 'keihatsu')!,
     longDescription:
-      'ELLUM is a comprehensive AI platform that orchestrates agents, workflows, and data pipelines to automate complex business operations end-to-end.',
-    skills: ['TypeScript', 'Next.js', 'PostgreSQL', 'Prisma', 'Docker', 'OpenAI'],
-    githubUrl: '#',
-    liveUrl: '#',
+      'Keihatsu is an opensource, social manwha reader app with a vibrant community of readers that provide a platform for manwha, manga and manhua fans to connect over their favorite series, while supporting offline downloads.',
+    skills: ['TypeScript', 'Nest.js', 'Flutter', 'Dart', 'System Design'],
+    githubUrl: 'https://github.com/grvt8/Keihatsu.git',
+    liveUrl: 'http://keihatsu.vercel.app',
     images: [
       'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1600&q=80',
       'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80',
@@ -30,27 +30,12 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ],
   },
   {
-    ...PROJECTS.find((p) => p.slug === 'walpress')!,
+    ...PROJECTS.find((p) => p.slug === 'farmintel')!,
     longDescription:
-      'WalPress is a decentralized site builder that lets creators launch censorship-resistant websites backed by blockchain infrastructure.',
-    skills: ['TypeScript', 'Next.js', 'Web3', 'Smart Contracts'],
-    githubUrl: '#',
-    liveUrl: '#',
-    images: [
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80',
-    ],
-  },
-  {
-    ...PROJECTS.find((p) => p.slug === 'gradific')!,
-    longDescription:
-      'Gradific is an AI-first grading and classroom management platform that helps teachers automate evaluation and surface deep insights about student performance.',
+      'FarmIntel is an agricultural intelligence system designed to help farmers and agro-enterprises make smarter data-driven decisions and optimize farming operations. It comes with AI pest and plant disease detection, as well as real-time weather and crop yield predictions, AI recommendations for optimal farming practices, and a community of farmers and agro-enterprises to share knowledge and best practices.',
     skills: ['React', 'TypeScript', 'Python', 'FastAPI', 'PostgreSQL', 'OpenAI'],
-    githubUrl: '#',
-    liveUrl: '#',
+    githubUrl: 'https://github.com/404khai/FarmIntel-API',
+    liveUrl: 'https://farmintel-ai.vercel.app',
     images: [
       'https://images.unsplash.com/photo-1545235617-9465c4b8baad?auto=format&fit=crop&w=1600&q=80',
       'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80',
@@ -60,11 +45,25 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ],
   },
   {
-    ...PROJECTS.find((p) => p.slug === 'formdrop')!,
+    ...PROJECTS.find((p) => p.slug === 'hirecraft')!,
     longDescription:
-      'FormDrop is a headless form backend that captures submissions from any frontend and forwards them to your preferred destinations.',
-    skills: ['Next.js', 'TypeScript', 'PostgreSQL', 'Redis'],
-    githubUrl: '#',
+      'HireCraft is a Springboot powered domestic service marketplace which provides a platform connecting service providers (e.g.plumbers, painters) to employers.',
+    skills: ['Java', 'Springboot', 'Typescript', 'Smart Contracts'],
+    githubUrl: 'https://github.com/404khai/HireCraft-SpringBoot',
+    liveUrl: 'https://hirecraft.vercel.app',
+    images: [
+      '/hirecraft1.png',
+      '/hirecraft2.png',
+      '/hirecraft3.png',
+      '/hirecraft4.png'
+    ],
+  },
+  {
+    ...PROJECTS.find((p) => p.slug === 'oroshi')!,
+    longDescription:
+      'Oroshi is a concept mobile app for a japanese sushi franchise.',
+    skills: ['React Native', 'TypeScript', 'Expo'],
+    githubUrl: 'https://github.com/404khai/oroshi',
     liveUrl: '#',
     images: [
       'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
