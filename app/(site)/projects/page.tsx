@@ -67,6 +67,13 @@ export const PROJECTS: ProjectMeta[] = [
     category: 'Mobile Apps',
   },
   {
+    slug: 'supabricx',
+    title: 'Supabricx',
+    description: 'Build end-to-end backend services via intelligent prompts.',
+    logo: '/supabricx.png',
+    category: 'AI',
+  },
+  {
     slug: 'supanote',
     title: 'Supanote',
     description: 'Concept AI note and task organizer.',
