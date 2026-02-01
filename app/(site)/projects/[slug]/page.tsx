@@ -178,9 +178,19 @@ export default function ProjectDetailPage() {
             <span>←</span>
             <span>Back to projects</span>
           </Link>
-          <h1 className="font-irish-grover text-4xl md:text-6xl font-bold tracking-tight text-white">
-            {project.title}
-          </h1>
+          <div className="flex items-center gap-4 md:gap-6">
+            <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
+               {/* eslint-disable-next-line @next/next/no-img-element */}
+               <img
+                 src={project.logo}
+                 alt={`${project.title} logo`}
+                 className="h-full w-full object-cover"
+               />
+            </div>
+            <h1 className="font-irish-grover text-4xl md:text-6xl font-bold tracking-tight text-white">
+              {project.title}
+            </h1>
+          </div>
           <p className="font-figtree text-zinc-400 text-base md:text-lg max-w-3xl">
             {project.longDescription}
           </p>
