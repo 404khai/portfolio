@@ -31,10 +31,10 @@ export const ProjectListItem: React.FC<ProjectListItemProps> = ({
 
             {/* Content */}
             <div className="flex flex-col gap-1 min-w-0 flex-1">
-                <h3 className="font-figtree text-lg md:text-xl font-bold text-white truncate group-hover:text-zinc-200 transition-colors">
+                <h3 className="font-figtree text-lg md:text-xl font-bold text-white line-clamp-1 group-hover:text-zinc-200 transition-colors">
                     {title}
                 </h3>
-                <p className="font-figtree text-zinc-500 text-sm md:text-base line-clamp-2 md:line-clamp-none">
+                <p className="font-figtree text-zinc-500 text-sm md:text-base line-clamp-2">
                 {description}
             </p>
             </div>
