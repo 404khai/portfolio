@@ -32,16 +32,16 @@ const PROJECT_DETAILS: ProjectDetail[] = [
   {
     ...PROJECTS.find((p) => p.slug === 'farmintel')!,
     longDescription:
-      'FarmIntel is an agricultural intelligence system designed to help farmers and agro-enterprises make smarter data-driven decisions and optimize farming operations. It comes with AI pest and plant disease detection, as well as real-time weather and crop yield predictions, AI recommendations for optimal farming practices, and a community of farmers and agro-enterprises to share knowledge and best practices.',
-    skills: ['React', 'TypeScript', 'Python', 'FastAPI', 'PostgreSQL', 'OpenAI'],
+      'FarmIntel is an agricultural intelligence system designed to help farmers and agro-enterprises make smarter data-driven decisions and optimize farming operations. It comes with ML pest and plant disease detection, as well as real-time weather and crop yield predictions, AI recommendations for optimal farming practices, and a community of farmers and agro-enterprises to share knowledge and best practices.',
+    skills: ['React', 'TypeScript', 'Python', 'FastAPI', 'ML', 'Model Training', 'PostgreSql'],
     githubUrl: 'https://github.com/404khai/FarmIntel-API',
     liveUrl: 'https://farmintel-ai.vercel.app',
     images: [
-      'https://images.unsplash.com/photo-1545235617-9465c4b8baad?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
+      '/farmintel1.png',
+      '/farmintel2.png',
+      '/farmintel3.png',
+      '/farmintel4.png',
+      '/farmintel5.png'
     ],
   },
   {

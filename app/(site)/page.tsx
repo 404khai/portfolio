@@ -35,7 +35,7 @@ export default function Home() {
              I'm a <b className="text-[#a8e64c] font-calistoga">Creative Systems Engineer</b> who is intrigued by Operating Systems, Game Development, Animation and Interactive UI.
            </li>
            <li>
-             <b>4+</b> years of experience in the industry, specializing in backend development with a focus on performance and scalability.
+             <b>4+</b> years of experience in the industry, with specialty across Agentic AI, Backend Development and Game Development.
            </li>
            <li>
              Probably trying out new frameworks, or dabbling in <b className="text-white">Lua</b>, <b className="text-white">Rust</b> or <b className="text-white">ArkTs</b>.

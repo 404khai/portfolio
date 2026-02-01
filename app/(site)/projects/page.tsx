@@ -11,7 +11,7 @@ export type ProjectCategory =
   | 'Frontend'
   | 'Fullstack'
   | 'Backend / APIs'
-  | 'EdTech'
+  | 'Designs'
   | 'Games'
   | 'SaaS';
 
@@ -121,7 +121,7 @@ export default function ProjectsPage() {
   'Frontend',
   'Backend / APIs',
   'Fullstack',
-  'EdTech',
+  'Designs',
   'Games',
   'SaaS'
   ];
@@ -132,18 +132,18 @@ export default function ProjectsPage() {
       : PROJECTS.filter((project) => project.category === activeTab);
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white px-4 py-10 md:px-8 md:py-16 flex flex-col items-center">
-      <div className="w-full max-w-4xl flex flex-col gap-10">
+    <div className="w-full min-h-screen bg-[#09090b] text-white px-6 py-10 md:px-8 md:py-16 flex flex-col items-center pb-20">
+      <div className="w-full max-w-5xl flex flex-col gap-10">
         <div className="flex flex-col gap-4">
-          <h1 className="font-irish-grover text-6xl md:text-8xl font-bold tracking-tight text-white">
+          <h1 className="font-irish-grover text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-white">
             Projects
           </h1>
-          <p className="font-figtree text-zinc-400 text-xl md:text-2xl max-w-2xl">
+          <p className="font-figtree text-zinc-400 text-lg md:text-2xl max-w-2xl">
             A selection of highlighted projects showcasing my work and expertise.
           </p>
         </div>
 
-        <div className="flex overflow-x-auto pb-4 gap-3 no-scrollbar border-b border-zinc-800 w-full -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap">
+        <div className="flex overflow-x-auto pb-4 gap-2 md:gap-3 no-scrollbar border-b border-zinc-800 -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap">
           {TABS.map((tab) => (
             <button
               key={tab}
