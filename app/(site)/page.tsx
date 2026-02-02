@@ -1,4 +1,5 @@
 import React from 'react';
+import { FileEarmarkArrowDownFill } from 'react-bootstrap-icons';
 import { FeaturedProject } from '@/components/FeaturedProject';
 import { ProjectCard } from '@/components/ProjectCard';
 
@@ -10,9 +11,20 @@ export default function Home() {
       {/* Intro Section */}
       <div className="w-full flex flex-col gap-8 border border-dashed border-[#27272a] p-8 md:p-12 bg-[#09090b]">
         <div className="flex flex-col gap-2">
-           <h1 className="text-xl text-zinc-300 font-figtree">
-            Hey it's me, <span className="font-irish-grover font-black tracking-tighter text-4xl text-white ml-2">Khai</span>
-           </h1>
+           <div className="flex items-center justify-between w-full">
+             <h1 className="text-xl text-zinc-300 font-figtree flex items-center">
+              Hey it's me, <span className="font-irish-grover font-black tracking-tighter text-4xl text-white ml-2">Khai</span>
+             </h1>
+             
+             <div className="group relative">
+               <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Download CV">
+                 <FileEarmarkArrowDownFill className="w-6 h-6 text-zinc-400 hover:text-[#a8e64c] transition-colors duration-300 cursor-pointer" />
+               </a>
+               <div className="absolute -top-12 right-0 w-max px-3 py-1.5 bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-xl transform translate-y-2 group-hover:translate-y-0 z-10">
+                 Download CV
+               </div>
+             </div>
+           </div>
            <p className="text-zinc-400 font-figtree text-lg max-w-2xl mt-4 leading-relaxed">
              Let's get straight to the point....
            </p>
