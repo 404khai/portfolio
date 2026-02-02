@@ -22,11 +22,17 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     githubUrl: 'https://github.com/grvt8/Keihatsu.git',
     liveUrl: 'http://keihatsu.vercel.app',
     images: [
-      'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80',
+      '/keihatsu1.png',
+      '/keihatsu2.png',
+      '/keihatsu3.png',
+      '/keihatsu4.png',
+      '/keihatsu5.png',
+      '/keihatsu6.png',
+      '/keihatsu7.png',
+      '/keihatsu8.png',
+      '/keihatsu9.png',
+      '/keihatsu10.png',
+      '/keihatsu11.png'
     ],
   },
   {
