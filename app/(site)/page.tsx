@@ -20,7 +20,7 @@ export default function Home() {
                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Download CV">
                  <FileEarmarkArrowDownFill className="w-6 h-6 text-zinc-400 hover:text-[#a8e64c] transition-colors duration-300 cursor-pointer" />
                </a>
-               <div className="absolute -top-12 right-0 w-max px-3 py-1.5 bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-xl transform translate-y-2 group-hover:translate-y-0 z-10">
+               <div className="absolute -top-12 -left-10 w-max px-3 py-1.5 bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-xl transform translate-y-2 group-hover:translate-y-0 z-10">
                  Download CV
                </div>
              </div>
