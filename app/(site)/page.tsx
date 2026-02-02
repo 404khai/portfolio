@@ -2,18 +2,6 @@ import React from 'react';
 import { FeaturedProject } from '@/components/FeaturedProject';
 import { ProjectCard } from '@/components/ProjectCard';
 
-// Placeholder Icons
-const EllumLogo = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-);
-
-const WalPressLogo = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-blue-400"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
-);
-
-const GradificLogo = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-green-400"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-);
 
 export default function Home() {
   return (
@@ -41,6 +29,93 @@ export default function Home() {
              Probably trying out new frameworks, or dabbling in <b className="text-white">Lua</b>, <b className="text-white">Rust</b> or <b className="text-white">ArkTs</b>.
            </li>
         </ul>
+      </div>
+
+      {/* Socials Section */}
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-px bg-[#27272a] border border-[#27272a]">
+        <a 
+          href="https://github.com/404khai" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="group relative flex items-center justify-between p-6 bg-[#09090b] hover:bg-zinc-900/80 transition-all duration-300"
+        >
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden group-hover:border-zinc-700 transition-colors">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/github.png" alt="GitHub" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-figtree text-white font-bold text-xl tracking-tight">GitHub</span>
+              <span className="font-figtree text-zinc-500 text-sm font-medium">404khai</span>
+            </div>
+          </div>
+          <div className="text-zinc-600 group-hover:text-white transition-colors duration-300 transform group-hover:translate-x-1 group-hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </a>
+
+        <a 
+          href="https://x.com/404kha1" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="group relative flex items-center justify-between p-6 bg-[#09090b] hover:bg-zinc-900/80 transition-all duration-300"
+        >
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden group-hover:border-zinc-700 transition-colors">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/x.png" alt="X" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-figtree text-white font-bold text-xl tracking-tight">X</span>
+              <span className="font-figtree text-zinc-500 text-sm font-medium">@404kha1</span>
+            </div>
+          </div>
+          <div className="text-zinc-600 group-hover:text-white transition-colors duration-300 transform group-hover:translate-x-1 group-hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </a>
+
+        <a 
+          href="https://www.tiktok.com/@404khai" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="group relative flex items-center justify-between p-6 bg-[#09090b] hover:bg-zinc-900/80 transition-all duration-300"
+        >
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden group-hover:border-zinc-700 transition-colors">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/tiktok.png" alt="X" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-figtree text-white font-bold text-xl tracking-tight">Tiktok</span>
+              <span className="font-figtree text-zinc-500 text-sm font-medium">404khai</span>
+            </div>
+          </div>
+          <div className="text-zinc-600 group-hover:text-white transition-colors duration-300 transform group-hover:translate-x-1 group-hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </a>
+
+        <a 
+          href="https://www.youtube.com/@404khai" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="group relative flex items-center justify-between p-6 bg-[#09090b] hover:bg-zinc-900/80 transition-all duration-300"
+        >
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden group-hover:border-zinc-700 transition-colors">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/youtube.png" alt="X" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-figtree text-white font-bold text-xl tracking-tight">Youtube</span>
+              <span className="font-figtree text-zinc-500 text-sm font-medium">@404khai</span>
+            </div>
+          </div>
+          <div className="text-zinc-600 group-hover:text-white transition-colors duration-300 transform group-hover:translate-x-1 group-hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </a>
       </div>
 
       {/* Featured Projects Section */}
