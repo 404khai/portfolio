@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, ArrowLeft, ArrowRight } from 'react-bootstrap-icons';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { PROJECTS, ProjectMeta } from '../page';
@@ -245,7 +246,7 @@ export default function ProjectDetailPage() {
                   className="pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-zinc-200 hover:bg-black"
                 >
                   <span className="sr-only">Previous image</span>
-                  <span>←</span>
+                  <ArrowLeft />
                 </button>
                 <button
                   type="button"
@@ -253,7 +254,7 @@ export default function ProjectDetailPage() {
                   className="pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-zinc-200 hover:bg-black"
                 >
                   <span className="sr-only">Next image</span>
-                  <span>→</span>
+                 <ArrowRight/>
                 </button>
               </div>
             </div>
