@@ -74,33 +74,30 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ],
   },
   {
-    ...PROJECTS.find((p) => p.slug === 'pathwatch')!,
+    ...PROJECTS.find((p) => p.slug === 'supanote')!,
     longDescription:
-      'PathWatch is an observability layer for APIs, giving you insight into request paths, performance, and failures across distributed services.',
-    skills: ['Go', 'TypeScript', 'gRPC', 'Kafka', 'Prometheus'],
-    githubUrl: '#',
-    liveUrl: '#',
+      'SupaNote is a note & task organization app for startup founders and teams with a focus on simplicity and ease of use. It allows founders to organize their thoughts, track their to-dos, and get smart suggestions in one unified workspace.',
+    skills: ['React', 'TypeScript', 'JavaScript', 'CSS'],
+    githubUrl: 'https://github.com/404khai/supanote',
+    liveUrl: 'https://supanote-space.vercel.app',
     images: [
-      'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
+      '/supanote1.png',
+      '/supanote2.png',
+      '/supanote3.png',
+      '/supanote4.png'
     ],
   },
   {
-    ...PROJECTS.find((p) => p.slug === 'notdatabase')!,
+    ...PROJECTS.find((p) => p.slug === 'krea-ai')!,
     longDescription:
-      'NotDatabase is a type-safe document database designed for TypeScript-first applications, combining flexibility with strong typing.',
-    skills: ['TypeScript', 'Node.js', 'Redis', 'Docker'],
-    githubUrl: '#',
-    liveUrl: '#',
+      'Krea-AI is a clone of the previous landing page of the official Krea AI website built entirely from an image provided. Krea AI is a powerful AI suite for creatives, that enables users to generate, enhance and edit images, videos or 3D meshes with AI ',
+    skills: ['TypeScript', 'Next.js', 'TailwindCSS'],
+    githubUrl: 'https://github.com/404khai/Krea-AI-Clone',
+    liveUrl: 'https://krea-ai-web-clone.vercel.app',
     images: [
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
+      '/krea-ai1.png',
+      '/krea-ai2.png',
+      '/krea-ai3.png'
     ],
   },
 ];
