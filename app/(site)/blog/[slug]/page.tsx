@@ -160,7 +160,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   };
 
   return (
-    <article className="min-h-screen bg-[#09090b] text-white">
+    <article className="w-full min-h-screen bg-[#09090b] text-white">
       <div className="max-w-5xl mx-auto pt-24 pb-12 px-6 md:px-0">
         
         <div className="md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2.7fr)] md:gap-10">
