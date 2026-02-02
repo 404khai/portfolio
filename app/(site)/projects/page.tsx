@@ -89,7 +89,7 @@ export const PROJECTS: ProjectMeta[] = [
   },
   {
     slug: 'mail-api',
-    title: 'Mail Integration API',
+    title: 'ESP Integration API',
     description: 'Mail integration API using Mailchimp and GetResponse.',
     logo: '/mail.png',
     category: 'Backend / APIs',

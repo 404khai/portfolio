@@ -100,6 +100,33 @@ const PROJECT_DETAILS: ProjectDetail[] = [
       '/krea-ai3.png'
     ],
   },
+  {
+    ...PROJECTS.find((p) => p.slug === 'mail-api')!,
+    longDescription:
+      'Mail Integration API using MailChimp and GetResponse for marketing leads and conversion campaign emails.',
+    skills: ['TypeScript', 'Express', 'MongoDB'],
+    githubUrl: 'https://github.com/404khai/mail-integration-api',
+    liveUrl: '#',
+    images: [
+      '/mail-api1.png',
+      '/mail-api2.png',
+      '/mail-api3.png',
+      '/mail-api4.png'
+    ],
+  },
+  {
+    ...PROJECTS.find((p) => p.slug === 'wallet-service')!,
+    longDescription:
+      'Wallet Service System using FastAPI, Paystack and PostgreSql for managing user wallets, deposits and transactions.',
+    skills: ['Python', 'FastAPI', 'PostgreSql'],
+    githubUrl: 'https://github.com/404khai/wallet-service-api',
+    liveUrl: '#',
+    images: [
+      '/wallet-api1.png',
+      '/wallet-api2.png',
+      '/wallet-api3.png'
+    ],
+  },
 ];
 
 const GithubIcon = () => (
