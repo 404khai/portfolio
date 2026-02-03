@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, ChevronLeft, ChevronRight, ZoomIn, ArrowLeft, ArrowRight } from 'react-bootstrap-icons';
+import { X, ChevronLeft, ChevronRight, ZoomIn, ArrowLeft, ArrowRight, RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff } from 'react-bootstrap-icons';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { PROJECTS, ProjectMeta } from '../page';
+import { ProjectStatus } from '@/components/ProjectListItem';
 
 type ProjectDetail = ProjectMeta & {
   longDescription: string;
@@ -12,6 +13,44 @@ type ProjectDetail = ProjectMeta & {
   githubUrl?: string;
   liveUrl?: string;
   images: string[];
+};
+
+const statusConfig: Record<ProjectStatus, { icon: React.ElementType, color: string, bg: string, border: string, label: string }> = {
+  live: { 
+    icon: RocketTakeoffFill, 
+    color: 'text-emerald-400', 
+    bg: 'bg-emerald-950/30', 
+    border: 'border-emerald-800',
+    label: 'Live'
+  },
+  construction: { 
+    icon: Hammer, 
+    color: 'text-amber-400', 
+    bg: 'bg-amber-950/30', 
+    border: 'border-amber-800',
+    label: 'Under Construction'
+  },
+  users: { 
+    icon: PeopleFill, 
+    color: 'text-blue-400', 
+    bg: 'bg-blue-950/30', 
+    border: 'border-blue-800',
+    label: 'Has Users'
+  },
+  'coming-soon': { 
+    icon: HourglassSplit, 
+    color: 'text-purple-400', 
+    bg: 'bg-purple-950/30', 
+    border: 'border-purple-800',
+    label: 'Coming Soon'
+  },
+  'not-live': { 
+    icon: WifiOff, 
+    color: 'text-zinc-400', 
+    bg: 'bg-zinc-900', 
+    border: 'border-zinc-700',
+    label: 'Not Live'
+  }
 };
 
 const PROJECT_DETAILS: ProjectDetail[] = [
@@ -319,6 +358,31 @@ export default function ProjectDetailPage() {
                   ))}
                 </div>
               </div>
+
+              {project.status && project.status.length > 0 && (
+                <div>
+                  <h2 className="font-calistoga text-xs text-zinc-400 uppercase tracking-[0.2em]">
+                    Status
+                  </h2>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {project.status.map((status) => {
+                      const config = statusConfig[status];
+                      const Icon = config.icon;
+                      return (
+                        <div
+                          key={status}
+                          className={`flex items-center gap-3 rounded-full border ${config.border} ${config.bg} px-3 py-2.5`}
+                        >
+                          <Icon className={`h-4 w-4 ${config.color}`} />
+                          <span className={`text-xs font-medium ${config.color}`}>
+                            {config.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
             </div>
           </div>
