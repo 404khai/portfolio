@@ -49,6 +49,76 @@ This project uses [Keystatic](https://keystatic.com/) as a headless CMS for mana
    git push
    ```
 
+## Writing Guide (Markdoc)
+
+This blog uses [Markdoc](https://markdoc.dev/) for content. Below is a guide on the supported syntax and components.
+
+### 1. Basic Formatting
+
+- **Bold**: Use double asterisks: `**Bold Text**`
+- **Italic**: Use underscores or asterisks: `_Italic_` or `*Italic*`
+- **Bullet Points**: Use hyphens or asterisks:
+  ```markdown
+  - Item 1
+  - Item 2
+  ```
+- **Ordered Lists**: Use numbers:
+  ```markdown
+  1. First item
+  2. Second item
+  ```
+
+### 2. Table of Contents (TOC) Hierarchy
+
+The Table of Contents is automatically generated based on the headings in your post.
+
+- `## Heading 2`: Main section (appears at the top level of TOC).
+- `### Heading 3`: Subsection (nested under the preceding H2 in TOC).
+- `#### Heading 4`: Not included in TOC.
+
+**Example:**
+```markdown
+## Introduction (TOC Level 1)
+Some intro text...
+
+### Background (TOC Level 2)
+More details...
+
+## Implementation (TOC Level 1)
+How we built it...
+```
+
+### 3. Custom Components
+
+You can insert custom React components using the Markdoc tag syntax `{% ComponentName prop="value" /%}`.
+
+#### TerminalBlock
+Displays a terminal window with a command and its output.
+
+```markdoc
+{% TerminalBlock
+   command="npm run dev"
+   output="> dev
+> next dev
+
+ready - started server on 0.0.0.0:3000, url: http://localhost:3000"
+   title="terminal" 
+/%}
+```
+
+#### WorkflowDiagram
+Visualizes a workflow with a central LLM node and connected tools.
+
+```markdoc
+{% WorkflowDiagram
+   tools=[
+     { label: "Calendar", imageSrc: "/images/posts/calendar.png" },
+     { label: "Weather App", imageSrc: "/weather.png" }
+   ]
+/%}
+```
+*Note: `imageSrc` should be a path to an image in the `public` folder.*
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
