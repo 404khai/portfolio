@@ -1,17 +1,60 @@
 import React from 'react';
+import { RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff } from 'react-bootstrap-icons';
+
+export type ProjectStatus = 'live' | 'construction' | 'users' | 'coming-soon' | 'not-live';
 
 interface ProjectListItemProps {
   title: string;
   description: string;
   logo: string;
   href?: string;
+  status?: ProjectStatus[];
 }
+
+const statusConfig: Record<ProjectStatus, { icon: React.ElementType, color: string, bg: string, border: string, label: string }> = {
+  live: { 
+    icon: RocketTakeoffFill, 
+    color: 'text-emerald-400', 
+    bg: 'bg-emerald-950', 
+    border: 'border-emerald-800',
+    label: 'Live'
+  },
+  construction: { 
+    icon: Hammer, 
+    color: 'text-amber-400', 
+    bg: 'bg-amber-950', 
+    border: 'border-amber-800',
+    label: 'Under Construction'
+  },
+  users: { 
+    icon: PeopleFill, 
+    color: 'text-blue-400', 
+    bg: 'bg-blue-950', 
+    border: 'border-blue-800',
+    label: 'Has Users'
+  },
+  'coming-soon': { 
+    icon: HourglassSplit, 
+    color: 'text-purple-400', 
+    bg: 'bg-purple-950', 
+    border: 'border-purple-800',
+    label: 'Coming Soon'
+  },
+  'not-live': { 
+    icon: WifiOff, 
+    color: 'text-zinc-400', 
+    bg: 'bg-zinc-900', 
+    border: 'border-zinc-700',
+    label: 'Not Live'
+  }
+};
 
 export const ProjectListItem: React.FC<ProjectListItemProps> = ({
   title,
   description,
   logo,
   href = "#",
+  status = []
 }) => {
   return (
     <a 
@@ -38,6 +81,30 @@ export const ProjectListItem: React.FC<ProjectListItemProps> = ({
                 {description}
             </p>
             </div>
+
+            {/* Status Icons (Overlapping) */}
+            {status.length > 0 && (
+              <div className="flex -space-x-3 md:-space-x-4 flex-shrink-0 pl-2">
+                {status.map((s, index) => {
+                  const config = statusConfig[s];
+                  const Icon = config.icon;
+                  return (
+                    <div 
+                      key={`${title}-status-${index}`}
+                      className={`relative w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 border-[#09090b] ${config.bg} shadow-sm z-${status.length - index} group/icon`}
+                      title={config.label}
+                    >
+                      <Icon className={`w-3.5 h-3.5 md:w-4 md:h-4 ${config.color}`} />
+                      
+                      {/* Tooltip */}
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-zinc-800 text-zinc-200 text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                        {config.label}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
         </div>
     </a>
   );

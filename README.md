@@ -107,7 +107,7 @@ ready - started server on 0.0.0.0:3000, url: http://localhost:3000"
 ```
 
 #### WorkflowDiagram
-Visualizes a workflow with a central LLM node and connected tools.
+Visualizes a workflow diagram with a central node and connected tools.
 
 ```markdoc
 {% WorkflowDiagram
