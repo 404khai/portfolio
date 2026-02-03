@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ProjectListItem } from '@/components/ProjectListItem';
+import { ProjectListItem, ProjectStatus } from '@/components/ProjectListItem';
 
 
 export type ProjectCategory =
@@ -21,6 +21,7 @@ export type ProjectMeta = {
   description: string;
   logo: string;
   category: ProjectCategory;
+  status?: ProjectStatus[];
 };
 
 export const PROJECTS: ProjectMeta[] = [
@@ -30,6 +31,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'A social manwha reader app with a vibrant community',
     logo: '/keihatsu.png',
     category: 'Mobile Apps',
+    status: ['live', 'users'],
   },
   {
     slug: 'farmintel',
@@ -37,6 +39,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Agricultural intelligence system for farmers and agro-enterprises',
     logo: '/farmintel.png',
     category: 'AI',
+    status: ['live', 'construction'],
   },
   {
     slug: 'hirecraft',
@@ -44,6 +47,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Domestic Service Marketplace.',
     logo: '/hirecraft.jpeg',
     category: 'Fullstack',
+    status: ['coming-soon'],
   },
   {
     slug: 'atlas',
@@ -51,6 +55,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Agentic 2D Game Developer.',
     logo: '/atlas.png',
     category: 'Games',
+    status: ['construction'],
   },
   {
     slug: 'Revixor',
@@ -58,6 +63,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'AI-driven learning and exam practice for West Africa.',
     logo: '/revixor.png',
     category: 'AI',
+    status: ['live', 'users'],
   },
   {
     slug: 'oroshi',
@@ -65,6 +71,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'App design for a concept sushi brand.',
     logo: '/oroshi.png',
     category: 'Mobile Apps',
+    status: ['not-live'],
   },
   {
     slug: 'supabricx',
@@ -72,6 +79,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Build end-to-end backend services via intelligent prompts.',
     logo: '/supabricx.png',
     category: 'AI',
+    status: ['construction'],
   },
   {
     slug: 'supanote',
@@ -79,6 +87,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Concept AI note and task organizer.',
     logo: '/supanote.png',
     category: 'Frontend',
+    status: ['not-live'],
   },
   {
     slug: 'krea-ai',
@@ -86,6 +95,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Clone of KreaAI website',
     logo: '/krea.png',
     category: 'Frontend',
+    status: ['live'],
   },
   {
     slug: 'mail-api',
@@ -93,6 +103,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Mail integration API using Mailchimp and GetResponse.',
     logo: '/mail.png',
     category: 'Backend / APIs',
+    status: ['live'],
   },
   {
     slug: 'wallet-service',
@@ -100,6 +111,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Wallet service for managing user wallets, deposits & transactions using Paystack.',
     logo: '/wallet.jpg',
     category: 'Backend / APIs',
+    status: ['live'],
   },
   {
     slug: 'notification-service',
@@ -107,6 +119,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Microservice notification system that sends emails and push notifications.',
     logo: '/bell.png',
     category: 'Backend / APIs',
+    status: ['live'],
   },
 ];
 
@@ -172,6 +185,7 @@ export default function ProjectsPage() {
                 description={project.description}
                 logo={project.logo}
                 href={`/projects/${project.slug}`}
+                status={project.status}
               />
             ))
           ) : (
