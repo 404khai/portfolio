@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Funnel, X, ChevronDown } from 'react-bootstrap-icons';
 import { ProjectListItem, ProjectStatus } from '@/components/ProjectListItem';
 
 
@@ -126,6 +127,7 @@ export const PROJECTS: ProjectMeta[] = [
 
 export default function ProjectsPage() {
   const [selectedCategories, setSelectedCategories] = useState<ProjectCategory[]>([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const TABS: ProjectCategory[] = [
   'All',
@@ -176,7 +178,50 @@ export default function ProjectsPage() {
           </p>
         </div>
 
-        <div className="flex overflow-x-auto pb-4 gap-2 md:gap-3 no-scrollbar border-b border-zinc-800 -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap">
+        {/* Mobile Filter (< 500px) */}
+        <div className="flex flex-col gap-2 min-[500px]:hidden w-full relative z-30">
+            <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center justify-between w-full px-4 py-3 bg-zinc-900/50 border border-zinc-800 rounded-xl text-zinc-300 font-figtree transition-colors hover:bg-zinc-900"
+            >
+                <div className="flex items-center gap-2">
+                    <Funnel className="w-4 h-4" />
+                    <span className="text-sm font-medium">Filter Projects</span>
+                    {selectedCategories.length > 0 && (
+                        <span className="flex items-center justify-center w-5 h-5 text-[10px] font-bold text-black bg-zinc-100 rounded-full">
+                            {selectedCategories.length}
+                        </span>
+                    )}
+                </div>
+                {isDropdownOpen ? <X className="w-5 h-5" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+
+            {isDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-2 p-3 bg-[#09090b] border border-zinc-800 rounded-xl shadow-2xl flex flex-wrap gap-2 animate-in fade-in zoom-in-95 duration-200">
+                    {TABS.map((tab) => {
+                         const isActive = tab === 'All'
+                            ? selectedCategories.length === 0
+                            : selectedCategories.includes(tab);
+                         return (
+                             <button
+                                key={tab}
+                                onClick={() => toggleCategory(tab)}
+                                className={`text-xs font-medium px-3 py-2 rounded-lg transition-all border ${
+                                    isActive
+                                        ? 'bg-zinc-100 text-black border-zinc-100'
+                                        : 'bg-zinc-900/50 text-zinc-400 border-zinc-800 hover:border-zinc-700'
+                                }`}
+                             >
+                                {tab}
+                             </button>
+                         )
+                    })}
+                </div>
+            )}
+        </div>
+
+        {/* Desktop/Tablet Filter (> 500px) */}
+        <div className="hidden min-[500px]:flex overflow-x-auto pb-4 gap-2 md:gap-3 no-scrollbar border-b border-zinc-800 -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap">
           {TABS.map((tab) => {
             const isActive =
               tab === 'All'
