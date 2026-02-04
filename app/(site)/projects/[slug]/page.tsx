@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, ChevronLeft, ChevronRight, ZoomIn, ArrowLeft, ArrowRight, RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff } from 'react-bootstrap-icons';
+import { X, ChevronLeft, ChevronRight, ZoomIn, CheckCircleFill, ArrowLeft, ArrowRight, RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff } from 'react-bootstrap-icons';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { PROJECTS, ProjectMeta } from '../page';
@@ -19,29 +19,29 @@ const statusConfig: Record<ProjectStatus, { icon: React.ElementType, color: stri
   live: { 
     icon: RocketTakeoffFill, 
     color: 'text-emerald-400', 
-    bg: 'bg-emerald-950/30', 
+    bg: 'bg-emerald-950/15', 
     border: 'border-emerald-800',
     label: 'Live'
   },
   construction: { 
     icon: Hammer, 
-    color: 'text-amber-400', 
-    bg: 'bg-amber-950/30', 
-    border: 'border-amber-800',
+    color: 'text-yellow-400', 
+    bg: 'bg-yellow-950/15', 
+    border: 'border-yellow-800',
     label: 'Under Construction'
   },
   users: { 
     icon: PeopleFill, 
     color: 'text-blue-400', 
-    bg: 'bg-blue-950/30', 
+    bg: 'bg-blue-950/15', 
     border: 'border-blue-800',
     label: 'Has Users'
   },
   'coming-soon': { 
     icon: HourglassSplit, 
-    color: 'text-purple-400', 
-    bg: 'bg-purple-950/30', 
-    border: 'border-purple-800',
+    color: 'text-rose-400', 
+    bg: 'bg-rose-950/15', 
+    border: 'border-rose-800',
     label: 'Coming Soon'
   },
   'not-live': { 
@@ -50,7 +50,14 @@ const statusConfig: Record<ProjectStatus, { icon: React.ElementType, color: stri
     bg: 'bg-zinc-900', 
     border: 'border-zinc-700',
     label: 'Not Live'
-  }
+  },
+  completed: { 
+    icon: CheckCircleFill, 
+    color: 'text-lime-400', 
+    bg: 'bg-lime-950/15', 
+    border: 'border-lime-800',
+    label: 'Completed'
+  },
 };
 
 const PROJECT_DETAILS: ProjectDetail[] = [

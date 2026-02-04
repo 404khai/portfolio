@@ -1,7 +1,7 @@
 import React from 'react';
-import { RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff } from 'react-bootstrap-icons';
+import { RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff, CheckCircleFill } from 'react-bootstrap-icons';
 
-export type ProjectStatus = 'live' | 'construction' | 'users' | 'coming-soon' | 'not-live';
+export type ProjectStatus = 'live' | 'construction' | 'users' | 'coming-soon' | 'not-live' | 'completed';
 
 interface ProjectListItemProps {
   title: string;
@@ -21,9 +21,9 @@ const statusConfig: Record<ProjectStatus, { icon: React.ElementType, color: stri
   },
   construction: { 
     icon: Hammer, 
-    color: 'text-amber-400', 
-    bg: 'bg-amber-950', 
-    border: 'border-amber-800',
+    color: 'text-yellow-400', 
+    bg: 'bg-yellow-950', 
+    border: 'border-yellow-800',
     label: 'Under Construction'
   },
   users: { 
@@ -35,9 +35,9 @@ const statusConfig: Record<ProjectStatus, { icon: React.ElementType, color: stri
   },
   'coming-soon': { 
     icon: HourglassSplit, 
-    color: 'text-purple-400', 
-    bg: 'bg-purple-950', 
-    border: 'border-purple-800',
+    color: 'text-rose-400', 
+    bg: 'bg-rose-950', 
+    border: 'border-rose-800',
     label: 'Coming Soon'
   },
   'not-live': { 
@@ -46,7 +46,14 @@ const statusConfig: Record<ProjectStatus, { icon: React.ElementType, color: stri
     bg: 'bg-zinc-900', 
     border: 'border-zinc-700',
     label: 'Not Live'
-  }
+  },
+  completed: { 
+    icon: CheckCircleFill, 
+    color: 'text-lime-400', 
+    bg: 'bg-lime-950', 
+    border: 'border-lime-800',
+    label: 'Completed'
+  },
 };
 
 export const ProjectListItem: React.FC<ProjectListItemProps> = ({

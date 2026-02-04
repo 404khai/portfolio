@@ -31,7 +31,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'A social manwha reader app with a vibrant community',
     logo: '/keihatsu.png',
     category: 'Mobile Apps',
-    status: ['live', 'users'],
+    status: ['construction', 'coming-soon'],
   },
   {
     slug: 'farmintel',
@@ -39,7 +39,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Agricultural intelligence system for farmers and agro-enterprises',
     logo: '/farmintel.png',
     category: 'AI',
-    status: ['live', 'construction'],
+    status: ['completed', 'not-live'],
   },
   {
     slug: 'hirecraft',
@@ -47,7 +47,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Domestic Service Marketplace.',
     logo: '/hirecraft.jpeg',
     category: 'Fullstack',
-    status: ['coming-soon'],
+    status: ['completed' ,'not-live'],
   },
   {
     slug: 'atlas',
@@ -55,7 +55,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Agentic 2D Game Developer.',
     logo: '/atlas.png',
     category: 'Games',
-    status: ['construction'],
+    status: ['coming-soon'],
   },
   {
     slug: 'Revixor',
@@ -63,7 +63,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'AI-driven learning and exam practice for West Africa.',
     logo: '/revixor.png',
     category: 'AI',
-    status: ['live', 'users'],
+    status: ['construction', 'coming-soon'],
   },
   {
     slug: 'oroshi',
@@ -71,7 +71,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'App design for a concept sushi brand.',
     logo: '/oroshi.png',
     category: 'Mobile Apps',
-    status: ['not-live'],
+    status: ['completed', 'not-live'],
   },
   {
     slug: 'supabricx',
@@ -79,7 +79,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Build end-to-end backend services via intelligent prompts.',
     logo: '/supabricx.png',
     category: 'AI',
-    status: ['construction'],
+    status: ['coming-soon'],
   },
   {
     slug: 'supanote',
@@ -87,7 +87,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Concept AI note and task organizer.',
     logo: '/supanote.png',
     category: 'Frontend',
-    status: ['not-live'],
+    status: ['completed', 'live'],
   },
   {
     slug: 'krea-ai',
@@ -95,7 +95,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Clone of KreaAI website',
     logo: '/krea.png',
     category: 'Frontend',
-    status: ['live'],
+    status: ['completed', 'live'],
   },
   {
     slug: 'mail-api',
@@ -103,7 +103,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Mail integration API using Mailchimp and GetResponse.',
     logo: '/mail.png',
     category: 'Backend / APIs',
-    status: ['live'],
+    status: ['completed', 'not-live'],
   },
   {
     slug: 'wallet-service',
@@ -111,7 +111,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Wallet service for managing user wallets, deposits & transactions using Paystack.',
     logo: '/wallet.jpg',
     category: 'Backend / APIs',
-    status: ['live'],
+    status: ['completed', 'not-live'],
   },
   {
     slug: 'notification-service',
@@ -119,7 +119,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Microservice notification system that sends emails and push notifications.',
     logo: '/bell.png',
     category: 'Backend / APIs',
-    status: ['live'],
+    status: ['completed', 'not-live'],
   },
 ];
 
