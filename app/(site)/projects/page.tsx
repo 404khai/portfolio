@@ -20,7 +20,7 @@ export type ProjectMeta = {
   title: string;
   description: string;
   logo: string;
-  category: ProjectCategory;
+  categories: ProjectCategory[];
   status?: ProjectStatus[];
 };
 
@@ -30,7 +30,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Keihatsu',
     description: 'A social manwha reader app with a vibrant community',
     logo: '/keihatsu.png',
-    category: 'Mobile Apps',
+    categories: ['Mobile Apps'],
     status: ['construction', 'coming-soon'],
   },
   {
@@ -38,7 +38,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'FarmIntel',
     description: 'Agricultural intelligence system for farmers and agro-enterprises',
     logo: '/farmintel.png',
-    category: 'AI',
+    categories: ['AI', 'Fullstack'],
     status: ['completed', 'not-live'],
   },
   {
@@ -46,7 +46,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'HireCraft',
     description: 'Domestic Service Marketplace.',
     logo: '/hirecraft.jpeg',
-    category: 'Fullstack',
+    categories: ['Fullstack'],
     status: ['completed' ,'not-live'],
   },
   {
@@ -54,7 +54,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Atlas',
     description: 'Agentic 2D Game Developer.',
     logo: '/atlas.png',
-    category: 'Games',
+    categories: ['Games'],
     status: ['coming-soon'],
   },
   {
@@ -62,15 +62,15 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Revixor',
     description: 'AI-driven learning and exam practice for West Africa.',
     logo: '/revixor.png',
-    category: 'AI',
-    status: ['construction', 'coming-soon'],
+    categories: ['AI'],
+    status: ['live', 'users'],
   },
   {
     slug: 'oroshi',
     title: 'Oroshi',
     description: 'App design for a concept sushi brand.',
     logo: '/oroshi.png',
-    category: 'Mobile Apps',
+    categories: ['Mobile Apps'],
     status: ['completed', 'not-live'],
   },
   {
@@ -78,7 +78,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Supabricx',
     description: 'Build end-to-end backend services via intelligent prompts.',
     logo: '/supabricx.png',
-    category: 'AI',
+    categories: ['AI'],
     status: ['coming-soon'],
   },
   {
@@ -86,7 +86,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Supanote',
     description: 'Concept AI note and task organizer.',
     logo: '/supanote.png',
-    category: 'Frontend',
+    categories: ['Frontend'],
     status: ['completed', 'live'],
   },
   {
@@ -94,7 +94,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Krea AI',
     description: 'Clone of KreaAI website',
     logo: '/krea.png',
-    category: 'Frontend',
+    categories: ['Frontend'],
     status: ['completed', 'live'],
   },
   {
@@ -102,7 +102,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'ESP Integration API',
     description: 'Mail integration API using Mailchimp and GetResponse.',
     logo: '/mail.png',
-    category: 'Backend / APIs',
+    categories: ['Backend / APIs'],
     status: ['completed', 'not-live'],
   },
   {
@@ -110,7 +110,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Wallet Service',
     description: 'Wallet service for managing user wallets, deposits & transactions using Paystack.',
     logo: '/wallet.jpg',
-    category: 'Backend / APIs',
+    categories: ['Backend / APIs'],
     status: ['completed', 'not-live'],
   },
   {
@@ -118,14 +118,14 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Notification Service',
     description: 'Microservice notification system that sends emails and push notifications.',
     logo: '/bell.png',
-    category: 'Backend / APIs',
+    categories: ['Backend / APIs'],
     status: ['completed', 'not-live'],
   },
 ];
 
 
 export default function ProjectsPage() {
-  const [activeTab, setActiveTab] = useState<ProjectCategory>('All');
+  const [selectedCategories, setSelectedCategories] = useState<ProjectCategory[]>([]);
 
   const TABS: ProjectCategory[] = [
   'All',
@@ -139,10 +139,27 @@ export default function ProjectsPage() {
   'SaaS'
   ];
 
+  const toggleCategory = (category: ProjectCategory) => {
+    if (category === 'All') {
+      setSelectedCategories([]);
+      return;
+    }
+
+    setSelectedCategories((prev) => {
+      if (prev.includes(category)) {
+        return prev.filter((c) => c !== category);
+      } else {
+        return [...prev, category];
+      }
+    });
+  };
+
   const filteredProjects =
-    activeTab === 'All'
+    selectedCategories.length === 0
       ? PROJECTS
-      : PROJECTS.filter((project) => project.category === activeTab);
+      : PROJECTS.filter((project) =>
+          project.categories.some((cat) => selectedCategories.includes(cat))
+        );
 
   return (
     <div className="w-full min-h-screen bg-[#09090b] text-white px-4 py-10 md:px-8 md:py-16 flex flex-col items-center pb-20">
@@ -160,20 +177,27 @@ export default function ProjectsPage() {
         </div>
 
         <div className="flex overflow-x-auto pb-4 gap-2 md:gap-3 no-scrollbar border-b border-zinc-800 -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => setActiveTab(tab)}
-              className={`font-figtree text-sm md:text-base font-medium px-3 md:px-4 py-2 rounded-md transition-all duration-200 ${
-                activeTab === tab
-                  ? 'bg-zinc-100 text-black'
-                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+          {TABS.map((tab) => {
+            const isActive =
+              tab === 'All'
+                ? selectedCategories.length === 0
+                : selectedCategories.includes(tab);
+
+            return (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => toggleCategory(tab)}
+                className={`font-figtree text-sm md:text-base font-medium px-3 md:px-4 py-2 rounded-md transition-all duration-200 ${
+                  isActive
+                    ? 'bg-zinc-100 text-black'
+                    : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900'
+                }`}
+              >
+                {tab}
+              </button>
+            );
+          })}
         </div>
 
         <div className="flex flex-col gap-4">
@@ -190,7 +214,7 @@ export default function ProjectsPage() {
             ))
           ) : (
             <div className="text-zinc-500 font-figtree text-sm md:text-lg py-10 text-center border border-dashed border-zinc-800 rounded-lg">
-              No projects found for {activeTab}.
+              No projects found for selected categories.
             </div>
           )}
         </div>
