@@ -296,6 +296,70 @@ const SpringBootIcon = () => (
   />
 )
 
+const CharacterArtIcon = () => (
+  <img
+    src="/icons/character.jpeg"
+    alt="Character Art"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const EnvArtIcon = () => (
+  <img
+    src="/icons/environment.png"
+    alt="Environment Art"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const EffectsIcon = () => (
+  <img
+    src="/icons/effects.jpeg"
+    alt="Game Effects"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const AISdkIcon = () => (
+  <img
+    src="/icons/aisdk.png"
+    alt="Vercel AI SDK"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const MastraIcon = () => (
+  <img
+    src="/icons/mastra.png"
+    alt="Mastra AI"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const MLIcon = () => (
+  <img
+    src="/icons/ml.png"
+    alt="Machine Learning"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const DeepLearningIcon = () => (
+  <img
+    src="/icons/deepLearning.png"
+    alt="Deep Learning"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const OpencvIcon = () => (
+  <img
+    src="/icons/opencv.png"
+    alt="OpenCV"
+    className="h-8 w-8 object-contain"
+  />
+)
+
 
 
 const sections: SkillSection[] = [
@@ -376,12 +440,11 @@ const sections: SkillSection[] = [
     title: '<AI & Machine Learning />',
     description: 'Techniques and tools to build intelligent, data-driven applications.',
     skills: [
-      { name: 'Vercel AI SDK', icon: <JavascriptIcon /> },
-      { name: 'Mastra AI', icon: <JavascriptIcon /> },
-      { name: 'Machine Learning', icon: <JavascriptIcon /> },
-      { name: 'Deep Learning', icon: <JavascriptIcon /> },
-      { name: 'OpenCV', icon: <JavascriptIcon /> },
-      { name: 'OpenAI API', icon: <JavascriptIcon /> },
+      { name: 'Vercel AI SDK', icon: <AISdkIcon /> },
+      { name: 'Mastra AI', icon: <MastraIcon /> },
+      { name: 'Machine Learning', icon: <MLIcon /> },
+      { name: 'Deep Learning', icon: <DeepLearningIcon /> },
+      { name: 'OpenCV', icon: <OpencvIcon /> },
     ],
   },
   {
@@ -390,9 +453,9 @@ const sections: SkillSection[] = [
       'Other creative & design skills.',
     skills: [
       { name: 'UI Design', icon: <FigmaIcon /> },
-      { name: 'Game Environment Art', icon: <JavascriptIcon /> },
-      { name: 'Game Character Art', icon: <JavascriptIcon /> },
-      { name: 'Game Effects & Animations', icon: <JavascriptIcon /> },
+      { name: 'Game Environment Art', icon: <EnvArtIcon /> },
+      { name: 'Game Character Art', icon: <CharacterArtIcon /> },
+      { name: 'Game Effects & Animations', icon: <EffectsIcon /> },
     ],
   },
 ];
