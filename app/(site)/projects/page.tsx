@@ -179,7 +179,7 @@ export default function ProjectsPage() {
         </div>
 
         {/* Mobile Filter (< 500px) */}
-        <div className="flex flex-col gap-2 min-[500px]:hidden w-full relative z-30">
+        <div className="flex flex-col gap-2 min-[765px]:hidden w-full relative z-30">
             <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center justify-between w-full px-4 py-3 bg-zinc-900/50 border border-zinc-800 rounded-xl text-zinc-300 font-figtree transition-colors hover:bg-zinc-900"

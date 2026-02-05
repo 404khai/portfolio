@@ -137,40 +137,79 @@ const LuaIcon = () => (
 )
 
 const RustIcon = () => (
-  <div className="flex items-center justify-center p-10 bg-white">
-  <svg 
-    viewBox="0 0 100 100" 
-    className="w-64 h-64 fill-black transition-colors duration-300 hover:fill-orange-700"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M50 5 a45 45 0 1 0 0 90 a45 45 0 1 0 0 -90 Z M50 15 a35 35 0 1 1 0 70 a35 35 0 1 1 0 -70 Z 
-             M50 2 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
-             M84 15 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
-             M98 50 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
-             M84 85 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
-             M50 98 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
-             M16 85 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
-             M2 50 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z 
-             M16 15 a3 3 0 0 1 0 6 a3 3 0 0 1 0 -6 Z" 
-    />
-    
-    <path d="M32 30 h30 c10 0 15 5 15 12 s-5 12 -15 12 h-10 v16 h12 v10 h-32 v-10 h8 v-40 h-8 Z 
-             M44 40 v14 h14 c4 0 6 -2 6 -7 s-2 -7 -6 -7 Z" 
-    />
-    
-    <g className="origin-center">
-      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-0" />
-      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[45deg]" />
-      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[90deg]" />
-      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[135deg]" />
-      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[180deg]" />
-      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[225deg]" />
-      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[270deg]" />
-      <path d="M50 2 l3 6 h-6 Z" className="origin-center rotate-[315deg]" />
-    </g>
-  </svg>
-</div>
+  <img
+    src="/icons/rust.png"
+    alt="Rust"
+    className="h-8 w-8 object-contain"
+  />
 )
+
+const CPPIcon = () => (
+  <img
+    src="/icons/cpp.png"
+    alt="C++"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const CSharpIcon = () => (
+  <img
+    src="/icons/csharp.png"
+    alt="C#"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const ArkTsIcon = () => (
+  <img
+    src="/icons/arkts.png"
+    alt="ArkTs"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const JavaIcon = () => (
+  <img
+    src="/icons/java.png"
+    alt="Java"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const DartIcon = () => (
+  <img
+    src="/icons/dart.png"
+    alt="Dart"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const KotlinIcon = () => (
+  <img
+    src="/icons/kotlin.png"
+    alt="Kotlin"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const SwiftIcon = () => (
+  <img
+    src="/icons/swift.png"
+    alt="Swift"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const CangjieIcon = () => (
+  <img
+    src="/icons/cangjie.png"
+    alt="Cangjie"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+
+
 const sections: SkillSection[] = [
   {
     title: '<Languages />',
@@ -179,21 +218,17 @@ const sections: SkillSection[] = [
       { name: 'JavaScript', icon: <JavascriptIcon /> },
       { name: 'TypeScript', icon: <TypescriptIcon /> },
       { name: 'Python', icon: <PythonIcon /> },
-      { name: 'Lua', icon: <LuaIcon /> },
-      { name: 'ArkTs', icon: <ReactIcon /> },
-      { name: 'C#', icon: <ReactIcon /> },
-      { name: 'C++', icon: <ReactIcon /> },
+      { name: 'Luau', icon: <LuaIcon /> },
+      { name: 'ArkTs', icon: <ArkTsIcon /> },
+      { name: 'C#', icon: <CSharpIcon /> },
+      { name: 'C++', icon: <CPPIcon /> },
       { name: 'Go (Golang)', icon: <GolangIcon /> },
-      { name: 'Java', icon: <ReactIcon /> },
-      { name: 'Dart', icon: <ReactIcon /> },
-      { name: 'C', icon: <ReactIcon /> },
-      { name: 'Rust', icon: <ReactIcon /> },
-      { name: 'Elixir', icon: <ReactIcon /> },
-      { name: 'Kotlin', icon: <ReactIcon /> },
-      { name: 'PHP', icon: <ReactIcon /> },
-      { name: 'Ruby', icon: <ReactIcon /> },
-      { name: 'Cangjie', icon: <ReactIcon /> },
-      { name: 'Swift', icon: <ReactIcon /> },
+      { name: 'Java', icon: <JavaIcon /> },
+      { name: 'Dart', icon: <DartIcon /> },
+      { name: 'Rust', icon: <RustIcon /> },
+      { name: 'Kotlin', icon: <KotlinIcon /> },
+      { name: 'Cangjie', icon: <CangjieIcon /> },
+      { name: 'Swift', icon: <SwiftIcon /> },
     ],
   },
   {
