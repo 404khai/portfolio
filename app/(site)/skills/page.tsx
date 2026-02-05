@@ -361,6 +361,13 @@ const OpencvIcon = () => (
 )
 
 
+const SupabaseIcon = () => (
+  <img
+    src="/icons/supabase.png"
+    alt="Supabase"
+    className="h-8 w-8 object-contain"
+  />
+)
 
 const sections: SkillSection[] = [
   {
@@ -413,7 +420,7 @@ const sections: SkillSection[] = [
       { name: 'MySQL', icon: <MysqlIcon /> },
       { name: 'MongoDB', icon: <MongoDBIcon /> },
       { name: 'Redis', icon: <RedisIcon /> },
-      { name: 'Supabase', icon: <ReactIcon /> },
+      { name: 'Supabase', icon: <SupabaseIcon /> },
       { name: 'Firebase', icon: <FirebaseIcon /> },
     ],
   },
@@ -424,7 +431,7 @@ const sections: SkillSection[] = [
     skills: [
       { name: 'AWS', icon: <AWSIcon /> },
       { name: 'GCP', icon: <GCPIcon /> },
-      { name: 'Supabase', icon: <ReactIcon /> },
+      { name: 'Supabase', icon: <SupabaseIcon /> },
       { name: 'Firebase', icon: <FirebaseIcon /> },
       { name: 'Docker', icon: <DockerIcon /> },
       { name: 'Kubernetes', icon: <KubernetesIcon /> },
@@ -432,7 +439,6 @@ const sections: SkillSection[] = [
       { name: 'Git', icon: <GitIcon /> },
       { name: 'GitHub Actions', icon: <GithubActions /> },
       { name: 'Vercel', icon: <VercelIcon /> },
-      { name: 'Apache Kafka', icon: <JavascriptIcon /> },
       { name: 'Node.js', icon: <NodejsIcon /> },
     ],
   },
