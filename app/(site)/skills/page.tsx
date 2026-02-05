@@ -188,7 +188,7 @@ const KotlinIcon = () => (
   <img
     src="/icons/kotlin.png"
     alt="Kotlin"
-    className="h-8 w-8 object-contain"
+    className="h-8 w-6 object-contain"
   />
 )
 
@@ -204,6 +204,94 @@ const CangjieIcon = () => (
   <img
     src="/icons/cangjie.png"
     alt="Cangjie"
+    className="h-8 w-6 object-contain"
+  />
+)
+
+const FlutterIcon = () => (
+  <img
+    src="/icons/flutter.png"
+    alt="Flutter"
+    className="h-8 w-6 object-contain"
+  />
+)
+
+const SvelteIcon = () => (
+  <img
+    src="/icons/svelte.png"
+    alt="Svelte"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const AstroIcon = () => (
+  <img
+    src="/icons/astro.png"
+    alt="Astro Js"
+    className="h-8 w-6 object-contain"
+  />
+)
+
+const VueIcon = () => (
+  <img
+    src="/icons/vue.png"
+    alt="Vue"
+    className="h-8 w-6 object-contain"
+  />
+)
+
+const LangChainIcon = () => (
+  <img
+    src="/icons/langchain.png"
+    alt="LangChain"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const TauriIcon = () => (
+  <img
+    src="/icons/tauri.png"
+    alt="Tauri"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const DotnetIcon = () => (
+  <img
+    src="/icons/dotnet.png"
+    alt=".NET"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const DioxusIcon = () => (
+  <img
+    src="/icons/dioxus.png"
+    alt="Dioxus"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const DjangoIcon = () => (
+  <img
+    src="/icons/django.png"
+    alt="Django"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const ExpressIcon = () => (
+  <img
+    src="/icons/express.png"
+    alt="Express"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const SpringBootIcon = () => (
+  <img
+    src="/icons/springboot.png"
+    alt="Springboot"
     className="h-8 w-8 object-contain"
   />
 )
@@ -237,26 +325,19 @@ const sections: SkillSection[] = [
     skills: [
       { name: 'React', icon: <ReactIcon /> },
       { name: 'Next.js', icon: <NextjsIcon /> },
-      { name: 'Vue', icon: <ReactIcon /> },
-      { name: 'Svelte', icon: <ReactIcon /> },
-      { name: 'Astro', icon: <ReactIcon /> },
-      { name: 'Express', icon: <ReactIcon /> },
+      { name: 'Vue', icon: <VueIcon /> },
+      { name: 'Svelte', icon: <SvelteIcon /> },
+      { name: 'Astro', icon: <AstroIcon /> },
+      { name: 'Express', icon: <ExpressIcon /> },
       { name: 'Nest.js', icon: <NestjsIcon /> },
-      { name: 'SpringBoot', icon: <ReactIcon /> },
+      { name: 'SpringBoot', icon: <SpringBootIcon /> },
       { name: 'FastAPI', icon: <FastapiIcon /> },
-      { name: 'Django', icon: <ReactIcon /> },
-      { name: 'Phoenix', icon: <ReactIcon /> },
-      { name: 'Rails', icon: <ReactIcon /> },
-      { name: 'Symphony', icon: <ReactIcon /> },
-      { name: 'Laravel', icon: <ReactIcon /> },
-      { name: '.NET', icon: <ReactIcon /> },
-      { name: 'Flutter', icon: <ReactIcon /> },
-      { name: 'Dioxus', icon: <ReactIcon /> },
-      { name: 'Tauri', icon: <ReactIcon /> },
-      { name: 'Electron', icon: <ReactIcon /> },
-      { name: 'Tailwind CSS', icon: <TailwindIcon /> },
-      { name: 'SASS', icon: <JavascriptIcon /> },
-      { name: 'GSAP', icon: <JavascriptIcon /> },
+      { name: 'Django', icon: <DjangoIcon /> },
+      { name: '.NET', icon: <DotnetIcon /> },
+      { name: 'Flutter', icon: <FlutterIcon /> },
+      { name: 'Dioxus', icon: <DioxusIcon /> },
+      { name: 'Tauri', icon: <TauriIcon /> },
+      { name: 'LangChain', icon: <LangChainIcon /> },
     ],
   },
   {
