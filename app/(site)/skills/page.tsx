@@ -160,6 +160,56 @@ const CSharpIcon = () => (
   />
 )
 
+const ArkTsIcon = () => (
+  <img
+    src="/icons/arkts.png"
+    alt="ArkTs"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const JavaIcon = () => (
+  <img
+    src="/icons/java.png"
+    alt="Java"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const DartIcon = () => (
+  <img
+    src="/icons/dart.png"
+    alt="Dart"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const KotlinIcon = () => (
+  <img
+    src="/icons/kotlin.png"
+    alt="Kotlin"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const SwiftIcon = () => (
+  <img
+    src="/icons/swift.png"
+    alt="Swift"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+const CangjieIcon = () => (
+  <img
+    src="/icons/cangjie.png"
+    alt="Cangjie"
+    className="h-8 w-8 object-contain"
+  />
+)
+
+
+
 const sections: SkillSection[] = [
   {
     title: '<Languages />',
@@ -169,20 +219,16 @@ const sections: SkillSection[] = [
       { name: 'TypeScript', icon: <TypescriptIcon /> },
       { name: 'Python', icon: <PythonIcon /> },
       { name: 'Luau', icon: <LuaIcon /> },
-      { name: 'ArkTs', icon: <ReactIcon /> },
+      { name: 'ArkTs', icon: <ArkTsIcon /> },
       { name: 'C#', icon: <CSharpIcon /> },
       { name: 'C++', icon: <CPPIcon /> },
       { name: 'Go (Golang)', icon: <GolangIcon /> },
-      { name: 'Java', icon: <ReactIcon /> },
-      { name: 'Dart', icon: <ReactIcon /> },
-      { name: 'C', icon: <ReactIcon /> },
+      { name: 'Java', icon: <JavaIcon /> },
+      { name: 'Dart', icon: <DartIcon /> },
       { name: 'Rust', icon: <RustIcon /> },
-      { name: 'Elixir', icon: <ReactIcon /> },
-      { name: 'Kotlin', icon: <ReactIcon /> },
-      { name: 'PHP', icon: <ReactIcon /> },
-      { name: 'Ruby', icon: <ReactIcon /> },
-      { name: 'Cangjie', icon: <ReactIcon /> },
-      { name: 'Swift', icon: <ReactIcon /> },
+      { name: 'Kotlin', icon: <KotlinIcon /> },
+      { name: 'Cangjie', icon: <CangjieIcon /> },
+      { name: 'Swift', icon: <SwiftIcon /> },
     ],
   },
   {
