@@ -32,7 +32,15 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'A social manwha reader app with a vibrant community',
     logo: '/keihatsu.png',
     categories: ['Mobile Apps'],
-    status: ['construction', 'coming-soon'],
+    status: ['completed', 'live', 'users'],
+  },
+  {
+    slug: 'supabricx',
+    title: 'Supabricx',
+    description: 'AI system design assistant for developers',
+    logo: '/supabricx.png',
+    categories: ['AI'],
+    status: ['coming-soon', 'construction'],
   },
   {
     slug: 'farmintel',
@@ -73,14 +81,6 @@ export const PROJECTS: ProjectMeta[] = [
     logo: '/oroshi.png',
     categories: ['Mobile Apps'],
     status: ['completed', 'not-live'],
-  },
-  {
-    slug: 'supabricx',
-    title: 'Supabricx',
-    description: 'Build end-to-end backend services via intelligent prompts.',
-    logo: '/supabricx.png',
-    categories: ['AI'],
-    status: ['coming-soon'],
   },
   {
     slug: 'supanote',
