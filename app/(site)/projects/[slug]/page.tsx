@@ -83,6 +83,19 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ],
   },
   {
+    ...PROJECTS.find((p) => p.slug === 'supabricx')!,
+    longDescription:
+      'Supabricx is a collaborative agentic system & architeture design assistant tool built for devs to design, validate, and deploy resilient systems with AI-guided architecture..',
+    skills: ['Next.js', 'TypeScript', 'Langchain', 'Mastra', 'React Flow', 'Socket.io'],
+    githubUrl: 'https://github.com/404khai',
+    liveUrl: 'https://supabricx.vercel.app',
+    images: [
+      '/supabricx1.png',
+      '/supabricx2.png',
+      '/supabricx3.png',
+    ],
+  },
+  {
     ...PROJECTS.find((p) => p.slug === 'farmintel')!,
     longDescription:
       'FarmIntel is an agricultural intelligence system designed to help farmers and agro-enterprises make smarter data-driven decisions and optimize farming operations. It comes with ML pest and plant disease detection, as well as real-time weather and crop yield predictions, AI recommendations for optimal farming practices, and a community of farmers and agro-enterprises to share knowledge and best practices.',
