@@ -143,14 +143,14 @@ export default function Home() {
 
         {/* Hero Project */}
         <FeaturedProject 
-          title="Agentic Game Developer"
-          subtitle="Atlas"
-          description="Atlas is a semi-autonomous agentic AI where 2D game mechanics, systems and worlds are shaped"
-          linkText="Try out Atlas"
+          title="Agentic System Design"
+          subtitle="Supabricx"
+          description="Supabricx is a collaborative agentic system & architeture design assistant built for devs to design, validate, and deploy resilient systems with AI-guided architecture.."
+          linkText="Try out Supabricx"
           linkUrl="#"
-          logo="/atlas.png"
+          logo="/supabricx.png"
           // Using a colored placeholder since we don't have the image
-          imageUrl="/atlasUI.png" 
+          imageUrl="/supabricxBanner.png" 
         />
 
         {/* Project Grid */}

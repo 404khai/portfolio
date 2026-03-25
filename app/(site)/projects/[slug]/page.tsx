@@ -125,18 +125,18 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ],
   },
   {
-    ...PROJECTS.find((p) => p.slug === 'oroshi')!,
+    ...PROJECTS.find((p) => p.slug === 'laptopharbor')!,
     longDescription:
-      'Oroshi is a concept mobile app for a japanese sushi franchise.',
-    skills: ['React Native', 'TypeScript', 'Expo'],
-    githubUrl: 'https://github.com/404khai/oroshi',
+      'Laptop Harbor is a mobile app for purchasing laptops & related accessories.',
+    skills: ['Flutter', 'Dart', 'Firebase'],
+    githubUrl: 'https://github.com/404khai/LaptopHarbor',
     liveUrl: '#',
     images: [
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80',
-      'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1600&q=80',
+      '/laptopharbor1.jpeg',
+      '/laptopharbor2.jpeg',
+      '/laptopharbor3.jpeg',
+      '/laptopharbor4.jpeg',
+      '/laptopharbor5.jpeg'
     ],
   },
   {

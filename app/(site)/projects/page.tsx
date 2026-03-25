@@ -59,6 +59,14 @@ export const PROJECTS: ProjectMeta[] = [
     status: ['completed' ,'not-live'],
   },
   {
+    slug: 'laptopharbor',
+    title: 'Laptop Harbor',
+    description: 'Marketplace for laptops & related accessories.',
+    logo: '/laptopharbor.jpg',
+    categories: ['Mobile Apps'],
+    status: ['completed' ,'live', 'users'],
+  },
+  {
     slug: 'atlas',
     title: 'Atlas',
     description: 'Agentic 2D Game Developer.',
