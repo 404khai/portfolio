@@ -21,6 +21,19 @@ export default function ExperiencePage() {
         {/* Experience List */}
         <div className="flex flex-col gap-0 border-t border-[#27272a] border-dashed">
             <ExperienceItem 
+                company="JhinxPay"
+                role="App Developer"
+                type="Remote"
+                period="Mar 2026 - date"
+                logo="/jhinxpay.png"
+                contributions={[
+                    "Designing giftcard, gamepoint & wallet screens.",
+                    "API implementations."
+                ]}
+                skills={["Flutter", "Dart"]}
+            />
+            {/* 
+            <ExperienceItem 
                 company="FangFire Labs"
                 role="Founder"
                 type="Remote"
@@ -31,7 +44,8 @@ export default function ExperiencePage() {
                     "Designing game concepts, interfaces, environment, animations, VFX and prototypes."
                 ]}
                 skills={["C#", "Lua", "Unity", "C++", "Environment Art"]}
-            />
+            /> 
+            */}
             <ExperienceItem 
                 company="GRVT8"
                 role="Founder"
