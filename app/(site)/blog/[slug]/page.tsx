@@ -154,8 +154,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         title={props.title} 
       />
     ),
-    WorkflowDiagram: (props: { tools: any[] }) => (
-      <WorkflowDiagram tools={props.tools} />
+    WorkflowDiagram: (props: { tools: any[]; layout?: 'hub' | 'sequence' }) => (
+      <WorkflowDiagram tools={props.tools} layout={props.layout} />
     ),
   };
 
