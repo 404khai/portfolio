@@ -51,7 +51,7 @@ export const WorkflowDiagram: React.FC<WorkflowDiagramProps> = ({ tools, layout 
       <div className="w-full overflow-x-auto">
         <div className="p-4 md:p-12 w-full min-w-[400px] flex flex-col items-center gap-8 md:gap-16">
           {layout === 'sequence' ? (
-            <div className="flex items-center w-full justify-start md:justify-center max-w-6xl gap-0 min-w-max">
+            <div className="flex items-center w-max min-w-full justify-start gap-0 px-4 pl-60 md:pl-50">
               {tools.map((tool, index) => (
                 <React.Fragment key={`${tool.label}-${index}`}>
                   <WorkflowNode tool={tool} />
