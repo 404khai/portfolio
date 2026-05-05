@@ -26,7 +26,7 @@ I started where any sync investigation should start — the `SyncManager` itself
 {% TerminalBlock
    command="grep -n 'getToken' lib/services/sync_manager.dart"
    output="12:  final String? Function() getToken;\n53:      final token = getToken();\n54:      if (token == null) return;"
-   title="terminal" /%}
+   title="sync_manager.dart" /%}
 
 The sync queue checks for a valid auth token before processing. If `getToken()` returns `null`, it silently returns — no error, no log, no indication that anything went wrong.
 
@@ -35,13 +35,14 @@ So where was `getToken` being set? I traced it back to `main.dart`:
 {% TerminalBlock
    command="grep -n 'getToken' lib/main.dart"
    output="82:  // We'll update the token retrieval logic later when AuthProvider is integrated\n83:  String? getToken() => null;\n88:    getToken: getToken,"
-   title="terminal" /%}
+   title="main.dart" /%}
 
 There it was. Line 83:
 
-```dart
-String? getToken() => null;
-```
+{% TerminalBlock
+   command="// line 83 — the culprit"
+   output="String? getToken() => null;"
+   title="main.dart" /%}
 
 A hardcoded `null` return. The comment above it — *"We'll update the token retrieval logic later"* — told the full story. This was a TODO that was never completed. The `SyncManager` was initialized with a function that would **always** return `null`, meaning `processSyncQueue()` hit `if (token == null) return;` on every single invocation and silently exited.
 
@@ -52,10 +53,13 @@ Every `ADD_LIBRARY`, `UPDATE_HISTORY`, and `CREATE_CATEGORY` operation was being
 The reason this TODO existed was a real architectural constraint: `SyncManager` is created *before* `AuthProvider` in the widget tree. You can't reference `authProvider.token` in a constructor that runs before `authProvider` exists.
 
 {% WorkflowDiagram
+   layout="sequence"
    tools=[
-    { label: "Isar DB", imageSrc: "/images/posts/calendar.png" },
-    { label: "SyncManager", imageSrc: "/images/posts/calendar.png" },
-    { label: "AuthProvider", imageSrc: "/images/posts/calendar.png" }
+    { label: "Isar DB", imageSrc: "/images/posts/isar.png" },
+    { label: "API Clients", imageSrc: "/images/posts/api.png" },
+    { label: "Sync Manager", imageSrc: "/images/posts/sync.png" },
+    { label: "Repositories", imageSrc: "/images/posts/repo.png" },
+    { label: "Auth Provider", imageSrc: "/images/posts/auth.png" }
    ]
 /%}
 
@@ -74,39 +78,29 @@ Step 3 needed something from step 5. The original developer solved this by punti
 
 The solution was a mutable closure that starts as `null` and gets reassigned after `AuthProvider` is created:
 
-```dart
-// Step 1: Mutable token getter — starts as null
-String? Function() _getToken = () => null;
+{% TerminalBlock
+   command="// Step 1: Mutable token getter — starts as null"
+   output="String? Function() _getToken = () => null;"
+   title="main.dart" /%}
 
-// Step 2: Pass a WRAPPER closure that reads the mutable variable
-final syncManager = SyncManager(
-  isar: isar,
-  libraryApi: libraryApi,
-  getToken: () => _getToken(),  // indirection layer
-);
+{% TerminalBlock
+   command="// Step 2: Pass a WRAPPER closure that reads the mutable variable"
+   output="final syncManager = SyncManager(\n  isar: isar,\n  libraryApi: libraryApi,\n  getToken: () => _getToken(),  // indirection layer\n);"
+   title="main.dart" /%}
 
-// ... create repositories and AuthProvider ...
-
-// Step 3: NOW rewire it to the real token
-final authProvider = AuthProvider(
-  userRepository: userRepo,
-  onLogout: (_) async {},
-);
-
-_getToken = () => authProvider.token;
-```
+{% TerminalBlock
+   command="// Step 3: NOW rewire it to the real token"
+   output="final authProvider = AuthProvider(\n  userRepository: userRepo,\n  onLogout: (_) async {},\n);\n\n_getToken = () => authProvider.token;"
+   title="main.dart" /%}
 
 The key insight is the wrapper closure `() => _getToken()`. `SyncManager` captures the *wrapper*, not the *value*. When it later calls `getToken()`, the wrapper reads the current value of `_getToken` — which by that point has been reassigned to `authProvider.token`.
 
 I also added a listener to immediately flush the sync queue when the user logs in:
 
-```dart
-authProvider.addListener(() {
-  if (authProvider.token != null) {
-    syncManager.processSyncQueue();
-  }
-});
-```
+{% TerminalBlock
+   command="// Flush the queue as soon as a valid token arrives"
+   output="authProvider.addListener(() {\n  if (authProvider.token != null) {\n    syncManager.processSyncQueue();\n  }\n});"
+   title="main.dart" /%}
 
 ## The Other Bugs Hiding Underneath
 
@@ -116,30 +110,19 @@ Fixing the token issue exposed three more problems that would have caused sync t
 
 The original queue processor used a naive FIFO loop:
 
-```dart
-for (final op in pendingOps) {
-  bool success = await _executeOperation(op, token);
-  if (success) {
-    op.completed = true;
-    await isar.writeTxn(() => /* save */);
-  } else {
-    break;  // ← stops ALL remaining operations
-  }
-}
-```
+{% TerminalBlock
+   command="// Original FIFO loop — one failure kills everything"
+   output="for (final op in pendingOps) {\n  bool success = await _executeOperation(op, token);\n  if (success) {\n    op.completed = true;\n    await isar.writeTxn(() => /* save */);\n  } else {\n    break;  // ← stops ALL remaining operations\n  }\n}"
+   title="sync_manager.dart" /%}
 
 If operation #1 failed for *any* reason (network blip, server error, malformed payload), the `break` statement killed the entire queue. Operations #2 through #50 would never be attempted, even if they were completely independent.
 
 **Fix:** Only break on dependency-sensitive operations. If `ADD_LIBRARY` fails, downstream `ASSIGN_CATEGORY` operations genuinely can't proceed. But `UPDATE_HISTORY` or `UPDATE_PREFERENCES`? Those are independent — let them through.
 
-```dart
-if (!success) {
-  if (op.type == 'ADD_LIBRARY' || op.type == 'CREATE_CATEGORY') {
-    break;  // dependents need this to succeed first
-  }
-  // independent operations: skip and continue
-}
-```
+{% TerminalBlock
+   command="// Fixed: only break on dependency-sensitive operations"
+   output="if (!success) {\n  if (op.type == 'ADD_LIBRARY' || op.type == 'CREATE_CATEGORY') {\n    break;  // dependents need this to succeed first\n  }\n  // independent operations: skip and continue\n}"
+   title="sync_manager.dart" /%}
 
 ### Bug 3: No Retry Cap
 
@@ -147,11 +130,10 @@ Failed operations had no retry limit. If an operation failed permanently (bad pa
 
 **Fix:** Cap retries at 5 and skip exhausted operations:
 
-```dart
-if (op.retryCount >= 5) {
-  continue;  // skip permanently failed operations
-}
-```
+{% TerminalBlock
+   command="// Fixed: cap retries at 5"
+   output="if (op.retryCount >= 5) {\n  continue;  // skip permanently failed operations\n}"
+   title="sync_manager.dart" /%}
 
 ### Bug 4: 409 Conflicts Treated as Failures
 
@@ -159,33 +141,19 @@ When a user reinstalled the app and their library data still existed on the serv
 
 **Fix:** Handle `409` as a success case. The entry already exists — extract the `serverId` from the response body to update the local Isar mapping:
 
-```dart
-if (response.statusCode == 409) {
-  final data = json.decode(response.body);
-  final String? serverId = data['id'];
-  if (serverId != null) {
-    // update local entry with server ID
-  }
-  return true;  // not an error — entry exists
-}
-```
+{% TerminalBlock
+   command="// Fixed: treat 409 Conflict as success"
+   output="if (response.statusCode == 409) {\n  final data = json.decode(response.body);\n  final String? serverId = data['id'];\n  if (serverId != null) {\n    // update local entry with server ID\n  }\n  return true;  // not an error — entry exists\n}"
+   title="sync_manager.dart" /%}
 
 ## The Backend Side
 
 On the NestJS backend, I also had to update `LibraryService.create` to return the existing entry on conflict instead of just throwing:
 
-```typescript
-async create(userId: string, createDto: CreateLibraryEntryDto) {
-  const existing = await this.prisma.libraryEntry.findUnique({
-    where: { userId_mangaId: { userId, mangaId: createDto.mangaId } },
-  });
-  if (existing) return existing;  // return it so the client gets the serverId
-
-  return this.prisma.libraryEntry.create({
-    data: { ...createDto, userId, isBookmarked: true },
-  });
-}
-```
+{% TerminalBlock
+   command="// Return existing entry on conflict instead of throwing"
+   output="async create(userId: string, createDto: CreateLibraryEntryDto) {\n  const existing = await this.prisma.libraryEntry.findUnique({\n    where: { userId_mangaId: { userId, mangaId: createDto.mangaId } },\n  });\n  if (existing) return existing;  // client gets the serverId\n\n  return this.prisma.libraryEntry.create({\n    data: { ...createDto, userId, isBookmarked: true },\n  });\n}"
+   title="library.service.ts" /%}
 
 And I added the missing `language` field to the DTO so it wouldn't get silently stripped by NestJS's `ValidationPipe({ whitelist: true })`.
 

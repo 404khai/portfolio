@@ -58,6 +58,14 @@ export default config({
             WorkflowDiagram: {
               label: 'Workflow Diagram',
               schema: {
+                layout: fields.select({
+                  label: 'Layout',
+                  options: [
+                    { label: 'Hub', value: 'hub' },
+                    { label: 'Sequence', value: 'sequence' },
+                  ],
+                  defaultValue: 'hub',
+                }),
                 tools: fields.array(
                   fields.object({
                     label: fields.text({ label: 'Label' }),
@@ -75,7 +83,7 @@ export default config({
               },
               preview: (props) => (
                 <div style={{ padding: '10px', background: '#333', color: '#fff', borderRadius: '4px' }}>
-                  Workflow Diagram ({props.fields.tools.elements.length} tools)
+                  Workflow Diagram ({props.fields.layout.value}, {props.fields.tools.elements.length} tools)
                 </div>
               ),
             },
