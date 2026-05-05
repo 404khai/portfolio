@@ -1,0 +1,211 @@
+---
+title: Debugging a Silent Sync Failure — How Nothing Was Being Saved
+date: May 5, 2026
+category: SWE
+readTime: 12 min read
+description: How I tracked down and fixed a critical data synchronization bug in Keihatsu, where offline activities silently failed to persist and users lost everything on logout.
+tags:
+  - Flutter
+  - Debugging
+  - Offline-First
+  - NestJS
+  - Isar
+---
+## The Problem
+
+Users were losing their entire library. Every manga they added, every chapter they read — gone the moment they logged out or reinstalled the app.
+
+Keihatsu is an offline-first manga reader. The architecture is straightforward: user actions (adding to library, reading chapters) get saved locally to an Isar database, then a `SyncManager` background process pushes those operations to a PostgreSQL backend via a NestJS API. When the user logs back in, their data should be waiting for them on the server.
+
+Except it wasn't. The `library_entries` and `history_entries` tables on the server were completely empty. Every single sync operation was silently failing.
+
+## Finding the Root Cause
+
+I started where any sync investigation should start — the `SyncManager` itself.
+
+{% TerminalBlock
+   command="grep -n 'getToken' lib/services/sync_manager.dart"
+   output="12:  final String? Function() getToken;\n53:      final token = getToken();\n54:      if (token == null) return;"
+   title="terminal" /%}
+
+The sync queue checks for a valid auth token before processing. If `getToken()` returns `null`, it silently returns — no error, no log, no indication that anything went wrong.
+
+So where was `getToken` being set? I traced it back to `main.dart`:
+
+{% TerminalBlock
+   command="grep -n 'getToken' lib/main.dart"
+   output="82:  // We'll update the token retrieval logic later when AuthProvider is integrated\n83:  String? getToken() => null;\n88:    getToken: getToken,"
+   title="terminal" /%}
+
+There it was. Line 83:
+
+```dart
+String? getToken() => null;
+```
+
+A hardcoded `null` return. The comment above it — *"We'll update the token retrieval logic later"* — told the full story. This was a TODO that was never completed. The `SyncManager` was initialized with a function that would **always** return `null`, meaning `processSyncQueue()` hit `if (token == null) return;` on every single invocation and silently exited.
+
+Every `ADD_LIBRARY`, `UPDATE_HISTORY`, and `CREATE_CATEGORY` operation was being queued into Isar dutifully, but the queue processor never ran. Not once.
+
+## The Chicken-and-Egg Problem
+
+The reason this TODO existed was a real architectural constraint: `SyncManager` is created *before* `AuthProvider` in the widget tree. You can't reference `authProvider.token` in a constructor that runs before `authProvider` exists.
+
+{% WorkflowDiagram
+   tools=[
+    { label: "Isar DB", imageSrc: "/images/posts/calendar.png" },
+    { label: "SyncManager", imageSrc: "/images/posts/calendar.png" },
+    { label: "AuthProvider", imageSrc: "/images/posts/calendar.png" }
+   ]
+/%}
+
+The initialization order in `main.dart` was:
+
+1. Open Isar database
+2. Create API clients
+3. Create `SyncManager` (needs a token getter — but `AuthProvider` doesn't exist yet)
+4. Create repositories (need `SyncManager`)
+5. Create `AuthProvider` (needs repositories)
+6. Run the app
+
+Step 3 needed something from step 5. The original developer solved this by punting — hardcode `null`, fix it later.
+
+## The Fix: Late-Bound Closures
+
+The solution was a mutable closure that starts as `null` and gets reassigned after `AuthProvider` is created:
+
+```dart
+// Step 1: Mutable token getter — starts as null
+String? Function() _getToken = () => null;
+
+// Step 2: Pass a WRAPPER closure that reads the mutable variable
+final syncManager = SyncManager(
+  isar: isar,
+  libraryApi: libraryApi,
+  getToken: () => _getToken(),  // indirection layer
+);
+
+// ... create repositories and AuthProvider ...
+
+// Step 3: NOW rewire it to the real token
+final authProvider = AuthProvider(
+  userRepository: userRepo,
+  onLogout: (_) async {},
+);
+
+_getToken = () => authProvider.token;
+```
+
+The key insight is the wrapper closure `() => _getToken()`. `SyncManager` captures the *wrapper*, not the *value*. When it later calls `getToken()`, the wrapper reads the current value of `_getToken` — which by that point has been reassigned to `authProvider.token`.
+
+I also added a listener to immediately flush the sync queue when the user logs in:
+
+```dart
+authProvider.addListener(() {
+  if (authProvider.token != null) {
+    syncManager.processSyncQueue();
+  }
+});
+```
+
+## The Other Bugs Hiding Underneath
+
+Fixing the token issue exposed three more problems that would have caused sync to fail even with a valid token:
+
+### Bug 2: One Failure Blocks Everything
+
+The original queue processor used a naive FIFO loop:
+
+```dart
+for (final op in pendingOps) {
+  bool success = await _executeOperation(op, token);
+  if (success) {
+    op.completed = true;
+    await isar.writeTxn(() => /* save */);
+  } else {
+    break;  // ← stops ALL remaining operations
+  }
+}
+```
+
+If operation #1 failed for *any* reason (network blip, server error, malformed payload), the `break` statement killed the entire queue. Operations #2 through #50 would never be attempted, even if they were completely independent.
+
+**Fix:** Only break on dependency-sensitive operations. If `ADD_LIBRARY` fails, downstream `ASSIGN_CATEGORY` operations genuinely can't proceed. But `UPDATE_HISTORY` or `UPDATE_PREFERENCES`? Those are independent — let them through.
+
+```dart
+if (!success) {
+  if (op.type == 'ADD_LIBRARY' || op.type == 'CREATE_CATEGORY') {
+    break;  // dependents need this to succeed first
+  }
+  // independent operations: skip and continue
+}
+```
+
+### Bug 3: No Retry Cap
+
+Failed operations had no retry limit. If an operation failed permanently (bad payload, deleted resource), it would retry on every sync cycle, forever, blocking the queue indefinitely.
+
+**Fix:** Cap retries at 5 and skip exhausted operations:
+
+```dart
+if (op.retryCount >= 5) {
+  continue;  // skip permanently failed operations
+}
+```
+
+### Bug 4: 409 Conflicts Treated as Failures
+
+When a user reinstalled the app and their library data still existed on the server, the `ADD_LIBRARY` call returned `409 Conflict`. The original code only handled `200` and `201` — a `409` fell through to `return false`, blocking the queue.
+
+**Fix:** Handle `409` as a success case. The entry already exists — extract the `serverId` from the response body to update the local Isar mapping:
+
+```dart
+if (response.statusCode == 409) {
+  final data = json.decode(response.body);
+  final String? serverId = data['id'];
+  if (serverId != null) {
+    // update local entry with server ID
+  }
+  return true;  // not an error — entry exists
+}
+```
+
+## The Backend Side
+
+On the NestJS backend, I also had to update `LibraryService.create` to return the existing entry on conflict instead of just throwing:
+
+```typescript
+async create(userId: string, createDto: CreateLibraryEntryDto) {
+  const existing = await this.prisma.libraryEntry.findUnique({
+    where: { userId_mangaId: { userId, mangaId: createDto.mangaId } },
+  });
+  if (existing) return existing;  // return it so the client gets the serverId
+
+  return this.prisma.libraryEntry.create({
+    data: { ...createDto, userId, isBookmarked: true },
+  });
+}
+```
+
+And I added the missing `language` field to the DTO so it wouldn't get silently stripped by NestJS's `ValidationPipe({ whitelist: true })`.
+
+## The Result
+
+After deploying these changes, I added debug logging to confirm the fix:
+
+{% TerminalBlock
+   command="flutter run"
+   output="[SyncManager] Processing sync queue with token...\n[SyncManager] Executing: ADD_LIBRARY (retry: 0)\n[SyncManager] ADD_LIBRARY response: 201 {\"id\":\"abc-123\"...}\n[SyncManager] ✅ ADD_LIBRARY succeeded\n[SyncManager] Executing: UPDATE_HISTORY (retry: 0)\n[SyncManager] ✅ UPDATE_HISTORY succeeded"
+   title="terminal" /%}
+
+Operations that had been silently queuing for weeks finally flushed to the server. Users could now log out, reinstall, log back in — and their libraries were intact.
+
+## Takeaways
+
+**1. Silent failures are the worst kind of bug.** The `SyncManager` returned early with no log, no error, no crash. From the user's perspective, the app worked perfectly — until they logged out. Always log when you skip work.
+
+**2. TODOs in initialization code are landmines.** The `getToken() => null` placeholder was perfectly reasonable during early development. But it shipped to production. If your app depends on a late-wired dependency, assert that it gets wired — don't trust a comment.
+
+**3. Think about idempotency from day one.** Offline-first sync will inevitably replay operations. If your backend can't handle receiving the same `ADD_LIBRARY` call twice without breaking, your sync layer is fragile by design.
+
+**4. Don't let one bad apple block the queue.** FIFO processing with a `break` on failure is the simplest model, but it's also the most brittle. Classify your operations by dependency and only block when semantically necessary.
