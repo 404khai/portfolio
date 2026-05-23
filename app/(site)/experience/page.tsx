@@ -24,10 +24,10 @@ export default function ExperiencePage() {
                 company="JhinxPay"
                 role="App Developer"
                 type="Remote"
-                period="Mar 2026 - date"
+                period="Mar 2026 - May 2026"
                 logo="/jhinxpay.png"
                 contributions={[
-                    "Designing giftcard, gamepoint & wallet screens.",
+                    "Designed giftcard, gamepoint & wallet screens.",
                     "API implementations."
                 ]}
                 skills={["Flutter", "Dart"]}
@@ -53,8 +53,7 @@ export default function ExperiencePage() {
                 period="Aug 2025 - date"
                 logo="/grvt8.jpg"
                 contributions={[
-                    "Designed and developed Keihatsu, an interactive manwha, webtoon & manga reader app.",
-                    "Built Revixor, an AI powered learning assistant for stuents covering WAEC & JAMB exams."
+                    "Designed and developed Keihatsu, an social manwha, webtoon & manga reader app.",
                 ]}
                 skills={["System Design", "Typescript", "Dart", "Flutter", "OpenRouter"]}
             />
