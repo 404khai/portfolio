@@ -65,7 +65,7 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ...PROJECTS.find((p) => p.slug === 'keihatsu')!,
     longDescription:
       'Keihatsu is an opensource, social manwha reader app with a vibrant community of readers that provide a platform for manwha, manga and manhua fans to connect over their favorite series, while supporting offline downloads.',
-    skills: ['TypeScript', 'Nest.js', 'Flutter', 'Dart', 'System Design'],
+    skills: ['TypeScript', 'Nest.js', 'Swift', 'Flutter', 'Dart', 'System Design'],
     githubUrl: 'https://github.com/grvt8/Keihatsu.git',
     liveUrl: 'http://keihatsu.vercel.app',
     images: [
@@ -114,7 +114,7 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ...PROJECTS.find((p) => p.slug === 'hirecraft')!,
     longDescription:
       'HireCraft is a Springboot powered domestic service marketplace which provides a platform connecting service providers (e.g.plumbers, painters) to employers.',
-    skills: ['Java', 'Springboot', 'Typescript', 'Smart Contracts'],
+    skills: ['Java', 'Springboot', 'Typescript', 'React'],
     githubUrl: 'https://github.com/404khai/HireCraft-SpringBoot',
     liveUrl: 'https://hirecraft.vercel.app',
     images: [

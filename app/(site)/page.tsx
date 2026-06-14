@@ -32,13 +32,13 @@ export default function Home() {
         
         <ul className="flex flex-col gap-4 text-zinc-300 font-figtree text-lg list-disc pl-5 marker:text-zinc-600">
            <li>
-             I'm a <b className="text-[#a8e64c] font-calistoga">Creative Systems Engineer</b> who is intrigued by Operating Systems, Game Development, Animation and Interactive UI.
+             I'm a <b className="text-[#a8e64c] font-calistoga">Software Engineer</b> who is intrigued by Operating Systems, Game Development, Animation and Interactive UI.
            </li>
            <li>
              <b>4+</b> years of experience in the industry, with specialty across Agentic AI, Backend Development and Game Development.
            </li>
            <li>
-             Probably trying out new frameworks, or dabbling in <b className="text-white">Lua</b>, <b className="text-white">Rust</b> or <b className="text-white">ArkTs</b>.
+             Probably trying out new frameworks, or dabbling in <b className="text-white">Lua</b>, <b className="text-white">Go</b> or <b className="text-white">Rust</b>.
            </li>
         </ul>
       </div>
@@ -143,32 +143,49 @@ export default function Home() {
 
         {/* Hero Project */}
         <FeaturedProject 
+          title="Agricultural intelligence system for farmers and agro-enterprises"
+          subtitle="FarmIntel"
+          description="FarmIntel is an agricultural intelligence system designed to help farmers and agro-enterprises make smarter data-driven decisions and optimize farming operations. It comes with ML pest and plant disease detection, as well as real-time weather and crop yield predictions, AI recommendations for optimal farming practices, and a community of farmers and agro-enterprises to share knowledge and best practices."
+          linkText="Check it out"
+          linkUrl="#"
+          logo="/farmintel.png"
+          imageUrl="/farmintelBanner.jpg" 
+        />
+
+        {/* <FeaturedProject 
           title="Agentic System Design"
           subtitle="Supabricx"
           description="Supabricx is a collaborative agentic system & architeture design assistant built for devs to design, validate, and deploy resilient systems with AI-guided architecture.."
           linkText="Try out Supabricx"
           linkUrl="#"
           logo="/supabricx.png"
-          // Using a colored placeholder since we don't have the image
           imageUrl="/supabricxBanner.png" 
-        />
+        /> */}
 
         {/* Project Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <ProjectCard 
-            title="Social manwha / manga reader app"
-            subtitle="Keihatsu"
-            category="ENTERTAINMET"
-            description="A social manwha reader app with over 2k users and a vibrant community."
-            logo="/keihatsu.png"
+            title="Domestic Service Marketplace."
+            subtitle="Hirecraft"
+            category="LIFESTYLE"
+            description="HireCraft is a Springboot powered domestic service marketplace which provides a platform connecting service providers (e.g.plumbers, painters) to employers."
+            logo="/hirecraft.jpeg"
           />
           <ProjectCard 
+            title="Social manwha reader app"
+            subtitle="Keihatsu"
+            category="ENTERTAINMENT"
+            description="A social manwha reader app built for iOS."
+            logo="/keihatsu.png"
+          />
+
+          {/* <ProjectCard 
             title="AI-driven learning and exam practice for West Africa"
             subtitle="Revixor"
             category="EDTECH"
             description="Transforming your exam study sessions with intelligent prompts, AI-powered explanations & step-by-step solutions."
             logo="/revixor.png"
-          />
+          /> */}
         </div>
 
       </div>
