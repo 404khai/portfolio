@@ -29,7 +29,7 @@ export const PROJECTS: ProjectMeta[] = [
   {
     slug: 'keihatsu',
     title: 'Keihatsu',
-    description: 'A social manwha reader app with a vibrant community',
+    description: 'A social manwha reader app for iOS',
     logo: '/keihatsu.png',
     categories: ['Mobile Apps'],
     status: ['completed', 'live', 'users'],
@@ -45,7 +45,8 @@ export const PROJECTS: ProjectMeta[] = [
   {
     slug: 'relay',
     title: 'Relay',
-    description: 'Intent-based OS execution layer',
+    description: 'Intent-based system orchestrator',
+    // description: 'Intent-based OS execution layer',
     logo: '/supabrix1.png',
     categories: ['AI'],
     status: ['coming-soon', 'construction'],
