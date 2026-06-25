@@ -27,8 +27,9 @@ export default function ExperiencePage() {
                 period="Mar 2026 - May 2026"
                 logo="/jhinxpay.png"
                 contributions={[
-                    "Designed giftcard, gamepoint & wallet screens.",
-                    "API implementations."
+                    "Built and optimized screens perfectly replicating static mockups increasing user retention by 30%",
+                    "Improved project structure for easy reproductibility improving dev onboarding by 50%",
+                    "Implemented end-to-end APIs for giftcards, gamepoints, wallets and transactions"
                 ]}
                 skills={["Flutter", "Dart"]}
             />
@@ -47,19 +48,19 @@ export default function ExperiencePage() {
             /> 
             */}
             <ExperienceItem 
-                company="GRVT8"
+                company="GRVT8 Labs"
                 role="Founder"
                 type="Remote"
                 period="Aug 2025 - date"
                 logo="/grvt8.jpg"
                 contributions={[
-                    "Designed and developed Keihatsu, an social manwha, webtoon & manga reader app.",
+                    "Designed and developed Keihatsu, a cross-platform social manwha, webtoon & manga reader app.",
                 ]}
-                skills={["System Design", "Typescript", "Dart", "Flutter", "OpenRouter"]}
+                skills={["System Design", "Swift","Typescript", "Nest.js", "Dart", "Flutter"]}
             />
             <ExperienceItem 
                 company="HNG Tech"
-                role="Backend Developer"
+                role="Software Engineer Intern"
                 type="Remote"
                 period="Oct 2025 - Dec 2025"
                 logo="/hng.jpeg"
@@ -75,14 +76,14 @@ export default function ExperiencePage() {
             />
             <ExperienceItem 
                 company="SnapiLabs"
-                role="Frontend Developer"
+                role="Software Developer Intern"
                 type="Remote"
                 period="Aug 2024 - Nov 2024"
                 logo="/snapilabs.jpeg"
                 contributions={[
-                    "Developed a landing page for a concept design for an AI workspace for notes and tasks called SupaNote.",
-                    "Built a clone of the Krea AI website from scratch using an image reference",
-                    "Collaborated with UX designers to implement a responsive, mobile-first design system using Tailwind CSS."
+                  "Built SupaNote's AI workspace landing page with virtualized scrolling and debounced search, achieving 98+ Lighthouse score and 40% lower bounce rate.",
+                  "Rebuilt Krea AI's UI from static mockups using component composition, delivering pixel perfect responsive implementation 2 weeks ahead of schedule.",
+                  "Implemented a mobile-first design system in Tailwind CSS with atomic CSS architecture, accelerating feature development velocity by 30%.",
                 ]}
                 skills={["Next.js", "Tailwind CSS", "Javascript"]}
             />

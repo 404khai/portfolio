@@ -7,14 +7,13 @@ import { ProjectListItem, ProjectStatus } from '@/components/ProjectListItem';
 
 export type ProjectCategory =
   | 'All'
-  | 'AI'
+  | 'AI / ML'
   | 'Mobile Apps'
   | 'Frontend'
   | 'Fullstack'
   | 'Backend / APIs'
-  | 'Designs'
   | 'Games'
-  | 'SaaS';
+  | 'Other'
 
 export type ProjectMeta = {
   slug: string;
@@ -32,15 +31,15 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'A social manwha reader app for iOS',
     logo: '/keihatsu.png',
     categories: ['Mobile Apps'],
-    status: ['completed', 'live', 'users'],
+    status: ['completed', 'not-live', 'users'],
   },
   {
     slug: 'finomaly',
     title: 'Finomaly',
     description: 'Real-time financial anomaly detection system ',
     logo: '/finomaly.png',
-    categories: ['AI'],
-    status: ['coming-soon', 'construction'],
+    categories: ['AI / ML', 'Backend / APIs'],
+    status: ['completed', 'not-live'],
   },
   {
     slug: 'relay',
@@ -48,7 +47,7 @@ export const PROJECTS: ProjectMeta[] = [
     description: 'Intent-based system orchestrator',
     // description: 'Intent-based OS execution layer',
     logo: '/supabrix1.png',
-    categories: ['AI'],
+    categories: ['AI / ML'],
     status: ['coming-soon', 'construction'],
   },
   {
@@ -56,7 +55,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Supabricx',
     description: 'The AI documentation agent',
     logo: '/supabricx.png',
-    categories: ['AI'],
+    categories: ['AI / ML'],
     status: ['coming-soon', 'construction'],
   },
   {
@@ -64,7 +63,7 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'FarmIntel',
     description: 'Agricultural intelligence system for farmers and agro-enterprises',
     logo: '/farmintel.png',
-    categories: ['AI', 'Fullstack'],
+    categories: ['AI / ML', 'Fullstack'],
     status: ['completed', 'not-live'],
   },
   {
@@ -96,8 +95,8 @@ export const PROJECTS: ProjectMeta[] = [
     title: 'Revixor',
     description: 'AI-driven learning and exam practice for West Africa.',
     logo: '/revixor.png',
-    categories: ['AI'],
-    status: ['live', 'users'],
+    categories: ['AI / ML'],
+    status: ['coming-soon', 'not-live'],
   },
   {
     slug: 'oroshi',
@@ -156,14 +155,13 @@ export default function ProjectsPage() {
 
   const TABS: ProjectCategory[] = [
   'All',
-  'AI',
+  'AI / ML',
   'Mobile Apps',
   'Frontend',
   'Backend / APIs',
   'Fullstack',
-  'Designs',
   'Games',
-  'SaaS'
+  'Other',
   ];
 
   const toggleCategory = (category: ProjectCategory) => {
