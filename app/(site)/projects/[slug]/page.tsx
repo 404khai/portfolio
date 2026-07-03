@@ -64,8 +64,8 @@ const PROJECT_DETAILS: ProjectDetail[] = [
   {
     ...PROJECTS.find((p) => p.slug === 'keihatsu')!,
     longDescription:
-      'Keihatsu is an opensource, social manwha reader app with a vibrant community of readers that provide a platform for manwha, manga and manhua fans to connect over their favorite series, while supporting offline downloads.',
-    skills: ['TypeScript', 'Nest.js', 'Swift', 'Flutter', 'Dart', 'System Design'],
+      'Keihatsu is a cross-platform social manwha reader app with a vibrant community of readers that provide a platform for manwha, manga and manhua fans to connect over their favorite series, while supporting offline downloads.',
+    skills: ['TypeScript', 'Nest.js', 'Swift', 'SwiftUI', 'Flutter', 'Dart', 'System Design'],
     githubUrl: 'https://github.com/grvt8/Keihatsu.git',
     liveUrl: 'http://keihatsu.vercel.app',
     images: [
@@ -80,6 +80,28 @@ const PROJECT_DETAILS: ProjectDetail[] = [
       '/keihatsu9.png',
       '/keihatsu10.png',
       '/keihatsu11.png'
+    ],
+  },
+  {
+    ...PROJECTS.find((p) => p.slug === 'rails')!,
+    longDescription:
+      'Rails is the dedicated virtual account infrastructure on Nomba that provides per-customer provisioning, inbound transfer reconciliation, and a clean webhook API for downstream teams.',
+    skills: ['Fastify', 'TypeScript', 'BullMQ', 'Redis', 'Nomba API'],
+    githubUrl: 'https://github.com/404khai/rails',
+    liveUrl: 'https://rails-92q5.onrender.com/docs',
+    images: [
+      '/rails.png'
+    ],
+  },
+  {
+    ...PROJECTS.find((p) => p.slug === 'finomaly')!,
+    longDescription:
+      'Finomaly is a production-grade fraud-detection ML pipeline that combines a PyTorch Autoencoder with a GraphSAGE GNN and serves both through Kafka + Redis + FastAPI.',
+    skills: ['FastAPI', 'Python', 'Pytorch', 'Kafka (Redpanda)', 'Redis', 'Docker'],
+    githubUrl: 'https://github.com/404khai/finomaly',
+    liveUrl: '#',
+    images: [
+      '/finomaly1.png'
     ],
   },
   {

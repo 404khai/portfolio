@@ -175,7 +175,7 @@ export default function Home() {
             title="Social manwha reader app"
             subtitle="Keihatsu"
             category="ENTERTAINMENT"
-            description="A social manwha reader app built for iOS."
+            description="The cross-platform social manwha reader app."
             logo="/keihatsu.png"
           />
 

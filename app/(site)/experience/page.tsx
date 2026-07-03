@@ -56,7 +56,7 @@ export default function ExperiencePage() {
                 contributions={[
                     "Designed and developed Keihatsu, a cross-platform social manwha, webtoon & manga reader app.",
                 ]}
-                skills={["System Design", "Swift","Typescript", "Nest.js", "Dart", "Flutter"]}
+                skills={["System Design", "Swift", "Typescript", "Nest.js", "Dart", "Flutter"]}
             />
             <ExperienceItem 
                 company="HNG Tech"
@@ -72,7 +72,7 @@ export default function ExperiencePage() {
                     "Developed RESTful API projects with Django and FastAPI implementing NLP search.",
                     "Built a document analyzer & summarization tool with OpenRouter."
                 ]}
-                skills={["Team Leadership & Management", "Prompt engineering", "Collaboration", "AI Agents", "Mastra", "Python", "Nest.js", "Microservices", "Distributed Systems", "TypeScript", "Docker", "Minio", "Redis"]}
+                skills={["Team Leadership & Management", "Prompt Engineering", "Collaboration", "AI Agents", "Mastra", "Python", "Nest.js", "Microservices", "Distributed Systems", "TypeScript", "Docker", "Minio", "Redis"]}
             />
             <ExperienceItem 
                 company="SnapiLabs"
