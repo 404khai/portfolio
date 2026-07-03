@@ -189,6 +189,17 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ],
   },
   {
+    ...PROJECTS.find((p) => p.slug === 'oroshi')!,
+    longDescription:
+      'Oroshi is a mobile app for a concept Japanese sushi brand built with React Native and TypeScript.',
+    skills: ['React Native', 'TypeScript', 'Expo'],
+    githubUrl: 'https://github.com/404khai/oroshi',
+    liveUrl: '#',
+    images: [
+      '/oroshi1.png'
+    ],
+  },
+  {
     ...PROJECTS.find((p) => p.slug === 'mail-api')!,
     longDescription:
       'Mail Integration API using MailChimp and GetResponse for marketing leads and conversion campaign emails.',
