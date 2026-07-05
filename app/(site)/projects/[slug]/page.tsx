@@ -105,18 +105,30 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ],
   },
   {
-    ...PROJECTS.find((p) => p.slug === 'supabricx')!,
+    ...PROJECTS.find((p) => p.slug === 'openframe')!,
     longDescription:
-      'Supabricx is a collaborative agentic system & architeture design assistant tool built for devs to design, validate, and deploy resilient systems with AI-guided architecture..',
-    skills: ['Next.js', 'TypeScript', 'Langchain', 'Mastra', 'React Flow', 'Socket.io'],
-    githubUrl: 'https://github.com/404khai',
-    liveUrl: 'https://supabricx.vercel.app',
+      'OpenFrame is an opensource desktop video editor built for creators, designed for speed, simplicity, and modern social-media workflows.',
+    skills: ['Rust', 'Tauri', 'Typescript', 'Astro'],
+    githubUrl: 'https://github.com/404khai/openframe',
+    liveUrl: '#',
     images: [
-      '/supabricx1.png',
-      '/supabricx2.png',
-      '/supabricx3.png',
+      '/openframe1.png',
+      '/openframe2.png',
     ],
   },
+  // {
+  //   ...PROJECTS.find((p) => p.slug === 'supabricx')!,
+  //   longDescription:
+  //     'Supabricx is a collaborative agentic system & architeture design assistant tool built for devs to design, validate, and deploy resilient systems with AI-guided architecture..',
+  //   skills: ['Next.js', 'TypeScript', 'Langchain', 'Mastra', 'React Flow', 'Socket.io'],
+  //   githubUrl: 'https://github.com/404khai',
+  //   liveUrl: 'https://supabricx.vercel.app',
+  //   images: [
+  //     '/supabricx1.png',
+  //     '/supabricx2.png',
+  //     '/supabricx3.png',
+  //   ],
+  // },
   {
     ...PROJECTS.find((p) => p.slug === 'farmintel')!,
     longDescription:

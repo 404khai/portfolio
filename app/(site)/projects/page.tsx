@@ -51,6 +51,14 @@ export const PROJECTS: ProjectMeta[] = [
     status: ['completed', 'not-live'],
   },
   {
+    slug: 'openframe',
+    title: 'OpenFrame',
+    description: 'The opensource creative editing platform',
+    logo: '/openframe.png',
+    categories: ['Other'],
+    status: ['coming-soon' ,'construction'],
+  },
+  {
     slug: 'bifrost',
     title: 'Bifrost',
     description: 'Intent-based system orchestrator',
@@ -59,14 +67,14 @@ export const PROJECTS: ProjectMeta[] = [
     categories: ['AI / ML'],
     status: ['coming-soon', 'construction'],
   },
-  {
-    slug: 'supabricx',
-    title: 'Supabricx',
-    description: 'The AI documentation agent',
-    logo: '/supabricx.png',
-    categories: ['AI / ML'],
-    status: ['coming-soon', 'construction'],
-  },
+  // {
+  //   slug: 'supabricx',
+  //   title: 'Supabricx',
+  //   description: 'The AI documentation agent',
+  //   logo: '/supabricx.png',
+  //   categories: ['AI / ML'],
+  //   status: ['coming-soon', 'construction'],
+  // },
   {
     slug: 'farmintel',
     title: 'FarmIntel',
