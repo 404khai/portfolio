@@ -110,7 +110,7 @@ const PROJECT_DETAILS: ProjectDetail[] = [
       'OpenFrame is an opensource desktop video editor built for creators, designed for speed, simplicity, and modern social-media workflows.',
     skills: ['Rust', 'Tauri', 'Typescript', 'Astro'],
     githubUrl: 'https://github.com/404khai/openframe',
-    liveUrl: '#',
+    liveUrl: 'https://openframe-app.vercel.app',
     images: [
       '/openframe1.png',
       '/openframe2.png',
