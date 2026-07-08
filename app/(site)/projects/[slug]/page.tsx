@@ -90,7 +90,9 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     githubUrl: 'https://github.com/404khai/rails',
     liveUrl: 'https://rails-92q5.onrender.com/docs',
     images: [
-      '/rails.png'
+      '/rails.png',
+      '/rails2.png',
+      '/rails3.png'
     ],
   },
   {
@@ -116,6 +118,20 @@ const PROJECT_DETAILS: ProjectDetail[] = [
       '/openframe2.png',
     ],
   },
+  {
+    ...PROJECTS.find((p) => p.slug === 'rift')!,
+    longDescription:
+      'Rift is an intent-based OS orchestrator that transforms natural language into validated, safe execution plans for your machine',
+    skills: ['Rust', 'Python', 'Typescript', 'Ink', 'Tanstack', 'PostgreSQL'],
+    githubUrl: 'https://github.com/404khai',
+    liveUrl: 'https://userift.vercel.app',
+    images: [
+      '/rift1.png',
+      '/rift2.png',
+      '/rift3.png',
+    ],
+  },
+
   // {
   //   ...PROJECTS.find((p) => p.slug === 'supabricx')!,
   //   longDescription:
@@ -236,6 +252,18 @@ const PROJECT_DETAILS: ProjectDetail[] = [
       '/wallet-api1.png',
       '/wallet-api2.png',
       '/wallet-api3.png'
+    ],
+  },
+  {
+    ...PROJECTS.find((p) => p.slug === 'notification-service')!,
+    longDescription:
+      'A microservices-based notification system that sends emails and push notifications asynchronously through message queues.',
+    skills: ['Python', 'TypeScript', 'Redis', 'FastAPI', 'Nest.js', 'PostgreSql', 'RabbitMQ'],
+    githubUrl: 'https://github.com/404khai/hng13-stage4-notification-system',
+    liveUrl: '#',
+    images: [
+      '/noti-service1.png',
+      '/noti-service2.png'
     ],
   },
 ];

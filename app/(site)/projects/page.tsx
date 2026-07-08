@@ -48,7 +48,7 @@ export const PROJECTS: ProjectMeta[] = [
     // description: 'Intent-based OS execution layer',
     logo: '/rails.jpeg',
     categories: ['Backend / APIs'],
-    status: ['completed', 'not-live'],
+    status: ['completed', 'live'],
   },
   {
     slug: 'openframe',
@@ -59,11 +59,11 @@ export const PROJECTS: ProjectMeta[] = [
     status: ['coming-soon' ,'construction'],
   },
   {
-    slug: 'bifrost',
-    title: 'Bifrost',
-    description: 'Intent-based system orchestrator',
+    slug: 'rift',
+    title: 'Rift',
+    description: 'Intent-based OS orchestrator',
     // description: 'Intent-based OS execution layer',
-    logo: '/bifrost.png',
+    logo: '/rift.png',
     categories: ['AI / ML'],
     status: ['coming-soon', 'construction'],
   },
@@ -158,7 +158,7 @@ export const PROJECTS: ProjectMeta[] = [
   {
     slug: 'notification-service',
     title: 'Notification Service',
-    description: 'Microservice notification system that sends emails and push notifications.',
+    description: 'Microservices notification system for sending emails and push notifications asynchronously.',
     logo: '/bell.png',
     categories: ['Backend / APIs'],
     status: ['completed', 'not-live'],
