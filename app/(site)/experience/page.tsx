@@ -19,7 +19,7 @@ export default function ExperiencePage() {
         </div>
 
         {/* Experience List */}
-        <div className="flex flex-col gap-0 border-t border-[#27272a] border-dashed">
+        <div className="flex flex-col gap-0 border-t border-[#27272a] border-dashed min-w-0 w-full">
             <ExperienceItem 
                 company="JhinxPay"
                 role="App Developer"

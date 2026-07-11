@@ -2,8 +2,11 @@
 
 import React, { useState } from 'react';
 import { BlogCard } from '@/components/BlogCard';
+import { PaletteFill, Controller } from 'react-bootstrap-icons';
 
-const TABS = ['SWE', 'Design case studies', 'Game dev'];
+const TABS = ['SWE', 'Design case studies', 'Game dev'] as const;
+
+type BlogTab = (typeof TABS)[number];
 
 interface BlogPost {
   id: string;
@@ -15,16 +18,47 @@ interface BlogPost {
   tags: readonly string[];
 }
 
-export default function BlogList({ posts }: { posts: BlogPost[] }) {
-  const [activeTab, setActiveTab] = useState('SWE');
+const EMPTY_STATES: Record<
+  Exclude<BlogTab, 'SWE'>,
+  { icon: React.ReactNode; title: string; description: string }
+> = {
+  'Design case studies': {
+    icon: <PaletteFill className="w-10 h-10 text-zinc-600" />,
+    title: 'No design case studies yet',
+    description: 'UI and product design write-ups will show up here when they are published.',
+  },
+  'Game dev': {
+    icon: <Controller className="w-10 h-10 text-zinc-600" />,
+    title: 'No game dev posts yet',
+    description: 'Dev logs and game development notes will show up here when they are published.',
+  },
+};
 
-  const filteredPosts = posts.filter(post => post.category === activeTab);
+function BlogEmptyState({ tab }: { tab: Exclude<BlogTab, 'SWE'> }) {
+  const state = EMPTY_STATES[tab];
+
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
+      <div className="flex h-20 w-20 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900/40">
+        {state.icon}
+      </div>
+      <div className="flex flex-col gap-2 max-w-sm">
+        <h2 className="font-figtree text-xl text-zinc-300">{state.title}</h2>
+        <p className="font-figtree text-zinc-500 text-sm leading-relaxed">{state.description}</p>
+      </div>
+    </div>
+  );
+}
+
+export default function BlogList({ posts }: { posts: BlogPost[] }) {
+  const [activeTab, setActiveTab] = useState<BlogTab>('SWE');
+
+  const filteredPosts = posts.filter((post) => post.category === activeTab);
+  const isEmptyCategoryTab = activeTab !== 'SWE' && filteredPosts.length === 0;
 
   return (
     <div className="min-h-screen bg-[#09090b] text-white p-8 md:p-16 flex flex-col items-center">
       <div className="max-w-4xl w-full flex flex-col gap-12">
-        
-        {/* Header */}
         <div className="flex flex-col gap-4">
           <h1 className="font-unbounded text-6xl md:text-8xl font-bold tracking-tight text-white">
             Blog
@@ -34,7 +68,6 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
           </p>
         </div>
 
-        {/* Tabs */}
         <div className="flex flex-wrap gap-4 border-b border-zinc-800 pb-4">
           {TABS.map((tab) => (
             <button
@@ -51,9 +84,10 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
           ))}
         </div>
 
-        {/* Blog Grid */}
         <div className="grid grid-cols-1 gap-8">
-          {filteredPosts.length > 0 ? (
+          {isEmptyCategoryTab ? (
+            <BlogEmptyState tab={activeTab} />
+          ) : filteredPosts.length > 0 ? (
             filteredPosts.map((post) => (
               <BlogCard
                 key={post.id}
@@ -71,7 +105,6 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
