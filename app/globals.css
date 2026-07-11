@@ -2,6 +2,7 @@
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
 @theme inline {
+  --font-unbounded: "Unbounded", sans-serif;
   --font-figtree: "Figtree", sans-serif;
   --font-doto: "Doto", sans-serif;
   --font-micro_5: "Micro 5", sans-serif;

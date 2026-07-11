@@ -28,7 +28,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               logo
             )}
         </div>
-        <span className="font-irish-grover text-xl text-white tracking-wide group-hover:text-zinc-200 transition-colors">{subtitle}</span>
+        <span className="font-unbounded text-xl text-white tracking-wide group-hover:text-zinc-200 transition-colors">{subtitle}</span>
       </div>
 
       {/* Content */}

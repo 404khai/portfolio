@@ -9,6 +9,144 @@ interface TerminalBlockProps {
   title?: string;
 }
 
+const COMMAND_TOKEN =
+  /(\s+|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b(?:curl|grep|npm|node|sh|openssl|export|const|async|await|return|import|from)\b|[A-Z][A-Z0-9_]*=|--?[a-zA-Z][\w-]*|\/[\w./:_-]+|\$\{[^}]+\}|\b\d+\b:[^\n]*)/g;
+
+function colorizeCommand(command: string) {
+  return command.split(COMMAND_TOKEN).map((part, index) => {
+    if (!part) return null;
+    if (/^\s+$/.test(part)) return part;
+
+    if (/^"(?:\\.|[^"\\])*"$|^'(?:\\.|[^'\\])*'$/.test(part)) {
+      return (
+        <span key={index} className="text-amber-300">
+          {part}
+        </span>
+      );
+    }
+
+    if (/^(curl|grep|npm|node|sh|openssl)$/.test(part)) {
+      return (
+        <span key={index} className="text-fuchsia-400">
+          {part}
+        </span>
+      );
+    }
+
+    if (/^(export|const|async|await|return|import|from)$/.test(part)) {
+      return (
+        <span key={index} className="text-sky-400">
+          {part}
+        </span>
+      );
+    }
+
+    if (/^[A-Z][A-Z0-9_]*=/.test(part)) {
+      return (
+        <span key={index} className="text-cyan-400">
+          {part}
+        </span>
+      );
+    }
+
+    if (/^--?[a-zA-Z]/.test(part)) {
+      return (
+        <span key={index} className="text-yellow-400">
+          {part}
+        </span>
+      );
+    }
+
+    if (/^\/[\w./:_-]+/.test(part)) {
+      return (
+        <span key={index} className="font-semibold text-[#a8e64c]">
+          {part}
+        </span>
+      );
+    }
+
+    if (/^\$\{[^}]+\}$/.test(part)) {
+      return (
+        <span key={index} className="text-orange-300">
+          {part}
+        </span>
+      );
+    }
+
+    if (/^\d+:/.test(part)) {
+      const [lineNo, ...rest] = part.split(':');
+      return (
+        <span key={index}>
+          <span className="text-zinc-500">{lineNo}:</span>
+          <span className="text-zinc-300">{rest.join(':')}</span>
+        </span>
+      );
+    }
+
+    return <span key={index}>{part}</span>;
+  });
+}
+
+function colorizeOutputLine(line: string, index: number) {
+  if (line.startsWith('#')) {
+    return (
+      <div key={index} className="text-zinc-500">
+        {line}
+      </div>
+    );
+  }
+
+  if (/✔|passed|succeeded|Build succeeded/i.test(line)) {
+    return (
+      <div key={index} className="text-emerald-400">
+        {line}
+      </div>
+    );
+  }
+
+  if (/^(Test Files|Tests)\s+/i.test(line)) {
+    return (
+      <div key={index} className="text-emerald-300">
+        {line}
+      </div>
+    );
+  }
+
+  if (/^(transactionId|sessionId|amount|aliasAccountNumber):/.test(line)) {
+    const [label, ...rest] = line.split(':');
+    return (
+      <div key={index}>
+        <span className="text-cyan-400">{label}:</span>
+        <span className="text-zinc-300">{rest.join(':')}</span>
+      </div>
+    );
+  }
+
+  if (/^\d+:/.test(line)) {
+    const [lineNo, ...rest] = line.split(':');
+    return (
+      <div key={index}>
+        <span className="text-zinc-500">{lineNo}:</span>
+        <span className="text-zinc-300">{rest.join(':')}</span>
+      </div>
+    );
+  }
+
+  if (/^(RAILS_|NOMBA_|ADMIN_|REDIS_|JOB_|BULLMQ_)/.test(line)) {
+    return (
+      <div key={index} className="text-cyan-300">
+        {line}
+      </div>
+    );
+  }
+
+  return <div key={index}>{line}</div>;
+}
+
+function colorizeOutput(output: string) {
+  return output.split('\n').map(colorizeOutputLine);
+}
+
 export const TerminalBlock: React.FC<TerminalBlockProps> = ({ command, output, title = "terminal" }) => {
   const [copied, setCopied] = useState(false);
 
@@ -51,12 +189,12 @@ export const TerminalBlock: React.FC<TerminalBlockProps> = ({ command, output, t
         <div className="flex gap-2 text-zinc-300">
           <span className="text-green-400">➜</span>
           <span className="text-blue-400">~</span>
-          <span>{command}</span>
+          <span>{colorizeCommand(command)}</span>
         </div>
 
         {output && (
-          <div className="mt-2 text-zinc-400 whitespace-pre-wrap leading-relaxed">
-            {output}
+          <div className="mt-2 whitespace-pre-wrap leading-relaxed">
+            {colorizeOutput(output)}
           </div>
         )}
       </div>

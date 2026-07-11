@@ -40,7 +40,7 @@ export const ExperienceItem: React.FC<ExperienceItemProps> = ({
             </div>
 
             <div className="flex flex-col gap-1">
-                <h3 className="font-irish-grover text-2xl text-white tracking-wide group-hover:text-zinc-200 transition-colors">
+                <h3 className="font-calistoga text-2xl text-white tracking-wide group-hover:text-zinc-200 transition-colors">
                     {company}
                 </h3>
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">

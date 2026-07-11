@@ -210,7 +210,7 @@ export default function ProjectsPage() {
     
     
         <div className="flex flex-col gap-4">
-          <h1 className="font-irish-grover text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-white">
+          <h1 className="font-unbounded text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-white">
             Projects
           </h1>
           <p className="font-figtree text-zinc-400 text-lg md:text-2xl max-w-2xl">

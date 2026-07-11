@@ -482,7 +482,7 @@ export default function SkillsPage() {
     <div className="min-h-screen bg-[#09090b] text-white p-8 md:p-16 flex flex-col items-center">
       <div className="w-full max-w-5xl flex flex-col gap-10">
         <div className="flex flex-col gap-4">
-          <h1 className="font-irish-grover text-6xl md:text-8xl font-bold tracking-tight text-white">
+          <h1 className="font-unbounded text-6xl md:text-8xl font-bold tracking-tight text-white">
             Skills
           </h1>
           <p className="font-figtree text-zinc-400 text-xl md:text-2xl max-w-2xl">

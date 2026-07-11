@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Doto, Micro_5, Irish_Grover, Calistoga, Denk_One, Henny_Penny, Exo_2 } from "next/font/google";
+import { Figtree, Doto, Micro_5, Unbounded, Irish_Grover, Calistoga, Denk_One, Henny_Penny, Exo_2 } from "next/font/google";
 import "../globals.css";
 import { Navbar } from "@/components/Navbar";
 
@@ -50,7 +50,11 @@ const exo2 = Exo_2({
   weight: "400"
 });
 
-
+const unbounded = Unbounded({
+  variable: "--font-unbounded",
+  subsets: ["latin"],
+  weight: "400"
+});
 
 export const metadata: Metadata = {
   title: "404KHAI.DEV",
@@ -68,7 +72,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} ${irishGrover.variable} ${calistoga.variable} ${denkOne.variable} ${hennyPenny.variable} ${exo2.variable} antialiased flex flex-col items-center`}
+        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} ${irishGrover.variable} ${calistoga.variable} ${denkOne.variable} ${hennyPenny.variable} ${exo2.variable} ${unbounded.variable} antialiased flex flex-col items-center`}
       >
         <Navbar/>
         {children}

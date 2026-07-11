@@ -88,16 +88,65 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const headingIds = tocItems.map((item) => item.href.slice(1));
   let headingIndex = 0;
 
+  const stateCodeColors: Record<string, string> = {
+    matched: 'text-emerald-400',
+    underpaid: 'text-amber-400',
+    overpaid: 'text-sky-400',
+    misdirected: 'text-rose-400',
+    duplicate: 'text-violet-400',
+  };
+
+  const renderInlineCode = (children: React.ReactNode) => {
+    const text =
+      typeof children === 'string'
+        ? children
+        : getNodeText({ children: Array.isArray(children) ? children : [children] });
+
+    if (stateCodeColors[text]) {
+      return (
+        <code className={`font-mono text-sm font-semibold ${stateCodeColors[text]} bg-zinc-900/80 px-1.5 py-0.5 rounded`}>
+          {text}
+        </code>
+      );
+    }
+
+    const endpointMatch = text.match(/^(GET|POST|PUT|DELETE|PATCH)\s+(\/[^\s]+)$/);
+    if (endpointMatch) {
+      const [, method, path] = endpointMatch;
+      return (
+        <code className="font-mono text-sm text-zinc-300 bg-zinc-900/80 px-1.5 py-0.5 rounded">
+          {method}{' '}
+          <strong className="font-semibold text-[#a8e64c]">{path}</strong>
+        </code>
+      );
+    }
+
+    if (text.startsWith('/')) {
+      return (
+        <code className="font-mono text-sm bg-zinc-900/80 px-1.5 py-0.5 rounded">
+          <strong className="font-semibold text-[#a8e64c]">{text}</strong>
+        </code>
+      );
+    }
+
+    return (
+      <code className="font-mono text-sm text-zinc-300 bg-zinc-900/80 px-1.5 py-0.5 rounded">
+        {children}
+      </code>
+    );
+  };
+
   const renderers: DocumentRendererProps['renderers'] = {
     inline: {
         bold: ({ children }) => <strong>{children}</strong>,
+        code: ({ children }) => renderInlineCode(children),
     },
     block: {
       paragraph: ({ children }: { children: React.ReactNode }) => <p className="text-zinc-400 mb-6 leading-relaxed">{children}</p>,
       heading: ({ level, children }: { level: number; children: React.ReactNode }) => {
         const HeadingTag = `h${level}` as keyof React.JSX.IntrinsicElements;
         const className = level === 2 
-          ? "text-4xl font-bold text-white mt-12 mb-6 font-denk-one text-center" 
+          ? "text-4xl font-bold text-white mt-12 mb-6 font-figtree text-center" 
           : level === 3 
           ? "text-md font-bold text-white mt-8 mb-4" 
           : "text-xl font-bold text-white mt-6 mb-3";
@@ -130,6 +179,43 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </Tag>
         );
       },
+      table: ({ head, body }: { head?: { children: React.ReactNode }[]; body: { children: React.ReactNode }[][] }) => (
+        <div className="my-8 overflow-x-auto rounded-xl border border-zinc-800 bg-[#0e0e11]">
+          <table className="w-full min-w-[28rem] text-sm font-figtree">
+            {head && head.length > 0 && (
+              <thead>
+                <tr className="border-b border-zinc-800 bg-zinc-900/60">
+                  {head.map((cell, index) => (
+                    <th
+                      key={index}
+                      className="px-4 py-3 text-left text-zinc-200 font-semibold tracking-wide"
+                    >
+                      {cell.children}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+            )}
+            <tbody>
+              {body.map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  className="border-b border-zinc-800/70 last:border-0 hover:bg-zinc-900/30 transition-colors"
+                >
+                  {row.map((cell, cellIndex) => (
+                    <td
+                      key={cellIndex}
+                      className={`px-4 py-3 align-top ${cellIndex === 0 ? 'text-zinc-300' : 'text-zinc-400'}`}
+                    >
+                      {cell.children}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ),
     },
   };
 

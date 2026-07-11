@@ -33,7 +33,7 @@ export const FeaturedProject: React.FC<FeaturedProjectProps> = ({
                   logo
               )}
             </div>
-          <span className="font-irish-grover text-xl text-white tracking-wide">{subtitle}</span>
+          <span className="font-unbounded text-xl text-white tracking-wide">{subtitle}</span>
         </div>
 
         <h2 className="font-figtree text-4xl md:text-3xl font-bold text-white leading-tight">

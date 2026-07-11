@@ -12,18 +12,47 @@ export default function Home() {
       <div className="w-full flex flex-col gap-8 border border-dashed border-[#27272a] p-8 md:p-12 bg-[#09090b]">
         <div className="flex flex-col gap-2">
            <div className="flex items-center justify-between w-full">
-             <h1 className="text-xl text-zinc-300 font-figtree flex items-center">
-              Hey it's me, <span className="font-irish-grover font-black tracking-tighter text-4xl text-white ml-2">Khai</span>
+             <h1 className="text-xl max-[525px]:text-sm text-zinc-300 font-figtree flex items-center max-[525px]:flex-wrap max-[525px]:gap-1">
+              Hey it's me, <span className="font-unbounded font-black tracking-tighter text-4xl max-[525px]:text-2xl text-white ml-2 max-[525px]:ml-0">Khai</span>
              </h1>
              
-             <div className="group relative">
-               <a href="/Oghenefega_Omajene_Resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Download CV">
-                 <FileEarmarkArrowDownFill className="w-6 h-6 text-zinc-400 hover:text-[#a8e64c] transition-colors duration-300 cursor-pointer" />
-               </a>
-               <div className="absolute -top-12 -left-10 w-max px-3 py-1.5 bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-xl transform translate-y-2 group-hover:translate-y-0 z-10">
-                 Download CV
+             <a
+               href="/Oghenefega_Omajene_Resume.pdf"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Download CV"
+               className="flex items-center group shrink-0"
+             >
+               <div className="relative top-3 mr-1 w-20 h-11 flex-shrink-0">
+                 <svg
+                   className="absolute inset-0 h-full w-full text-white/45 group-hover:text-[#a8e64c]/70 transition-colors duration-300"
+                   viewBox="0 0 260 92"
+                   fill="none"
+                   preserveAspectRatio="none"
+                   aria-hidden="true"
+                 >
+                   <path
+                     d="M4 60C42 28 76 74 110 48C132 31 98 5 84 26C67 52 112 72 160 38C190 20 223 30 254 22"
+                     stroke="currentColor"
+                     strokeWidth="3.2"
+                     strokeLinecap="round"
+                     strokeLinejoin="round"
+                   />
+                   <path
+                     d="M226 10C239 12 249 17 254 22M254 22C243 31 232 44 226 56"
+                     stroke="currentColor"
+                     strokeWidth="3.2"
+                     strokeLinecap="round"
+                     strokeLinejoin="round"
+                   />
+                 </svg>
+                 <span className="absolute right-23 top-5 font-figtree text-sm text-zinc-400 group-hover:text-[#a8e64c] transition-colors duration-300 whitespace-nowrap leading-none">
+                   download cv
+                 </span>
                </div>
-             </div>
+               <FileEarmarkArrowDownFill className="w-6 h-6 flex-shrink-0 text-zinc-400 group-hover:text-[#a8e64c] transition-colors duration-300" />
+             </a>
+             
            </div>
            <p className="text-zinc-400 font-figtree text-lg max-w-2xl mt-4 leading-relaxed">
              Let's get straight to the point....
@@ -35,7 +64,7 @@ export default function Home() {
              I'm a <b className="text-[#a8e64c] font-calistoga">Software Engineer</b> who is intrigued by Operating Systems, Game Development, Animation and Interactive UI.
            </li>
            <li>
-             <b>4+</b> years of experience in the industry, with specialty across Agentic AI, Backend Development and Game Development.
+             <b>4+</b> years of experience working on ML Pipelines, Distributed Systems, Agentic AI & AI Applications, Backend Systems, Mobile Apps and 2D Platformer Games.
            </li>
            <li>
              Probably trying out new frameworks, or dabbling in <b className="text-white">Lua</b>, <b className="text-white">Go</b> or <b className="text-white">Rust</b>.
@@ -133,7 +162,7 @@ export default function Home() {
       {/* Featured Projects Section */}
       <div className="w-full flex flex-col gap-12" id="features">
         <div className="flex flex-col gap-2">
-            <h2 className="font-irish-grover text-5xl md:text-6xl font-bold text-white tracking-tight">
+            <h2 className="font-unbounded text-5xl md:text-6xl font-bold text-white tracking-tight">
               Featured Projects
             </h2>
             <p className="font-figtree text-zinc-400 text-lg">
