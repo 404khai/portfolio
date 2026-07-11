@@ -2,8 +2,8 @@
 title: AI Agents & Workflows
 date: January 23, 2026
 category: SWE
-readTime: 45 min read
-description: A comprehensive breakdown of the fundamentals of LLMs, AI Agents and AI Workflows.
+readTime: 14 min read
+description: A practical breakdown of LLMs, AI workflows, and AI agents — what each one is, where they differ, and when to reach for which.
 tags:
   - AI
   - AI Agents
@@ -13,34 +13,36 @@ tags:
 ## LLMs
 
 An LLM (Large Language Model) in AI is a powerful deep learning model trained on massive text datasets to understand, generate, and predict human-like language, functioning as a core component of Generative AI to power chatbots, summarize documents, translate languages, and create content by recognizing complex patterns and context in text.
+
 ChatGPT, Gemini and Claude are widely used applications built on / powered by LLMs.
 
 ### Key Distinctions
-- LLM (e.g., GPT-4): The foundational, core model trained on vast text data to understand and generate human-like text.
-- ChatGPT: An application interface that uses the LLM as its brain, adding features like conversation history, safety filters, and the ability to use external tools (like browsing or code execution) to create a more capable AI assistant.
 
-### Examples of LLMS
+- **LLM** (e.g., GPT-4): The foundational, core model trained on vast text data to understand and generate human-like text.
+- **ChatGPT**: An application interface that uses the LLM as its brain, adding features like conversation history, safety filters, and the ability to use external tools (like browsing or code execution) to create a more capable AI assistant.
 
-- GPT-5/4/4o (OpenAI).
-- Gemini 3 Pro (Google).
-- Claude Opus 4.5 (Anthropic).
+### Examples of LLMs
+
+- GPT-5/4/4o (OpenAI)
+- Gemini 3 Pro (Google)
+- Claude Opus 4.5 (Anthropic)
 - Kimi-K2 Thinking (Moonshot AI)
-- Qwen3-Max (Alibaba).
+- Qwen3-Max (Alibaba)
 - DeepSeek-R1 (DeepSeek-AI)
-- LLaMA 4 Scout (Meta).
-- Command (Cohere).
+- LLaMA 4 Scout (Meta)
+- Command (Cohere)
 
 ### Key Traits of LLMs
 
-- **Open Domain Knowledge**: LLMs have access to a vast amount of general knowledge, but they are not trained on proprietary information e.g personal info or internal company data.
-- **Passive**: LLMs are passive in the sense that they do not generate text on their own. Instead, they generate text in response to user prompts.
+- **Open Domain Knowledge**: LLMs have access to a vast amount of general knowledge, but they are not trained on proprietary information e.g. personal info or internal company data.
+- **Passive**: LLMs do not act on their own. They respond to a prompt, produce text, and stop. Something else — a human, a workflow, or an agent — decides what happens next.
 - **Vast Training Data**: LLMs are trained on vast amounts of text data, enabling them to understand and generate human-like text.
 - **Contextual Understanding**: LLMs can understand the context of a given prompt and generate text that is relevant to the context.
 - **Flexibility**: LLMs can be fine-tuned for specific tasks, allowing them to perform a wide range of natural language processing tasks.
 
 ## AI Workflows
 
-If a user tells an LLM: "Everytime I ask for a personal event, perform a search query on my calendar and fetch data from my calendar before responding", that is a simple AI Workflow.
+If a user tells an LLM: "Every time I ask for a personal event, perform a search query on my calendar and fetch data from my calendar before responding", that is a simple AI Workflow.
 
 {% WorkflowDiagram
    tools=[
@@ -48,32 +50,158 @@ If a user tells an LLM: "Everytime I ask for a personal event, perform a search 
    ]
 /%}
 
+The human authored the rule. The LLM executes a fixed path: receive question → call calendar tool → inject result into context → respond. The LLM never decides *whether* to check the calendar. It always does.
+
 ### Key Traits of AI Workflows
 
-- **Control Logic**: They can only follow pre-defined paths set by humans. The paths are called control logic e.g. If we ask a follow up question like "What will the weather be?" on said event day, the LLM will fail to respond because that is outside the scope of its workflow.
+- **Control Logic**: They can only follow pre-defined paths set by humans. The paths are called control logic. If we ask a follow-up question like "What will the weather be?" on said event day, the LLM will fail to respond correctly because that is outside the scope of its workflow.
+- **Deterministic routing**: Same trigger, same steps, same tool calls. You can draw the flowchart before you ship it.
+- **Human is the decision maker**: The developer decides what tools exist, when they fire, and what happens on failure. There is no AI agent involvement.
 
-Pushing this example further, if we allow the LLM to access the weather via an API and use a text-to-audio model to speak the answer:
-No matter how many steps is added, it is still an AI workflow
-Note: The human is still the decision maker, there is no AI agent involvement
+Pushing this example further — if we allow the LLM to access the weather via an API and use a text-to-audio model to speak the answer:
 
 {% WorkflowDiagram
+   layout="sequence"
    tools=[
      { label: "Calendar", imageSrc: "/images/posts/calendar.png" },
-     { label: "Weather App", imageSrc: "/weather.png" }
+     { label: "Weather API", imageSrc: "/images/posts/openweather.png" },
+     { label: "TTS", imageSrc: "/images/posts/elevenlabs.png" }
    ]
 /%}
 
-![Server Architecture](/fangfirelabs.jpeg)
+No matter how many steps are added, it is still an AI workflow. More tools does not mean more autonomy. The graph is still fixed.
 
-Figure 1: Visualizing data flow across region boundaries.
-
-## Implementing Raft Consensus
-
-One of the most popular algorithms for managing a replicated log is Raft. It's designed to be understandable. Here is how you might verify the status of a Raft node in a production cluster.
+A minimal workflow in code looks like this:
 
 {% TerminalBlock
-   command="curl -X GET http://localhost:8080/raft/status"
-   output="{\n  \"state\": \"Leader\",\n  \"term\": 42,\n  \"commit_index\": 1024,\n  \"applied_index\": 1024,\n  \"peers\": [\"10.0.0.2\", \"10.0.0.3\"]\n}"
-   title="terminal" /%}
+   command="// Hard-coded workflow — calendar lookup on every personal-event query"
+   output="async function handlePersonalEventQuery(userMessage: string) {\n  const events = await calendar.search(userMessage);\n  const context = formatEvents(events);\n  return llm.complete({ prompt: userMessage, context });\n}"
+   title="workflow.ts" /%}
 
-The output confirms that our node is currently the `Leader` for term 42. All entries up to index 1024 have been committed and applied to the state machine.
+**When workflows win:** predictable tasks, compliance-sensitive flows, and anything where you need to audit exactly which tools ran and in what order.
+
+## AI Agents
+
+An AI Agent is an LLM wrapped in a loop that can **observe, decide, act, and repeat** until a goal is met.
+
+Same calendar example — but now the user asks: *"Am I free Thursday, and if so, book a focus block and tell my team in Slack."*
+
+A workflow breaks here. That request spans calendar lookup, availability reasoning, event creation, and a Slack message — and the user never told you the order. An agent has to figure it out.
+
+{% WorkflowDiagram
+   layout="sequence"
+   tools=[
+     { label: "LLM", imageSrc: "/images/posts/mistral.png" },
+     { label: "Calendar", imageSrc: "/images/posts/calendar.png" },
+     { label: "Slack", imageSrc: "/images/posts/slack.png" },
+     { label: "Memory", imageSrc: "/images/posts/memory.png" }
+   ]
+/%}
+
+### The Agent Loop
+
+Most agents follow a pattern close to ReAct (Reason + Act):
+
+1. **Observe**: read the user goal and current state (tool results, memory, errors)
+2. **Plan**: decide the next action
+3. **Act**: call a tool or produce a final answer
+4. **Repeat**: until done or until a step budget is exhausted
+
+{% TerminalBlock
+   command="// Simplified agent loop"
+   output="while (!done && steps < MAX_STEPS) {\n  const decision = await llm.decide({ goal, history, tools });\n\n  if (decision.type === 'final_answer') {\n    return decision.text;\n  }\n\n  const result = await tools.run(decision.tool, decision.input);\n  history.push({ action: decision, result });\n}"
+   title="agent.ts" /%}
+
+The difference from a workflow: **`decide()` is not hard-coded**. The LLM picks the next tool based on what it learned from the last step.
+
+### Key Traits of AI Agents
+
+- **Autonomy**: The model chooses which tools to call and in what order, within guardrails you define.
+- **Goal-directed**: Optimized for outcomes ("book the slot", "summarize this repo", "resolve the support ticket"), not a fixed script.
+- **Tool-augmented**: Agents without tools are just chatbots. Useful agents can read files, hit APIs, query databases, and write back.
+- **Stateful**: They carry conversation history, intermediate results, and sometimes long-term memory across turns.
+- **Bounded**: Production agents always have limits — max steps, allowed tool lists, approval gates, and budget caps. Unbounded autonomy is a demo feature, not a shipping strategy.
+
+### Workflows vs Agents — Side by Side
+
+| | AI Workflow | AI Agent |
+|---|-------------|----------|
+| Who routes? | Human-authored control logic | LLM decides next step |
+| Path | Fixed graph | Dynamic loop |
+| Predictability | High | Lower — same prompt can take different paths |
+| Best for | Known procedures | Open-ended goals |
+| Failure mode | Missed edge branch | Wrong tool, loop, or hallucinated action |
+
+## What I Have Actually Built
+
+During my HNG internship I worked on both sides of this line: fixed pipelines and autonomous agents.
+
+**Legal WatchDog** leaned workflow-heavy: ingest regulatory documents, run structured NLP extraction, store results. The steps were known upfront. You want repeatability when compliance teams audit what ran.
+
+**Telex.im A2A agents** were the opposite. I integrated two A2A-compliant agents, a riddle agent and a real-time news update agent into a chat surface where the system had to route intent to the right specialist without the user naming it. That is agent territory: dynamic handoffs, not a single if/else chain.
+
+I also shipped a Slack bot for intern task summarization. On the surface it looks like "call LLM, return text." Under the hood it is closer to an agent: fetch thread context, decide what is relevant, summarize, and format for Slack with retries when the channel history is incomplete.
+
+{% TerminalBlock
+   command="// Agent-style Slack summarizer — tool choice is dynamic"
+   output="const tools = {\n  fetchThread: (channelId, ts) => slack.conversations.replies(...),\n  fetchUser: (userId) => slack.users.info(...),\n  summarize: (messages) => llm.complete(...),\n};\n\n// LLM picks fetchThread first, then summarize — not hard-coded order"
+   title="slack-agent.ts" /%}
+
+**Lesson:** The label matters less than the control flow. If you can draw every branch before runtime, it is a workflow. If the LLM picks branches at runtime, you are in agent land — and you need step limits, tool allowlists, and logging.
+
+## Frameworks and Protocols Worth Knowing
+
+You do not need to build the loop from scratch. A few pieces I have reached for:
+
+- **Mastra**: TypeScript-first agent framework with workflows, tool definitions, and observability hooks. Good when you want agents inside a Node backend you already own.
+- **LangGraph / LangChain**: graph-based orchestration. Workflows as graphs; agents as cycles in the graph. Heavy, but the mental model maps cleanly.
+- **A2A (Agent-to-Agent)**: Google's protocol for agents discovering and delegating to other agents. Relevant when one user request should fan out to specialist agents instead of one monolithic prompt.
+
+The pattern across all of them: **tools are functions with schemas, the LLM emits structured calls, your runtime executes and feeds results back.**
+
+## Failure Modes Nobody Warns You About
+
+### Agents That Loop Forever
+
+An agent misses the calendar API response, calls calendar again, misses again, calls again. Without a step cap you burn tokens and money while the user waits.
+
+**Fix:** Hard `MAX_STEPS`, duplicate-action detection, and a fallback message when the budget is exhausted.
+
+### Workflows Pretending to Be Agents
+
+Teams add ten tools to a chatbot, call it an agent, and ship zero routing logic. The model free-associates tool calls because nothing constrains the graph.
+
+**Fix:** If the procedure is known, write the workflow. Reserve agents for tasks where path selection is the product.
+
+### Silent Tool Failures
+
+The calendar API returns 403. The agent summarizes an empty schedule confidently.
+
+**Fix:** Surface tool errors in the observation step. Force the model to acknowledge failure before producing a final answer.
+
+{% TerminalBlock
+   command="// Feed errors back into the observation loop"
+   output="if (!result.ok) {\n  history.push({\n    action: decision,\n    result: { error: true, status: result.status, message: result.error },\n  });\n  continue;  // let the LLM recover or ask the user\n}"
+   title="agent-runtime.ts" /%}
+
+## When to Use What
+
+**Use an LLM alone** when you need text transformation; summarize, rewrite, classify, extract with no external systems involved.
+
+**Use a workflow** when the steps are known, auditable, and repeat the same way every time. Payments, ETL, onboarding checklists, "always search calendar first."
+
+**Use an agent** when the user goal is open-ended, the tool sequence cannot be written upfront, and you can afford guardrails + observability overhead.
+
+If you are not sure, start with a workflow. Promote to an agent only when you hit a real routing problem workflows cannot express without turning into spaghetti.
+
+## Takeaways
+
+**1. Tools do not make it an agent.** A workflow can call twelve APIs and still be a workflow if the call order is fixed. Autonomy is about who chooses the next step.
+
+**2. Agents are loops, not magic.** Observe → decide → act → repeat. Everything else: memory, multi-agent, RAG hangs off that loop.
+
+**3. Bound autonomy before you ship.** Step limits, tool allowlists, and structured logging are not optional in production. They are the difference between a demo and a system you can debug at 2 a.m.
+
+**4. Match the architecture to the risk.** Compliance, billing, and auth-adjacent flows deserve workflows. Research assistants, internal ops bots, and multi-step user requests are where agents earn their complexity.
+
+**5. The vocabulary is converging fast.** LLM, workflow, agent, copilot: vendors use these interchangeably. Read the control flow, not the marketing page.

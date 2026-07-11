@@ -65,12 +65,13 @@ export default function ExperiencePage() {
                 period="Oct 2025 - Dec 2025"
                 logo="/hng.jpeg"
                 contributions={[
-                    "Led a team of 3 engineers in developing a distributed microservices notification system ",
+                    "Architected a distributed notification microservice (Redis Streams pub/sub, idempotent delivery), spearheading a 3-engineer pod, reducing notification latency by 40% (p95 <300ms).",
                     "Contributed to Legal WatchDog, an AI-powered regulatory intelligence platform for enterprises that reduces manual compliance efforts by 50%.",
                     "Integrated two A2A-compliant AI agents (a riddle agent and a real-time news update agent) into Telex.im",
                     "Created an AI agent slack bot that helped interns for task deliverables summarization.",
                     "Developed RESTful API projects with Django and FastAPI implementing NLP search.",
-                    "Built a document analyzer & summarization tool with OpenRouter."
+                    "Built a document analyzer using OpenRouter's LLM APIs with chunking and embedding similarity search, achieving 92% summarization accuracy",
+                    "Drove CI/CD adoption (GitHub Actions + Docker), tripling deployment frequency and eliminating staging environment drift."
                 ]}
                 skills={["Team Leadership & Management", "Prompt Engineering", "Collaboration", "AI Agents", "Mastra", "Python", "Nest.js", "Microservices", "Distributed Systems", "TypeScript", "Docker", "Minio", "Redis"]}
             />
