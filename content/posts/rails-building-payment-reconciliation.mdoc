@@ -1,0 +1,270 @@
+---
+title: Building Rails - Payment Reconciliation on Nomba Virtual Accounts
+date: July 11, 2026
+category: SWE
+readTime: 15 min read
+description: How I built a virtual-account reconciliation layer on Nomba's API for the Nomba x DevCareer hackathon 2026; provisioning per-student accounts, ingesting signed webhooks, reconciling five payment edge cases, and shipping a production proof with live money; while debugging everything that broke along the way.
+tags:
+  - TypeScript
+  - Fastify
+  - BullMQ
+  - Nomba
+  - PostgreSQL
+  - Webhooks
+  - Fintech
+---
+## The Brief
+
+Every Nigerian product team integrating Nomba virtual accounts ends up rebuilding the same plumbing: provision accounts, verify inbound webhooks, reconcile transfers against expected amounts, handle edge cases, and expose a clean ledger to downstream systems.
+
+I built **Rails** for the Nomba × DevCareer Hackathon 2026 (Infrastructure track) to solve that once. The demo scenario is school-fee collection: each student gets a dedicated Nomba virtual account, inbound transfers auto-reconcile to the right student, and the school admin pulls a per-student statement from a REST API.
+
+The constraint was real: one week, solo, sandbox credentials that eventually had to work in production, hosted on Render Free with Supabase Postgres and Upstash Redis.
+
+## What I Built
+
+Rails is a TypeScript/Fastify API plus a BullMQ worker. Downstream teams authenticate with SHA-256–hashed API keys and integrate in under an hour without rebuilding webhook or reconciliation logic.
+
+**Core surface area:**
+
+- `POST /customers` — create students/customers with an expected fee amount stored in Rails (integer kobo, not floats)
+- `POST /customers/:id/accounts` — provision or reuse a Nomba virtual account per customer
+- `POST /webhooks/nomba` — verify Nomba HMAC-SHA256, acknowledge with HTTP 200, queue reconciliation
+- `GET /customers/:id/transactions` — paginated ledger
+- `GET /customers/:id/statement` — filterable statement with totals
+- `POST /webhook-subscriptions` — register downstream URLs for signed `transfer.*` events
+- `/docs` — OpenAPI/Swagger with Bearer authorization
+
+**Reconciliation engine** — a pure decision function over five states:
+
+| State | Meaning |
+|-------|---------|
+| `matched` | Transfer equals expected amount |
+| `underpaid` | Transfer below expected |
+| `overpaid` | Transfer above expected |
+| `misdirected` | No Rails virtual account matched the transfer |
+| `duplicate` | Same `transactionId` or `sessionId` already processed |
+
+Every state change writes an immutable `reconciliation_events` row. Outbound webhooks (`transfer.matched`, `transfer.underpaid`, etc.) are signed with `RAILS_WEBHOOK_SECRET` and retried with exponential backoff. Delivery attempts are persisted in `outbound_webhook_delivery_log`.
+
+{% WorkflowDiagram
+   layout="sequence"
+   tools=[
+    { label: "Nomba", imageSrc: "/images/posts/nomba.png" },
+    { label: "Rails API", imageSrc: "/images/posts/rails-api.png" },
+    { label: "BullMQ", imageSrc: "/images/posts/redis-bullmq.png" },
+    { label: "Worker", imageSrc: "/images/posts/worker.jpeg" },
+    { label: "Postgres", imageSrc: "/images/posts/postgres.jpeg" },
+    { label: "Downstream", imageSrc: "/images/posts/webhook-site.png" }
+   ]
+/%}
+
+
+The happy-path flow:
+
+1. School app calls `POST /customers/student-003/accounts` → Rails provisions VA via Nomba OAuth
+2. Parent sends ₦150 to the student's account number
+3. Nomba fires `payment_success` webhook to Rails
+4. Rails verifies signature, returns `200`, enqueues reconciliation
+5. Worker matches amount to expected fee → `matched`
+6. Rails delivers signed `transfer.matched` to subscribed downstream URL
+
+Production proof: **student-003**, live Opay transfer, reconciled to `matched` in under 3 seconds end-to-end.
+
+## Problem 1 — I Provisioned Against the Wrong Nomba Endpoint
+
+Early on, virtual account creation failed or returned accounts that never received webhooks. I assumed the parent-account endpoint was enough.
+
+Nomba's sub-account model requires scoping VA creation to the sub-account:
+
+{% TerminalBlock
+   command="grep -n 'createVirtualAccount' src/nombaClient.ts"
+   output="62:  async createVirtualAccount(input: CreateVirtualAccountInput): Promise<NombaVirtualAccount> {\n63:    const subAccountId = encodeURIComponent(this.options.subAccountId);\n64:    const response = await this.request<{ data: NombaVirtualAccount }>(\n65:      `/v1/accounts/virtual/${subAccountId}`,\n66:      {\n67:        method: \"POST\",\n68:        body: JSON.stringify(input),\n69:      },\n70:      true,\n71:    );"
+   title="nombaClient.ts" /%}
+
+The fix was threefold:
+
+1. Call `POST /v1/accounts/virtual/{subAccountId}` — not a generic parent endpoint
+2. Pass `NOMBA_SUB_ACCOUNT_ID` from env and require it at boot
+3. Send the parent `accountId` header on authenticated requests (Nomba's OAuth contract)
+
+**Lesson:** Payment APIs are not CRUD. Sub-account scoping is part of the domain model, not a deployment detail you discover in week two.
+
+## Problem 2 — Webhooks Never Arrived (Until They Did)
+
+Provisioning worked. Transfers landed on Nomba. Rails showed nothing.
+
+I spent hours replaying signed webhooks manually with `scripts/send-demo-nomba-webhook.sh` — reconciliation worked perfectly on replay. That told me the bug was **upstream delivery**, not my state machine.
+
+Root cause: Nomba webhook routing is tied to account hierarchy. Until the sub-account was correctly scoped and the webhook URL registered against the right Nomba environment, inbound events simply never hit `/webhooks/nomba`.
+
+The debugging workflow I wish I'd had on day one:
+
+{% TerminalBlock
+   command="NOMBA_BASE_URL=https://api.nomba.com \\\nNOMBA_PARENT_ACCOUNT_ID='<parent-id>' \\\nNOMBA_CLIENT_ID='<client-id>' \\\nNOMBA_CLIENT_SECRET='<private-key>' \\\nnode scripts/fetch-nomba-va-transactions.mjs <virtual-account-number>"
+   output="transactionId: API-VACT_TRA-...\nsessionId: ...\namount: 150\naliasAccountNumber: 5714463916"
+   title="Backtrack a transfer Nomba received but Rails missed" /%}
+
+Fetch the transaction from Nomba's API, extract `transactionId` / `sessionId` / amount, then replay with the signing script. That separated "Nomba didn't send" from "Rails didn't process."
+
+**Lesson:** When webhooks are the source of truth, build a **reconciliation fallback** before you need it. A fetch-and-replay script is cheap insurance.
+
+## Problem 3 — Sandbox vs Production Footguns
+
+Sandbox and production Nomba credentials are not interchangeable. I hit this twice:
+
+- `NOMBA_BASE_URL` pointing at sandbox while testing live transfers
+- Webhook signing keys that differ between environments
+- Sandbox VA limits (₦150 cap, 2 accounts per user, expiration) that don't exist in production docs the same way
+
+The fix was explicit env validation with Zod at boot and documenting every secret's source in the README — which key comes from Nomba, which ones you generate yourself:
+
+{% TerminalBlock
+   command="openssl rand -base64 32"
+   output="RAILS_WEBHOOK_SECRET=<output>\nADMIN_BOOTSTRAP_TOKEN=<output>"
+   title="Rails-owned secrets — never commit these" /%}
+
+**Lesson:** Treat environment boundaries as first-class code. If a variable can be sandbox or production, name it loudly and validate the combination at startup.
+
+## Problem 4 — Render Free Tier Sleeps; Webhooks Don't Wait
+
+Render free tier sleeps after ~15 minutes of inactivity. Nomba does not queue webhooks indefinitely for a cold server.
+
+Transfers happened. Webhooks fired. Rails was asleep. Ledger empty.
+
+Fix: UptimeRobot pinging `GET /health` every 5 minutes. `/health` intentionally does **not** touch Redis or Postgres — it's a lightweight liveness probe:
+
+{% TerminalBlock
+   command="curl https://your-app.onrender.com/health"
+   output="{\"ok\":true,\"service\":\"rails\"}"
+   title="Keep-alive ping — never use POST /webhooks/nomba for this" /%}
+
+**Lesson:** On free-tier hosting, **availability is a feature**. Budget for a keep-alive strategy or accept that webhook-driven systems will miss events.
+
+## Problem 5 — Production Build Broke in CI
+
+Local `tsx watch` masked problems that only surfaced on Render's `npm ci && npm run build`.
+
+Two separate failures:
+
+**Prisma client not generated in production build.** Fix: `prisma generate` in the build script and a dedicated `prisma.config.ts` for migration datasource.
+
+**Vitest globals leaking into production TypeScript.** `tsc` tried to compile test types into `dist/`. Fix: separate `tsconfig.build.json` that excludes `tests/`.
+
+{% TerminalBlock
+   command="npm run build"
+   output="prisma generate && tsc -p tsconfig.build.json\n✔ Generated Prisma Client\n✔ Build succeeded"
+   title="Render build command" /%}
+
+**Lesson:** Your deploy build command is the real compile target. Run it locally before every push.
+
+## Problem 6 — BullMQ Was Burning Redis With Zero Traffic
+
+This was the most embarrassing oversight.
+
+Upstash Free gives 500k Redis commands/month. Within hours of deployment — **no users, no webhooks** — I was already at thousands of commands. Upstash showed keys like:
+
+```text
+bull:rails-reconciliation:stalled-check
+bull:rails-outbound-webhooks:stalled-check
+```
+
+`/health` wasn't the culprit. The start command was:
+
+{% TerminalBlock
+   command="sh -c \"node dist/src/worker.js & node dist/src/server.js\""
+   output="# Two BullMQ Workers polling Redis 24/7\n# stalled-check every 30s × 2 workers\n# empty-queue drain every 5s × 2 workers\n# ~40k–50k idle commands/month before any real traffic"
+   title="Render start command — the silent Redis tax" /%}
+
+Audit findings:
+
+- API process created 2 Queue clients; worker process created **2 more** (duplicate producers)
+- Each Worker maintained blocking Redis connections plus `stalled-check` timers even with an empty queue
+- Estimated **5–8 persistent Redis connections** idle at all times
+
+I refactored the job layer (`src/jobs/`) with three changes:
+
+1. **Shared Queue connection** in the API process — one Redis client for both queues
+2. **Worker-only outbound producer** — removed the duplicate reconciliation Queue in the worker
+3. **Tuned idle polling** — `BULLMQ_STALLED_INTERVAL_MS=120000`, `BULLMQ_DRAIN_DELAY_MS=30000`
+
+I also added a pluggable `JOB_PROCESSOR` (`inline` | `bullmq`) so low-traffic deployments can skip Redis entirely. For production I kept optimized BullMQ:
+
+{% TerminalBlock
+   command="JOB_PROCESSOR=bullmq \\\nREDIS_URL=<upstash-url> \\\nBULLMQ_STALLED_INTERVAL_MS=120000 \\\nBULLMQ_DRAIN_DELAY_MS=30000 \\\nnpm run dev:worker"
+   output="BullMQ workers started with tuned stalled interval and drain delay"
+   title="Optimized BullMQ configuration" /%}
+
+**Lesson:** Background job infrastructure has a **standing cost**. BullMQ is correct at scale; on a free-tier hackathon deploy, idle Workers are a billing incident waiting to happen. Measure Redis commands before you demo, not after Upstash emails you.
+
+> **Image suggestion:** Screenshot your Upstash Data Browser showing the `stalled-check` keys before optimization, and the command count graph dropping after tuning. That visual lands harder than any architecture paragraph.
+
+## Problem 7 — A Design Call That Saved the Demo
+
+Nomba virtual accounts support an `expectedAmount` field. If you set it, Nomba can reject or reverse payments that don't match exactly — which kills your ability to demo **underpayment** and **overpayment**.
+
+I deliberately stored `expectedAmountKobo` in Rails and left Nomba's `expectedAmount` unset:
+
+{% TerminalBlock
+   command="grep -n 'decideReconciliation' src/reconciliation.ts"
+   output="59:export const decideReconciliation = (input: ReconciliationInput): ReconciliationDecision => ..."
+   title="reconciliation.ts — pure decision function, tested in Vitest" /%}
+
+All amount comparisons happen in integer kobo. The reconciliation function is pure — 38 unit tests, no database required — which made edge-case demos predictable:
+
+{% TerminalBlock
+   command="npm test"
+   output="Test Files  12 passed (12)\nTests  38 passed (38)"
+   title="Vitest — reconciliation logic covered without Nomba sandbox" /%}
+
+**Lesson:** In fintech demos, **who owns the business rule** matters. Rails owns expected amounts; Nomba owns settlement. Don't outsource your demo scenarios to a provider constraint you didn't read.
+
+## Security Decisions I Didn't Compromise On
+
+Hackathon speed doesn't mean skipping security on the paths that matter:
+
+**Inbound Nomba webhooks** — HMAC-SHA256 over a colon-delimited payload, timing-safe comparison, `401` on failure, never queued:
+
+```text
+event_type:requestId:userId:walletId:transactionId:type:time:responseCode:nomba-timestamp
+```
+
+**API keys** — SHA-256 hashed at rest, prefix stored for identification, plaintext returned once at creation.
+
+**Outbound webhooks** — signed with `RAILS_WEBHOOK_SECRET`, delivery logged with response body and status for audit.
+
+**Idempotency** — duplicate detection on `nombaTransactionId` and `nombaSessionId` before any ledger write. Provisioning is idempotent per customer: existing active VA is returned, not duplicated.
+
+## What I'd Do Differently
+
+**Start with the replay script, not the queue.** Webhook delivery debugging ate a day that `fetch-nomba-va-transactions.mjs` would have shortened to an hour.
+
+**Question standing infrastructure cost on day one.** BullMQ was the right abstraction for "ack fast, process async," but I should have audited idle Redis before deploying the worker alongside the API on a free tier.
+
+**Split build and dev TypeScript configs immediately.** Don't wait for Render to tell you Vitest globals don't belong in production.
+
+**Register keep-alive before the first live transfer.** One missed webhook during a demo is worse than five minutes of UptimeRobot setup.
+
+## The Result
+
+Rails shipped as a public repo with:
+
+- Working MVP on Render + Supabase + Upstash
+- Live production transfer reconciled to `matched` (student-003, ₦150)
+- OpenAPI docs with Swagger Authorize for Bearer API keys
+- Operational scripts for webhook replay and Nomba transaction backtrack
+- Architecture/security note and a full BullMQ/Redis audit doc
+
+The reconciliation engine, webhook security, and ledger APIs are the product. Everything else — Redis tuning, keep-alive pings, build config fixes — is what it actually takes to make fintech infrastructure **work** on free-tier hosting, not just compile.
+
+## Takeaways
+
+**1. Webhook systems need three paths:** verify, process, and **recover**. If you can't replay or backtrack a missed event, you don't have a reconciliation system — you have a hope-based architecture.
+
+**2. Payment provider docs are the schema.** Sub-account IDs, signature payload field order, and environment-specific base URLs are not configuration trivia. Getting any one wrong looks like your code is broken when the integration contract is.
+
+**3. Background workers have idle costs.** Queues are not free when empty. Measure Redis commands, tune `stalledInterval` and `drainDelay`, and question whether you need a worker process at all at current traffic.
+
+**4. Own your business rules locally.** Expected amounts, edge-case states, and audit trails belong in your database — not in provider-side constraints you can't override during a demo.
+
+**5. Free-tier deploys are integration tests.** Sleepy servers, build pipelines that differ from dev, and quota-limited Redis will find every assumption you didn't encode in code. Plan for them like features, not surprises.

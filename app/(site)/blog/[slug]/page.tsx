@@ -51,10 +51,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const tocItems: { label: string; href: string; level: number }[] = [];
   
   // Simple recursive function to find headings
+  const getNodeText = (node: any): string => {
+    if (typeof node?.text === 'string') return node.text;
+    if (Array.isArray(node?.children)) return node.children.map(getNodeText).join('');
+    return '';
+  };
+
+  const slugifyHeading = (text: string) =>
+    text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '');
+
   const extractHeadings = (node: any) => {
     if (node.type === 'heading' && (node.level === 2 || node.level === 3)) {
-      const text = node.children.map((c: any) => c.text).join('');
-      const slug = text.toLowerCase().replace(/[^\w]+/g, '-');
+      const text = getNodeText(node);
+      const slug = slugifyHeading(text);
       tocItems.push({ label: text, href: `#${slug}`, level: node.level });
     }
     if (node.children) {
@@ -76,6 +85,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   const hasToc = tocItems.length > 0;
+  const headingIds = tocItems.map((item) => item.href.slice(1));
+  let headingIndex = 0;
 
   const renderers: DocumentRendererProps['renderers'] = {
     inline: {
@@ -90,34 +101,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           : level === 3 
           ? "text-md font-bold text-white mt-8 mb-4" 
           : "text-xl font-bold text-white mt-6 mb-3";
+
+        const id = level === 2 || level === 3 ? headingIds[headingIndex++] : undefined;
         
-        // Generate ID for H2s for TOC linking
-        let id = undefined;
-        if (level === 2 && Array.isArray(children)) {
-           // This is a bit tricky with React nodes. 
-           // For now, let's rely on the text content being simple or use a utility if needed.
-           // To keep it simple and working: we need the text content to generate the ID.
-           // But `children` here is already React Nodes.
-           // A common workaround is to not add IDs if we can't easily determine them, 
-           // OR use a slugifier on the raw text if we had access to it here.
-           // The renderers don't give us the raw node easily in the props.
-           
-           // ALTERNATIVE: Just render headings. If we want TOC, we need to inject IDs.
-           // We can try to infer ID from the children if it's a string.
-        }
-        
-        // Helper to get text from children (simple case)
-        const getText = (node: React.ReactNode): string => {
-            if (typeof node === 'string') return node;
-            if (Array.isArray(node)) return node.map(getText).join('');
-            if (React.isValidElement(node) && (node.props as any).children) return getText((node.props as any).children);
-            return '';
-        }
-        
-        const text = getText(children);
-        const slug = text.toLowerCase().replace(/[^\w]+/g, '-');
-        
-        return <HeadingTag id={slug} className={className}>{children}</HeadingTag>;
+        return <HeadingTag id={id} className={`scroll-mt-28 ${className}`}>{children}</HeadingTag>;
       },
       image: ({ src, alt }) => (
         <div className="my-8">
