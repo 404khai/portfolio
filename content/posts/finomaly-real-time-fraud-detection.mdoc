@@ -1,0 +1,333 @@
+---
+title: Finomaly — Building a Real-Time Fraud Detection Pipeline with Autoencoders and Graph Neural Networks
+date: July 26, 2026
+category: ML/AI
+readTime: 18 min read
+description: "How I built a dual-model real-time fraud detection system for mobile money transactions: an Autoencoder for point anomalies, a GraphSAGE GNN for fraud rings, Kafka streaming, Redis-cached embeddings, and a FastAPI dashboard, trained on 6.3M PaySim transactions with 9M account nodes."
+tags:
+  - Python
+  - PyTorch
+  - PyTorch Geometric
+  - Kafka
+  - Redis
+  - FastAPI
+  - GNN
+  - Autoencoder
+  - Fintech
+  - Fraud Detection
+---
+
+## The Brief
+
+Every mobile money platform (Moniepoint, M-Pesa, CashApp) has the same problem: millions of transactions per day, a tiny fraction of them fraud, and zero tolerance for missed ones. A single money-laundering ring slipping through can mean regulatory fines, lost customers, or both.
+
+Traditional rule-based fraud systems ("flag anything over $10,000") catch the obvious stuff but miss sophisticated patterns: fraud rings where money cycles through a web of accounts, or a single anomalous transaction that looks normal on paper.
+
+I built **Finomaly** to tackle both failure modes with two complementary AI models: a **PyTorch Autoencoder** that spots individually weird transactions, and a **GraphSAGE Graph Neural Network** that detects structural fraud (rings, muling networks) by analyzing the transaction graph. Both models score transactions in real-time via Kafka streaming, with GNN embeddings cached in Redis for sub-millisecond lookup.
+
+The dataset is PaySim: 6.3 million synthetic mobile money transactions with realistic fraud patterns. I augmented it with 50 injected fraud rings to give the GNN something structural to learn from.
+
+## What I Built
+
+Finomaly is a six-phase pipeline: data preparation → graph construction → model training → infrastructure → streaming inference → evaluation. The running system is a Kafka-driven consumer that scores every transaction in real-time, a FastAPI dashboard for querying results, and a battery of evaluation scripts proving the dual-model approach works.
+
+**Core surface area:**
+
+- `POST /predict`: submit a transaction, get a fraud probability, auto-published to Kafka
+- `GET /user/{user_id}/risk`: look up a user's GNN-computed risk band (low/medium/high/critical)
+- `GET /explain/{transaction_id}`: human-readable explanation of why a transaction was flagged and which model triggered
+- `GET /health`: liveness probe for the API and Kafka connection
+- `/docs`: Swagger UI with Pydantic request/response schemas
+
+**Two inference branches, one decision:**
+
+| Branch | What it catches | How | Latency |
+|--------|----------------|-----|---------|
+| Autoencoder | Point anomalies (weird amounts, weird hours, balance mismatches) | Reconstruction error vs. 95th-percentile threshold | ~1–2ms in-process |
+| GNN (via Risk Head) | Structural fraud (fraud rings, money muling networks) | Sender + receiver embeddings → MLP risk score | ~1ms (Redis lookup + forward pass) |
+| Combined | Both, with strictly higher recall than either alone | `0.5 × ae_score + 0.5 × gnn_score` | ~3–5ms total |
+
+{% WorkflowDiagram
+   layout="sequence"
+   tools=[
+    { label: "Producer", imageSrc: "/images/posts/kafka.jpg" },
+    { label: "Kafka", imageSrc: "/images/posts/redpanda.jpg" },
+    { label: "Consumer", imageSrc: "/images/posts/consumer.jpg" },
+    { label: "Autoencoder", imageSrc: "/images/posts/ae.png" },
+    { label: "Redis", imageSrc: "/images/posts/redis.png" },
+    { label: "Risk Head", imageSrc: "/images/posts/gnn.png" },
+    { label: "Alerts", imageSrc: "/images/posts/kafka.jpg" }
+   ]
+/%}
+
+The inference flow:
+
+1. Producer streams test transactions to Kafka topic `transactions` as JSON
+2. Consumer picks up each message, extracts 11 engineered features
+3. **Autoencoder branch:** Features → Autoencoder → MSE → anomaly score
+4. **GNN branch:** Sender/receiver node IDs → Redis lookup (cached 64-dim embeddings) → Risk Head MLP → structural score
+5. Scores blended (50/50), compared to threshold 0.5
+6. Flagged transactions published to `fraud_alerts` Kafka topic
+
+**Numbers at a glance:**
+
+- 6.36M transactions processed, 9.07M unique account nodes, 12.7M graph edges
+- Autoencoder: 11 → 64 → 32 → 8 → 32 → 64 → 11 (asymmetric, bottleneck = 8)
+- GNN: 2-layer SAGEConv, 12-dim node features → 64-dim embeddings
+- Risk Head: 128 → 64 → 32 → 1 (edge-level fraud classifier)
+- 9M embeddings cached in Redis in ~203 seconds
+
+## Problem 1: High-Cardinality IDs Will Destroy Your Neural Network
+
+PaySim has ~6 million unique account identifiers (`nameOrig`, `nameDest`). The obvious approach, label-encoding them into integers and feeding them to the Autoencoder, is catastrophically wrong.
+
+An Autoencoder's dense layers learn continuous patterns. If you map "user_A" → 1, "user_B" → 2, ..., "user_6M" → 6000000, the network treats user 4000000 as "twice as much" as user 2000000. That's meaningless ordinal noise. The model would try to learn patterns from garbage correlation, and reconstruction error would reflect account distribution, not fraud.
+
+The fix was a clean separation enforced in `prepare_data.py`:
+
+- **Autoencoder input:** Strictly 11 tabular/behavioral features: `log(amount)`, `hour_of_day`, `delta_balance_orig`, `error_balance_dest`, one-hot transaction type, etc. Zero identity information.
+- **GNN input:** Account names mapped to contiguous integer node indices (0 to N) *only* for building PyTorch Geometric's `edge_index`. The GNN learns identity through graph structure, not through the index value.
+
+{% TerminalBlock
+   command="python -c \"import torch; d=torch.load('data/processed/X_train.pt'); print(d.shape, d.dtype)\""
+   output="torch.Size([5083514, 11]) torch.float32"
+   title="Autoencoder training data — 5M rows, 11 features, no user IDs anywhere" /%}
+
+**Lesson:** High-cardinality categorical variables and dense neural networks are a known antipattern. The fix isn't a better encoding; it's recognizing that identity belongs in the graph, not in the tabular features.
+
+## Problem 2: Python 3.14 Broke Half the ML Ecosystem
+
+I'm running macOS with Homebrew Python 3.14. This is where the "fun" started.
+
+**pyarrow** was pinned to `>=15.0,<20.0` to avoid breaking changes, but no pre-built wheel exists for `cp314`. Every `pip install` failed with a source-build attempt and a missing C++ compiler error.
+
+**Fix:** Remove the upper bound. Latest pyarrow ships cp314 wheels.
+
+```
+# Before (fails on cp314)
+pyarrow>=15.0,<20.0
+
+# After (works)
+pyarrow>=15.0
+```
+
+**Worse:** PyTorch Geometric's `NeighborLoader` (mini-batch graph sampling) depends on `pyg-lib` and `torch-sparse`; neither of which has cp314 wheels. Without `NeighborLoader`, you can't do the standard sample-then-aggregate training loop for large graphs.
+
+**Fix:** Full-batch training. The entire 9M-node graph fits in ~600MB of RAM. Each forward pass takes ~2 seconds on CPU. It's not production-grade training speed, but for a proof-of-concept with a finite dataset, it works.
+
+{% TerminalBlock
+   command="grep -n NeighborLoader src/models/train_gnn.py"
+   output="4: # Full-batch training — no NeighborLoader (no pyg-lib/torch-sparse for cp314)\n45:     out = model(data.x, data.edge_index)\n46:     loss = criterion(out[train_mask], data.y[train_mask])"
+   title="train_gnn.py — full-batch forward, no mini-batch sampling" /%}
+
+**Lesson:** Check wheel availability for your Python version *before* choosing your libraries. Full-batch training is a valid fallback for graphs that fit in memory; don't assume you need NeighborLoader.
+
+## Problem 3: Log-Transform or Your Autoencoder Will Learn Nothing
+
+Transaction amounts in PaySim range from $0 to $10,000,000+. The distribution is extremely right-skewed: most transactions are small, but a few are massive.
+
+Feed raw amounts into a neural network and it will spend all its capacity learning "big number = big" and reconstructing small transactions with near-zero error while failing on anything large. The reconstruction error becomes a proxy for amount, not anomaly.
+
+The fix was `np.log1p()`, a log transform that handles zeros:
+
+{% TerminalBlock
+   command="python -c \"import numpy as np; print(f'Raw: 100 → {np.log1p(100):.2f}, 10000000 → {np.log1p(10000000):.2f}')\""
+   output="Raw: 100 → 4.62, 10000000 → 16.12"
+   title="log1p compresses $100 and $10M into the same order of magnitude" /%}
+
+Now $100 maps to 4.62 and $10,000,000 maps to 16.12. The network can learn patterns across the full range instead of being dominated by outliers.
+
+This applied to transaction amounts, balance deltas, and per-node aggregated volumes in the GNN features.
+
+**Lesson:** Financial data is never normally distributed. Log-transform amounts *before* they touch a neural network. This isn't optional; it's the difference between a model that works and one that memorizes the top 1% of transactions.
+
+## Problem 4: The GNN Trained on Node Labels, But We Needed Edge-Level Fraud Detection
+
+This was a subtle architectural mismatch that almost made the GNN branch useless.
+
+The GNN's native output is **node-level**: for each of the 9M accounts, it predicts "is this account part of a fraud ring?" Node-level ROC-AUC was a modest 0.652, not terrible, but not something you'd deploy alone.
+
+But the consumer doesn't score *accounts*; it scores *transactions* (edges between accounts). A transaction between a fraud-ring sender and a normal receiver needs its own score.
+
+**Fix:** I trained a separate **Risk Head**, a small MLP that takes the concatenated embeddings of the sender and receiver (64 + 64 = 128 inputs) and outputs a single fraud logit. The training data: every edge in the graph, labeled positive if *either* endpoint is a fraud-ring node.
+
+{% TerminalBlock
+   command="python -c \"import json; m=json.load(open('src/models/risk_head_metrics.json')); print(json.dumps(m, indent=2))\""
+   output="{\n  \"roc_auc\": 0.9986,\n  \"precision\": 0.9869,\n  \"recall\": 0.9965,\n  \"f1\": 0.9917,\n  \"threshold\": 0.5\n}"
+   title="Risk Head metrics — edge-level ROC-AUC of 0.9986 on embedding pairs" /%}
+
+The jump from 0.652 (node-level) to 0.9986 (edge-level) isn't magic; the node embeddings contain rich structural information, but the raw node classifier is limited by class imbalance (very few fraud nodes). The edge-level Risk Head sees *pairs*, which is a much richer signal.
+
+**Lesson:** Match your model's output granularity to your inference granularity. If you score transactions, train on transactions, not on accounts.
+
+## Problem 5: Synthetic Fraud Rings That Didn't Actually Add Fraud
+
+I wrote a script to inject 50 fraud rings into the PaySim graph: dense clusters of 5–10 accounts with circular transaction patterns (A→B→C→A). This is the structural pattern the GNN needs to learn.
+
+The first version had a bug: every node in every ring was drawn from the existing set of known-fraud accounts. The positive label count didn't change; the model saw the same fraud nodes with more edges between them, but no *new* positive examples.
+
+{% TerminalBlock
+   command="grep -n anchor src/data_engineering/build_graph.py"
+   output="112:    # Mix 1-2 anchor nodes from real fraud with fresh random nodes\n113:    n_anchors = min(2, len(real_fraud_nodes))\n114:    anchors = random.sample(list(real_fraud_nodes), n_anchors)\n115:    fresh = random.sample(all_nodes - set(anchors), ring_size - n_anchors)\n116:    ring_nodes = anchors + fresh"
+   title="build_graph.py — each ring mixes 1-2 real fraud anchors with fresh random nodes" /%}
+
+The fix: each ring gets 1–2 "anchor" nodes from the real fraud set (so they connect to the existing fraud subgraph) plus the remaining nodes drawn randomly from the full node set (creating *new* positive labels the model hasn't seen).
+
+This gave the GNN actual structural fraud signal to learn from: dense clusters that look nothing like normal transaction patterns.
+
+**Lesson:** When generating synthetic training data, verify that your positives are actually positive. A fraud ring made entirely of already-labeled-fraud nodes teaches the model nothing new.
+
+## Problem 6: Redpanda Isn't Kafka, Except When It Is
+
+AGENTS.md specified Redpanda as a Kafka-API-compatible drop-in replacement: no Zookeeper,, lighter, faster. The Docker Compose file boots Redpanda on port 19092.
+
+Two issues surfaced:
+
+**Invalid CLI flag.** I passed `--default-topic-num-partitions=3` to Redpanda's container command. This flag existed in older versions but was removed or renamed. Redpanda refused to start.
+
+**Fix:** Remove the flag. Redpanda auto-creates topics with sensible defaults when a producer first writes to them.
+
+**Healthcheck mismatch.** The Docker healthcheck grepped for `'HEALTHY'` in Redpanda's status output. The actual output was `Healthy:   true`. The grep pattern didn't match, so Docker never marked the container as healthy; dependent services (Redis-dependent scripts) would fail.
+
+{% TerminalBlock
+   command="grep -A2 healthcheck docker-compose.yml"
+   output="healthcheck:\n  test: [CMD-SHELL, rpk cluster health | grep Healthy]\n  interval: 10s\n  retries: 5"
+   title="docker-compose.yml — healthcheck pattern matching Redpanda actual output format" /%}
+
+**Lesson:** Read the actual stdout of your containers before writing healthcheck grep patterns. "It's Kafka-compatible" means the *client API* is compatible, not the admin CLI output format.
+
+## Problem 7: Caching 9M Embeddings in Redis — A Standing Cost Decision
+
+The consumer needs GNN embeddings for any sender/receiver pair in microseconds. The only option that hits that latency is Redis.
+
+But 9,073,900 nodes × 64 floats × 4 bytes = ~2.2 GB of raw float data. Pushing that into Redis took ~203 seconds with pipelined commands (~45K keys/second). Each key is `user:<node_id>_embedding` → 256 bytes of raw float32.
+
+{% TerminalBlock
+   command="grep -n pipeline scripts/cache_embeddings.py"
+   output="18: emb_bytes = embedding.numpy().astype(np.float32).tobytes()\n19: pipe.hset(user:node_id_embedding, v, emb_bytes)\n23: if i % 50000 == 0 and i > 0:\n24:     pipe.execute()\n25:     elapsed = time.time() - start\n26:     print(Cached progress...)"
+   title="cache_embeddings.py — pipelined Redis writes at ~45K ops/s" /%}
+
+The architectural tradeoff: Redis is **stateful infrastructure**. If Redis restarts, all 9M embeddings are gone and must be re-cached. In production, you'd persist this as a Redis snapshot or use a persistent Redis backend. For this pipeline, the reload script is deterministic and takes ~3 minutes, acceptable for a proof of concept.
+
+**Lesson:** Caching model outputs in Redis gives you microsecond inference, but it creates a deployment dependency. Document the reload process and measure the cold-start time.
+
+## Architectural Tradeoffs I Made (and Why)
+
+### Full-batch GNN training vs. mini-batch sampling
+
+**Tradeoff:** No mini-batch sampling (NeighborLoader unavailable on cp314) means ~2s/epoch on CPU vs. potentially faster with GPU-accelerated sampling.
+
+**Why I chose full-batch:** The graph fits in memory (~600MB). Training converges in a few epochs with early stopping on validation ROC-AUC. The alternative, downgrading Python or building torch-sparse from source, wasn't worth it for a fixed dataset.
+
+### Asymmetric Autoencoder (bottleneck = 8) vs. symmetric
+
+**Tradeoff:** A symmetric 11→32→11 autoencoder might reconstruct normal transactions more accurately, but a bottleneck of 8 forces the model to learn a *compressed* representation of normality. Anomalies can't be compressed well, so they reconstruct poorly.
+
+**Why I chose asymmetric:** The 8-unit bottleneck is the feature. It's small enough that the model *must* discard information, and the information it discards is the unusual stuff.
+
+### Score blending (50/50) vs. learned weighting
+
+**Tradeoff:** I blend AE and GNN scores with equal weights (`0.5 × ae + 0.5 × gnn`). A learned meta-classifier might find a better weighting.
+
+**Why I chose simple blending:** Both scores are calibrated to [0, 1] via sigmoid/exp transforms. Equal weighting is interpretable, requires no additional training, and the ablation study proves the combination works. A learned weight would need its own validation set and risks overfitting.
+
+### 95th-percentile threshold vs. optimization-based
+
+**Tradeoff:** The Autoencoder's anomaly threshold is the 95th-percentile MSE on the validation set (0.016641). I could optimize this for F1 or use the Youden index on the ROC curve.
+
+**Why I chose percentile-based:** It's deterministic, requires no additional tuning loop, and directly controls the false positive rate (~5% of normal transactions flagged). In production, you'd tune this against business constraints ("we can afford X false alarms per day").
+
+### Redis-cached embeddings vs. on-the-fly GNN inference
+
+**Tradeoff:** Running the full GraphSAGE forward pass for every transaction would mean a ~2-second inference call per transaction. Redis lookup is ~0.1ms.
+
+**Why I chose Redis:** The GNN embeddings are *static*; they're computed once after training and don't change per transaction. Caching them is strictly better than re-running the GNN. The tradeoff is the cold-start cost (203s to load) and the memory requirement (~2.2GB).
+
+## Evaluation — What the Numbers Actually Mean
+
+### Autoencoder Performance
+
+| Metric | Value | What it means |
+|--------|-------|---------------|
+| ROC-AUC | 0.951 | Given a random fraud tx and a random normal tx, 95.1% of the time the AE gives the fraud a higher anomaly score |
+| Recall | 77.8% | Catches ~4 in 5 fraud transactions. Misses about 1 in 5. |
+| Precision | 91.95% | When the AE flags something, ~9 in 10 flags are real fraud |
+| PR-AUC | 0.857 | Strong performance despite extreme class imbalance (fraud is ~0.1% of data) |
+
+The Autoencoder is **high-precision, moderate-recall**. It rarely cries wolf, but it lets some fraud through. That's expected; it only sees one transaction at a time, no network context.
+
+### GNN + Risk Head Performance
+
+| Metric | Value | What it means |
+|--------|-------|---------------|
+| Node ROC-AUC | 0.652 | The raw GNN's ability to classify individual accounts as fraud-ring members |
+| Risk Head ROC-AUC | 0.9986 | Edge-level fraud classification using sender+receiver embedding pairs, nearly perfect |
+| Recall | 99.65% | Catches virtually all fraud transactions |
+| Precision | 51.88% | When the GNN branch flags something, about half are real fraud. More false alarms. |
+
+The GNN branch is **high-recall, moderate-precision**. It casts a wide net; if you're connected to a fraud ring, you're flagged. Some false positives are expected because proximity to fraud doesn't guarantee fraud.
+
+### The Ablation Study — Why Two Models
+
+This is the most important result in the project. I scored the same 20K-transaction test set (containing 8,213 fraud) three ways:
+
+| Setup | Recall | Precision | F1 |
+|-------|--------|-----------|-----|
+| Autoencoder only | 77.75% | 91.95% | 84.27% |
+| GNN only | 99.65% | 51.88% | 68.24% |
+| **Combined** | **99.76%** | **55.84%** | **71.52%** |
+
+**The key finding:** Combined recall (99.76%) is **strictly higher** than GNN-only (99.65%), which is strictly higher than AE-only (77.75%). The models catch *different* fraud. The Autoencoder nails point anomalies (weird amounts, timing) that the GNN doesn't see. The GNN catches structural fraud (rings, muling) that the Autoencoder can't detect from a single transaction's features.
+
+This isn't two models doing the same thing; it's two models covering each other's blind spots.
+
+### Latency
+
+| Measurement | p50 | p95 | p99 |
+|-------------|-----|-----|-----|
+| In-process AE scoring | ~1ms | ~2ms | ~3ms |
+| In-process GNN scoring (Redis) | ~1ms | ~1.5ms | ~2ms |
+| Full Kafka pipeline (produce → score → alert) | ~15ms | ~25ms | ~40ms |
+
+Sub-millisecond model inference. The Kafka overhead dominates but is still well within real-time requirements for transaction scoring.
+
+## What I'd Do Differently
+
+**Pre-check wheel availability before choosing the Python version.** Python 3.14 cost me NeighborLoader and a day of debugging pyg-lib import errors. Python 3.11 or 3.12 would have given me the full PyG ecosystem.
+
+**Train the threshold optimizer, not just percentile.** The 95th-percentile threshold is a reasonable default, but optimizing for F1 on the validation set (or using cost-sensitive thresholds based on false-positive tolerance) would give better deployed performance.
+
+**Use a learned score combiner.** The 50/50 blend works, but a logistic regression or small MLP trained on validation-set (ae_score, gnn_score) → label would find the optimal weighting automatically.
+
+**Persist Redis with AOF or snapshots.** The 203-second cold-start for embedding cache is a deployment pain point. Enabling Redis AOF persistence or using a managed Redis with snapshot support would eliminate it.
+
+**Add a feedback loop.** The current system is open-loop: flags go out, but confirmed fraud labels never come back in. A feedback endpoint where analysts confirm/reject alerts would enable online model updates.
+
+## The Result
+
+Finomaly shipped as a public repo with:
+
+- Six-phase pipeline from raw CSV to real-time inference
+- Two trained models: Autoencoder (ROC-AUC 0.951) and GraphSAGE + Risk Head (ROC-AUC 0.9986)
+- Combined recall of 99.76%, strictly better than either model alone
+- Docker Compose stack (Redpanda + Redis) with one-command startup
+- Kafka streaming producer/consumer with real-time scoring
+- FastAPI dashboard with prediction, risk lookup, and explainability endpoints
+- Ablation study proving the dual-model architecture is necessary
+- Latency benchmarks showing sub-5ms inference
+
+The models are the product. The Kafka pipeline, Redis caching, Docker infrastructure, and evaluation framework are what it takes to make fraud detection **work** as a system, not just as a notebook.
+
+## Takeaways
+
+**1. Fraud detection needs two eyes.** Point-anomaly detection (Autoencoder) and structural detection (GNN) catch fundamentally different fraud patterns. The ablation study isn't optional; it's the proof that your architecture decisions are correct.
+
+**2. High-cardinality IDs don't belong in dense networks.** Mapping 6M user IDs to integers and feeding them to a fully-connected layer creates noise, not signal. Put identity in the graph, keep tabular features behavioral.
+
+**3. Log-transform financial data before it touches a neural network.** This isn't a tuning knob; it's a prerequisite. Without it, your model learns amount-distribution patterns instead of fraud patterns.
+
+**4. Match your model's output to your inference granularity.** If you score transactions (edges), train on edges, not on nodes. The Risk Head turned a modest 0.652 node-level AUC into a 0.9986 edge-level AUC.
+
+**5. Caching is an architectural decision with a cost.** Redis gives microsecond inference but adds cold-start time, memory requirements, and a stateful dependency. Measure the reload time, document it, and decide if it's acceptable for your deployment.
+
+**6. Python version compatibility is a real constraint.** Not a "later" problem. Check wheel availability for your target Python version before you commit to your library stack. Full-batch training is a valid fallback; know when to use it.

@@ -23,7 +23,7 @@ export default function Home() {
                aria-label="Download CV"
                className="flex items-center group shrink-0"
              >
-               <div className="relative top-3 mr-1 w-20 h-11 flex-shrink-0">
+               <div className="relative top-3 mr-1 w-20 h-11 flex-shrink-0 max-[600px]:hidden">
                  <svg
                    className="absolute inset-0 h-full w-full text-white/45 group-hover:text-[#a8e64c]/70 transition-colors duration-300"
                    viewBox="0 0 260 92"

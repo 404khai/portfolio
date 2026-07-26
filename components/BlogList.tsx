@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { BlogCard } from '@/components/BlogCard';
-import { PaletteFill, Controller } from 'react-bootstrap-icons';
+import { PaletteFill, Controller, CpuFill, SortDown, SortUp } from 'react-bootstrap-icons';
 
-const TABS = ['SWE', 'Design case studies', 'Game dev'] as const;
+const TABS = ['All', 'SWE', 'ML/AI', 'Design case studies', 'Game dev'] as const;
 
 type BlogTab = (typeof TABS)[number];
+type SortOrder = 'desc' | 'asc';
 
 interface BlogPost {
   id: string;
@@ -19,9 +20,14 @@ interface BlogPost {
 }
 
 const EMPTY_STATES: Record<
-  Exclude<BlogTab, 'SWE'>,
+  Exclude<BlogTab, 'All' | 'SWE'>,
   { icon: React.ReactNode; title: string; description: string }
 > = {
+  'ML/AI': {
+    icon: <CpuFill className="w-10 h-10 text-zinc-600" />,
+    title: 'No ML/AI posts yet',
+    description: 'Machine learning and AI write-ups will show up here when they are published.',
+  },
   'Design case studies': {
     icon: <PaletteFill className="w-10 h-10 text-zinc-600" />,
     title: 'No design case studies yet',
@@ -34,7 +40,7 @@ const EMPTY_STATES: Record<
   },
 };
 
-function BlogEmptyState({ tab }: { tab: Exclude<BlogTab, 'SWE'> }) {
+function BlogEmptyState({ tab }: { tab: Exclude<BlogTab, 'All' | 'SWE'> }) {
   const state = EMPTY_STATES[tab];
 
   return (
@@ -51,10 +57,23 @@ function BlogEmptyState({ tab }: { tab: Exclude<BlogTab, 'SWE'> }) {
 }
 
 export default function BlogList({ posts }: { posts: BlogPost[] }) {
-  const [activeTab, setActiveTab] = useState<BlogTab>('SWE');
+  const [activeTab, setActiveTab] = useState<BlogTab>('All');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
-  const filteredPosts = posts.filter((post) => post.category === activeTab);
-  const isEmptyCategoryTab = activeTab !== 'SWE' && filteredPosts.length === 0;
+  const sortedPosts = useMemo(() => {
+    const filtered =
+      activeTab === 'All' ? posts : posts.filter((post) => post.category === activeTab);
+
+    return [...filtered].sort((a, b) => {
+      const diff = new Date(a.date).getTime() - new Date(b.date).getTime();
+      return sortOrder === 'desc' ? -diff : diff;
+    });
+  }, [activeTab, posts, sortOrder]);
+
+  const isEmptyCategoryTab =
+    activeTab !== 'All' &&
+    activeTab !== 'SWE' &&
+    sortedPosts.length === 0;
 
   return (
     <div className="min-h-screen bg-[#09090b] text-white p-8 md:p-16 flex flex-col items-center">
@@ -68,27 +87,57 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-4 border-b border-zinc-800 pb-4">
-          {TABS.map((tab) => (
+        <div className="flex flex-col gap-4 border-b border-zinc-800 pb-4">
+          <div className="flex flex-wrap gap-4">
+            {TABS.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`font-figtree text-lg font-medium px-4 py-2 rounded-md transition-all duration-200 ${
+                  activeTab === tab
+                    ? 'bg-zinc-100 text-black'
+                    : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="font-figtree text-sm text-zinc-500">Sort by date:</span>
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`font-figtree text-lg font-medium px-4 py-2 rounded-md transition-all duration-200 ${
-                activeTab === tab
-                  ? 'bg-zinc-100 text-black'
+              type="button"
+              onClick={() => setSortOrder('desc')}
+              className={`inline-flex items-center gap-1.5 font-figtree text-sm px-3 py-1.5 rounded-md transition-colors ${
+                sortOrder === 'desc'
+                  ? 'bg-zinc-800 text-white'
                   : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900'
               }`}
             >
-              {tab}
+              <SortDown className="w-3.5 h-3.5" />
+              Newest first
             </button>
-          ))}
+            <button
+              type="button"
+              onClick={() => setSortOrder('asc')}
+              className={`inline-flex items-center gap-1.5 font-figtree text-sm px-3 py-1.5 rounded-md transition-colors ${
+                sortOrder === 'asc'
+                  ? 'bg-zinc-800 text-white'
+                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900'
+              }`}
+            >
+              <SortUp className="w-3.5 h-3.5" />
+              Oldest first
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-8">
           {isEmptyCategoryTab ? (
             <BlogEmptyState tab={activeTab} />
-          ) : filteredPosts.length > 0 ? (
-            filteredPosts.map((post) => (
+          ) : sortedPosts.length > 0 ? (
+            sortedPosts.map((post) => (
               <BlogCard
                 key={post.id}
                 id={post.id}

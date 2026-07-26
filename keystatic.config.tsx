@@ -17,6 +17,7 @@ export default config({
           label: 'Category',
           options: [
             { label: 'SWE', value: 'SWE' },
+            { label: 'ML/AI', value: 'ML/AI' },
             { label: 'Design case studies', value: 'Design case studies' },
             { label: 'Game dev', value: 'Game dev' },
           ],

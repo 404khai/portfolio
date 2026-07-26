@@ -54,7 +54,7 @@ export const Navbar = () => {
                       key={item.name}
                       href={item.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className="font-irish-grover text-zinc-300 hover:text-white text-2xl font-medium py-4 border-b border-dashed border-[#27272a]"
+                      className="font-unbounded text-zinc-300 hover:text-white text-2xl font-medium py-4 border-b border-dashed border-[#27272a]"
                     >
                       /{item.name}
                     </a>
