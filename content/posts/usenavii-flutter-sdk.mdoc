@@ -1,0 +1,309 @@
+---
+title: Building the Official Navii Flutter SDK — A Faithful Dart Port of a Deterministic Avatar Engine
+date: July 28, 2026
+category: SWE
+readTime: 16 min read
+description: "How I built usenavii, Navii's official Flutter SDK: a byte-identical Dart port of @usenavii/core, thin Navii/NaviiGroup widgets over flutter_svg, JS-faithful PRNG and number formatting, SVG golden tests, and a pub.dev path that stays out of the npm lockstep."
+tags:
+  - Flutter
+  - Dart
+  - TypeScript
+  - SVG
+  - SDK
+  - Cross-platform
+  - Determinism
+  - pub.dev
+  - flutter_svg
+  - Open Source
+---
+
+## The Brief
+
+Navii already had the hard part: a pure TypeScript engine (`@usenavii/core`) that turns any stable seed into a deterministic SVG mascot, plus framework bindings for React, React Native, Vue, and Svelte. Flutter was the missing piece.
+
+The brief looked simple on paper: ship `usenavii` on pub.dev so a Flutter app can do `Navii(seed: user.id)` and get the same face forever. The constraint that made it interesting was non-negotiable:
+
+> Same seed + same options → **byte-identical SVG string** as `@usenavii/core`.
+
+Not "looks the same." Not "close enough after float rounding." Identical markup. Offline. No network. No JS bridge. No WASM. A real Dart port of the engine, with thin widgets on top that mirror `@usenavii/react-native`.
+
+I built that as `packages/flutter` on the `feat/flutter-sdk` branch, phased through eight exit-gated stages: primitives → selection → render → group/build/packs → widgets → example → CI/publish.
+
+## What I Built
+
+`usenavii` is a Flutter package with two layers and one contract.
+
+**Engine layer** (`lib/src/core/`): a Dart port of the TypeScript core — hashing, PRNG, seed helpers, `selectAvatar`, part markup, `renderAvatar`, `renderGroup` / `renderGroupTiles`, `build`, packs registry.
+
+**Widget layer** (`lib/src/widgets/`): `Navii` and `NaviiGroup` that map props → engine options and paint with `SvgPicture.string`.
+
+**Core surface area:**
+
+{% TerminalBlock
+   command="packages/flutter/lib/usenavii.dart"
+   output="Navii(seed: user.id, size: 64, title: user.name);\n\nNaviiGroup(\n  seeds: team.map((u) => u.id).toList(),\n  size: 48,\n  overlap: 0.3,\n  max: 5,\n);\n\ncreateAvatar(seed, options);           // SVG string\nselectAvatar(seed, options);           // AvatarSpec\nrenderGroup / renderGroupTiles(...);\nbuild(BuildSpec(...), options);        // no seed, explicit parts\nresolvePacks(['office', 'halloween']);"
+   title="usenavii.dart — widget and engine API" /%}
+
+**What deliberately is not in the box:**
+
+| Approach | Why we rejected it |
+|----------|--------------------|
+| Call hosted `api.navii.dev` | Breaks offline / determinism contract; adds latency and a network dependency |
+| JS/WASM bridge to `@usenavii/core` | Extra runtime, harder to ship on pub.dev, still not "native" Dart |
+| Second Flutter-only renderer | Would drift from core; widgets would become a second engine |
+
+**Numbers at a glance:**
+
+- 8 implementation phases with exit criteria in `AGENTS.md`
+- Golden fixtures exported from Node `@usenavii/core`, asserted string-equal in Dart
+- 145+ package tests (primitives, select, SVG goldens, group, build, packs, widgets)
+- Example app: seed / size / mood / `NaviiGroup` on web + macOS
+- Independent versioning: `usenavii 0.1.0-dev.1` ↔ `@usenavii/core` `0.9.x`
+- Explicitly **out** of the npm release matrix (five JS packages only)
+
+## Problem 1: "Port the Algorithm" Is Not Enough — You Have to Port JavaScript's Integers
+
+The Navii engine's identity is its PRNG. `cyrb53` hashes a seed into two 32-bit halves; `sfc32` turns those into a deterministic float stream. Parts are drawn in a **fixed order**. Insert a draw in the middle and every avatar after that seed shifts forever.
+
+Dart `int` is arbitrary-precision. JavaScript number ops that matter here are 32-bit:
+
+- `| 0` → signed int32
+- `>>> 0` → unsigned int32
+- `Math.imul` → 32-bit multiply
+- `>>> n` → unsigned right shift
+
+Naively translating `h = ((h << 5) + h + c) | 0` into Dart without masking produces different hashes after enough iterations. Different hashes → different PRNG stream → different part picks → different SVG. Parity dies in silence.
+
+The fix was a small compatibility layer in `prng.dart`:
+
+{% TerminalBlock
+   command="packages/flutter/lib/src/prng.dart"
+   output="int _imul(int a, int b) => (a * b).toSigned(32);      // Math.imul\nint _urshift(int x, int n) => (x & 0xFFFFFFFF) >> n; // >>>\nint _i32(int x) => x.toSigned(32);                   // | 0\nint _u32(int x) => x & 0xFFFFFFFF;                   // >>> 0"
+   title="prng.dart — JS 32-bit integer compatibility layer" /%}
+
+Every hash step and every clip-id DJB2 in group rendering uses these helpers. Method names on the RNG had to change (`int` / `bool` are reserved in Dart → `nextInt` / `nextBool`), but the **stream values** stay identical.
+
+{% TerminalBlock
+   command="cd packages/flutter && flutter test test/primitives_test.dart --name cyrb53"
+   output="00:00 +N: All tests passed!"
+   title="primitives_test.dart — cyrb53 / createRng fixtures match TypeScript byte-for-byte" /%}
+
+**Lesson:** Cross-language determinism is a numeric-width problem before it is an algorithm problem. Port the bit semantics first, then the control flow.
+
+## Problem 2: SVG Goldens Fail on `44.800000000000004`
+
+Even with a correct PRNG, Phase 4 goldens broke on float formatting.
+
+In TypeScript, template literals call `Number#toString`. Integers print as `64`, not `64.0`. Some IEEE intermediates print the infamous binary artifact (`2.2399999999999998`). Dart's default interpolation and `toStringAsFixed` do not match that behavior.
+
+"Almost the same SVG" is useless for a parity contract. Diffs become unreadable. CI flakes. You start allowing soft matches and the lock softens forever.
+
+**Custom invention:** `jn()` in `js_num.dart` — JS-compatible number stringification for every SVG attribute interpolation.
+
+{% TerminalBlock
+   command="packages/flutter/lib/src/js_num.dart"
+   output="String jn(num v) {\n  final d = v.toDouble();\n  if (d.isNaN) return \"NaN\";\n  if (d.isInfinite) return d.isNegative ? \"-Infinity\" : \"Infinity\";\n  if (d == 0) return \"0\";\n  final truncated = d.truncateToDouble();\n  if (d == truncated && d.abs() <= 9007199254740991) {\n    return truncated.toInt().toString(); // no trailing .0\n  }\n  return d.toString(); // preserve IEEE artifacts like Node\n}"
+   title="js_num.dart — JS-compatible number stringification for SVG attributes" /%}
+
+Every path, circle, and transform in the parts port goes through `jn(...)`. We kept `${...}` braces in string templates even when the Dart linter complains (`unnecessary_brace_in_string_interps`) because the templates are meant to read like the TypeScript originals and stay mechanically comparable.
+
+{% TerminalBlock
+   command="node -e \"console.log(String(64 * (1 - 0.3)))\""
+   output="44.8"
+   title="JS Number#toString — the formatting contract jn() mirrors in Dart" /%}
+
+**Lesson:** For string-identical cross-language output, invent (or steal) a shared formatting primitive early. Do not "clean up" floats.
+
+## Problem 3: The Golden Pipeline Has to Be Generated, Not Hand-Written
+
+Hand-copying SVG fixtures is how parity dies. The TypeScript engine is the source of truth; Dart must chase it.
+
+The practice we locked in:
+
+1. Build `@usenavii/core`
+2. Run a small Node exporter (`tool/export_phase5_fixtures.mjs` and earlier phase scripts)
+3. Write JSON goldens under `test/fixtures/`
+4. Dart tests load fixtures and assert `expect(dartSvg, expectedFromTs)`
+
+That covers primitives, `selectAvatar` specs, `createAvatar` SVG, group tiles + dimensions, `build`, and pack-affected SVG. When upstream core changes, the workflow is: fetch upstream → regenerate fixtures → fix the Dart port until green.
+
+{% TerminalBlock
+   command="node packages/flutter/tool/export_phase5_fixtures.mjs"
+   output="Wrote 10 group, 7 build, 8 pack fixtures"
+   title="Fixture exporter — Node @usenavii/core → packages/flutter/test/fixtures/*.json" /%}
+
+**Lesson:** Treat the other language's output as an oracle. Export fixtures in CI-friendly JSON. Never eyeball SVG equality.
+
+## Problem 4: Flutter `style` Collides With Engine `style`
+
+React Native's binding already solved a naming problem: the engine option is `style` (`masc` / `femme` / `neutral`), but RN `style` means layout. They expose `styleHint` on the component and map it to engine `style`.
+
+Flutter has the same collision — every widget lives next to decoration and layout APIs people casually call "style."
+
+We mirrored RN exactly:
+
+- Widget prop: `styleHint`
+- Engine field: `style`
+- Host Flutter layout/decoration stays on the surrounding `Widget` tree
+- Accessibility: `alt ?? title` → `Semantics(label:, image: true)`
+
+That keeps the Flutter API feel native without forking the engine option names.
+
+**Lesson:** When porting a multi-framework SDK, copy the binding's escape hatches (`styleHint`), not just the engine's internal names.
+
+## Problem 5: `animated: true` Emits CSS That `flutter_svg` Cannot Run
+
+The core engine, when `animated: true`, injects a `<style>` block with keyframes (float, blink, sway) and honors `prefers-reduced-motion`. That is correct for web and for SVG string parity tests.
+
+`flutter_svg` parses paths, groups, gradients, clips — not a CSS animation runtime. RN had the same limitation and documented it: accept the prop, paint the first frame statically.
+
+Flutter v1 does the same. The engine still emits animation markup when asked (so Dart SVG strings match Node for `animated: true`), but the widget documents static paint. You will see `unhandled element <style/>` / `<filter/>` in test logs; that is expected, not a silent failure of selection.
+
+**Lesson:** Parity of *string output* and parity of *runtime behavior* are different contracts. Document which one you ship per platform.
+
+## Problem 6: Putting Flutter in a pnpm Monorepo Without Poisoning npm Release
+
+Navii's JS packages ship in lockstep SemVer via `.github/workflows/release.yml`. If `packages/flutter` had a `package.json`, pnpm filters and release scripts would try to treat it like another npm package.
+
+Non-negotiables we enforced:
+
+- **No** `package.json` inside `packages/flutter`
+- Flutter **never** added to the npm publish allowlist (`core`, `react`, `react-native`, `vue`, `svelte` only)
+- Independent version on pub.dev (`0.1.0-dev.1`)
+- Root `CHANGELOG.md` maps Flutter ↔ `@usenavii/core` versions
+- Separate GitHub Actions workflow: `.github/workflows/flutter.yml`
+
+{% TerminalBlock
+   command="rg -n Explicit packages/flutter .github/workflows/release.yml"
+   output="90:        # Five JS SDKs only — packages/flutter (usenavii on pub.dev) is\n118:          // Explicit allowlist — do not add flutter / usenavii here."
+   title="release.yml — Flutter explicitly excluded from npm tag publish" /%}
+
+**Lesson:** In a polyglot monorepo, isolation is a feature. Separate package managers, separate version lines, separate CI triggers, one shared product contract (SVG parity).
+
+## Problem 7: Example `ListView` Lazily Skipped `NaviiGroup`
+
+The example app put seed controls and a `NaviiGroup` in a `ListView`. Widget tests asserted `find.byType(NaviiGroup)` after `pumpAndSettle` — and found nothing.
+
+`ListView` builds children lazily. Off-screen tiles never mount. The group at the bottom of a short test viewport simply did not exist in the tree.
+
+**Fix:** `SingleChildScrollView` + `Column` so the demo always builds the full tree. Tests pass; scrolling still works.
+
+**Lesson:** Flutter test finders only see what was built. Prefer eager layouts for short demos, or scroll-into-view in tests.
+
+## Architectural Tradeoffs I Made (and Why)
+
+### **1. Faithful string templates vs. "idiomatic Dart"**
+
+- **Tradeoff:** Parts files are dense string templates with `jn()` calls and linter noise, not elegant widget trees.
+- **Why I chose templates:** The TypeScript engine *is* string templates. Matching markup character-for-character is the product. Refactoring to a scene-graph API would improve readability and break the parity story.
+
+### **2. Thin widgets over a second Flutter renderer**
+
+- **Tradeoff:** `SvgPicture.string` does not animate and warns on unsupported elements. A custom `CustomPainter` could animate.
+- **Why I chose thin widgets:** One engine. RN already made this tradeoff. Animation can come later (e.g. Reanimated-style) without forking selection/render logic.
+
+### **3. Independent pub.dev SemVer vs. npm lockstep**
+
+- **Tradeoff:** Consumers must check a version-mapping table instead of assuming `usenavii@0.9.1` matches `@usenavii/core@0.9.1`.
+- **Why I chose independent versions:** Flutter release cadence, SDK constraints, and pub tooling do not belong inside npm tag automation. Document the mapping; do not force a false lockstep.
+
+### **4. `ArgumentError` vs. JS `Error` messages**
+
+- **Tradeoff:** Dart throws `ArgumentError('navii: seed must be a non-empty string')` where TS throws `Error(...)`.
+- **Why that is fine:** Message text matches; the exception type is idiomatic Dart. Tests assert behavior (`throwsArgumentError`), not JS exception classes.
+
+### **5. Generate pack dumps vs. hand-porting 11 pack files**
+
+- **Tradeoff:** `packs/built_in.dart` is a generated-style dump of palettes and picks rather than eleven tiny Dart modules mirroring TS file layout.
+- **Why:** Content must match exactly; structure can differ. Registry + `resolvePacks` behavior is what consumers and goldens care about.
+
+## Keeping the Dart Port Faithful — The Checklist I Actually Used
+
+1. **Read TS before editing Dart.** Algorithm and string output first; never "improve" SVG.
+2. **PRNG append-only.** New variants only at the end of draw lists — same rule as core.
+3. **Bit-width helpers** for every `| 0` / `>>>` / `imul` site.
+4. **`jn()` everywhere** numeric SVG attributes are interpolated.
+5. **Whitespace and nesting** in group tile templates match TS template literals (including newlines).
+6. **Escape XML** on user-controlled colors (`ring`, `tileBg`, counter fills) before attribute write.
+7. **Goldens from Node**, not from Dart snapshots of itself.
+8. **Widgets map props → options**; they never reimplement selection.
+
+When something failed a golden, the debug order was always: (1) did the PRNG diverge? (2) did a float print differently? (3) did a template whitespace diverge? Almost never "the design is wrong."
+
+## Custom Inventions Worth Calling Out
+
+| Invention | Purpose |
+|-----------|---------|
+| `jn()` (`js_num.dart`) | ECMAScript-compatible number → string for SVG attrs |
+| `_imul` / `_i32` / `_u32` / `_urshift` | JS 32-bit arithmetic in Dart |
+| Fixture exporters (`tool/*.mjs`) | Regenerate TS goldens without hand-copying SVG |
+| `styleHint` widget prop | Avoid Flutter/RN `style` collision with engine `style` |
+| Separate `flutter.yml` + `.pubignore` | pub.dev path without npm entanglement |
+| Version-mapping table in root CHANGELOG | Document Flutter ↔ core compatibility without lockstep |
+
+None of these are product features users see. They are the scaffolding that makes "identical SVG" enforceable.
+
+## Evaluation — What "Done" Means Here
+
+This is not a model-metrics post. Success is a contract.
+
+| Check | Result |
+|-------|--------|
+| Primitive fixtures (`sha256`, `cyrb53`, RNG stream, seed helpers) | Match TS |
+| `selectAvatar` JSON specs for a seed matrix | Match TS |
+| `createAvatar` SVG goldens (emails, UUIDs, moods, packs, animated) | Match TS |
+| Group tile SVGs + width/height | Match TS |
+| `build(BuildSpec)` SVG | Match TS |
+| Pack registry resolve / SVG effect | Match TS |
+| Widget determinism + layout size | Green |
+| Empty `NaviiGroup` seeds | Zero-size widget |
+| `dart pub publish --dry-run` | Validates (clean git tree) |
+| npm release matrix | Still five JS packages only |
+
+{% TerminalBlock
+   command="cd packages/flutter && flutter test 2>&1 | tail -3"
+   output="00:01 +145: All tests passed!"
+   title="Full package suite after Phases 2–8" /%}
+
+## What I'd Do Differently
+
+**Pin a Flutter version in CI earlier.** We used `subosito/flutter-action` on `stable`. Pinning an exact version (or `flutter-version-file` with a precise constraint) would reduce "works on my 3.44, breaks on next stable" risk.
+
+**Silence or quarantine intentional lints from day one.** Hundreds of `unnecessary_brace_in_string_interps` infos are noise. An analyzer exclude/ignore for ported template files would have kept `flutter analyze` honest without `--no-fatal-infos`.
+
+**Automate fixture regeneration in CI as a manual workflow.** Exporters exist; a `workflow_dispatch` job that rebuilds core and refreshes goldens (without auto-committing) would make upstream rebases faster.
+
+**Ship a real `0.1.0` after one more upstream sync.** `0.1.0-dev.1` is honest for a first pub.dev cut, but a non-dev release should follow a final fixture regen against the tagged core version you claim in the mapping table.
+
+**Plan animation as a separate package milestone.** Documenting static paint is correct for v1; the next honest step is either "no animation API" until ready, or a small motion layer that does not pretend CSS keyframes work.
+
+**Consider excluding `example/macos` weight from the pub tarball if scoring/size becomes an issue.** Dry-run was ~240KB compressed — fine today, worth watching.
+
+## The Result
+
+The official Flutter SDK shipped as:
+
+- `packages/flutter` — Dart engine port + `Navii` / `NaviiGroup`
+- pub package name **`usenavii`**, MIT licensed, README + CHANGELOG + example
+- SVG string parity with `@usenavii/core` enforced by golden tests
+- Example app (seed, size, mood, group) for web and macOS
+- `.github/workflows/flutter.yml` for analyze / test / publish dry-run
+- Documented exclusion from npm lockstep and a root CHANGELOG mapping table
+
+The face is the product. The PRNG bit-width helpers, `jn()`, and fixture exporters are what it takes to make that face **the same face** in Dart as in TypeScript.
+
+## Takeaways
+
+**1. Determinism is a cross-language numeric contract.** Port `| 0`, `>>>`, and `imul` before you port business logic, or every golden will lie to you.
+
+**2. Prefer identical strings over pretty diffs.** Soft float allowlists are a one-way door. Invent a shared formatter (`jn`) and keep templates boring.
+
+**3. Generate oracles from the reference implementation.** Node exports fixtures; Dart asserts equality. Do not snapshot yourself and call it parity.
+
+**4. Thin bindings, one engine.** Widgets map props and paint. Selection and markup stay in `lib/src/core/`, the same rule as React Native.
+
+**5. Polyglot monorepos need hard boundaries.** No Flutter `package.json`, no npm publish entry, independent SemVer, separate CI — shared product guarantees only.
+
+**6. Document platform limits honestly.** Accepting `animated` while painting statically is better than claiming CSS keyframes work inside `flutter_svg`.
+
+**7. Phase exit criteria beat big-bang ports.** Primitives → select → render → group/build → widgets → example → CI. Each gate was a mergeable truth, not a promise.
