@@ -62,6 +62,28 @@ const statusConfig: Record<ProjectStatus, { icon: React.ElementType, color: stri
 
 const PROJECT_DETAILS: ProjectDetail[] = [
   {
+    ...PROJECTS.find((p) => p.slug === 'odyssey')!,
+    longDescription:
+      'Odyssey is a decoder-only transformer specializing in long-horizon reasoning, software architecture, and autonomous software engineering.',
+    skills: ['Rust', 'Python', 'Typescript', 'Ink', 'Tanstack', 'PostgreSQL'],
+    githubUrl: 'https://github.com/404khai/odyssey',
+    liveUrl: '#',
+    images: [
+      '/odyssey.jpeg',
+    ],
+  },
+  {
+    ...PROJECTS.find((p) => p.slug === 'phalanx')!,
+    longDescription:
+      'Phalanx is a high-performance Rust runtime for modern LLM inference.',
+    skills: ['Rust', 'Python', 'Inference', 'Quantization', 'Systems Programming', 'Deep Learning'],
+    githubUrl: 'https://github.com/404khai/phalanx',
+    liveUrl: '#',
+    images: [
+      '/phalanx.jpg',
+    ],
+  },
+  {
     ...PROJECTS.find((p) => p.slug === 'keihatsu')!,
     longDescription:
       'Keihatsu is a cross-platform social manwha reader app with a vibrant community of readers that provide a platform for manwha, manga and manhua fans to connect over their favorite series, while supporting offline downloads.',
@@ -118,19 +140,19 @@ const PROJECT_DETAILS: ProjectDetail[] = [
       '/openframe2.png',
     ],
   },
-  {
-    ...PROJECTS.find((p) => p.slug === 'rift')!,
-    longDescription:
-      'Rift is an intent-based OS orchestrator that transforms natural language into validated, safe execution plans for your machine',
-    skills: ['Rust', 'Python', 'Typescript', 'Ink', 'Tanstack', 'PostgreSQL'],
-    githubUrl: 'https://github.com/404khai',
-    liveUrl: 'https://userift.vercel.app',
-    images: [
-      '/rift1.png',
-      '/rift2.png',
-      '/rift3.png',
-    ],
-  },
+  // {
+  //   ...PROJECTS.find((p) => p.slug === 'rift')!,
+  //   longDescription:
+  //     'Rift is an intent-based OS orchestrator that transforms natural language into validated, safe execution plans for your machine',
+  //   skills: ['Rust', 'Python', 'Typescript', 'Ink', 'Tanstack', 'PostgreSQL'],
+  //   githubUrl: 'https://github.com/404khai',
+  //   liveUrl: 'https://userift.vercel.app',
+  //   images: [
+  //     '/rift1.png',
+  //     '/rift2.png',
+  //     '/rift3.png',
+  //   ],
+  // },
 
   // {
   //   ...PROJECTS.find((p) => p.slug === 'supabricx')!,

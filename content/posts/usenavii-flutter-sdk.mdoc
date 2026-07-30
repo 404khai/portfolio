@@ -1,5 +1,5 @@
 ---
-title: Building the Official Navii Flutter SDK — A Faithful Dart Port of a Deterministic Avatar Engine
+title: Building the Official Navii Flutter SDK, A Faithful Dart Port of a Deterministic Avatar Engine
 date: July 28, 2026
 category: SWE
 readTime: 16 min read
@@ -61,7 +61,7 @@ I built that as `packages/flutter` on the `feat/flutter-sdk` branch, phased thro
 - Independent versioning: `usenavii 0.1.0-dev.1` ↔ `@usenavii/core` `0.9.x`
 - Explicitly **out** of the npm release matrix (five JS packages only)
 
-## Problem 1: "Port the Algorithm" Is Not Enough — You Have to Port JavaScript's Integers
+## Problem 1: "Port the Algorithm" Is Not Enough, You Have to Port JavaScript's Integers
 
 The Navii engine's identity is its PRNG. `cyrb53` hashes a seed into two 32-bit halves; `sfc32` turns those into a deterministic float stream. Parts are drawn in a **fixed order**. Insert a draw in the middle and every avatar after that seed shifts forever.
 
@@ -165,7 +165,7 @@ Flutter v1 does the same. The engine still emits animation markup when asked (so
 
 Navii's JS packages ship in lockstep SemVer via `.github/workflows/release.yml`. If `packages/flutter` had a `package.json`, pnpm filters and release scripts would try to treat it like another npm package.
 
-Non-negotiables we enforced:
+Non-negotiables I enforced:
 
 - **No** `package.json` inside `packages/flutter`
 - Flutter **never** added to the npm publish allowlist (`core`, `react`, `react-native`, `vue`, `svelte` only)
@@ -217,7 +217,7 @@ The example app put seed controls and a `NaviiGroup` in a `ListView`. Widget tes
 - **Tradeoff:** `packs/built_in.dart` is a generated-style dump of palettes and picks rather than eleven tiny Dart modules mirroring TS file layout.
 - **Why:** Content must match exactly; structure can differ. Registry + `resolvePacks` behavior is what consumers and goldens care about.
 
-## Keeping the Dart Port Faithful — The Checklist I Actually Used
+## Keeping the Dart Port Faithful, The Checklist I Actually Used
 
 1. **Read TS before editing Dart.** Algorithm and string output first; never "improve" SVG.
 2. **PRNG append-only.** New variants only at the end of draw lists — same rule as core.
@@ -243,7 +243,7 @@ When something failed a golden, the debug order was always: (1) did the PRNG div
 
 None of these are product features users see. They are the scaffolding that makes "identical SVG" enforceable.
 
-## Evaluation — What "Done" Means Here
+## Evaluation, What "Done" Means Here
 
 This is not a model-metrics post. Success is a contract.
 

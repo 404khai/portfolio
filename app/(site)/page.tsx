@@ -61,13 +61,13 @@ export default function Home() {
         
         <ul className="flex flex-col gap-4 text-zinc-300 font-figtree text-lg list-disc pl-5 marker:text-zinc-600">
            <li>
-             I'm a <b className="text-[#a8e64c] font-calistoga">Software Engineer</b> who is intrigued by Operating Systems, Game Development, Animation and Interactive UI.
+             I'm a <b className="text-[#a8e64c] font-calistoga">Software Engineer</b> who is intrigued by Agentic harnesses, AI Infra, Operating systems, Game development, Animation and Interactive UI.
            </li>
            <li>
-             <b>4+</b> years of experience working on ML Pipelines, Distributed Systems, Agentic AI & AI Applications, Backend Systems, Mobile Apps and 2D Platformer Games.
+             <b>4+</b> years of experience working on ML pipelines, Transformers, Distributed systems, AI agents, LLM inference, Developer tools, Backend systems, Mobile apps and 2D platformer games.
            </li>
            <li>
-             Probably trying out new frameworks, or dabbling in <b className="text-white">Lua</b>, <b className="text-white">Go</b> or <b className="text-white">Rust</b>.
+             Probably trying out new frameworks, or dabbling in <b className="text-white">C++</b>, <b className="text-white">Go</b> and <b className="text-white">Rust</b>.
            </li>
         </ul>
       </div>

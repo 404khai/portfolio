@@ -26,6 +26,22 @@ export type ProjectMeta = {
 
 export const PROJECTS: ProjectMeta[] = [
   {
+    slug: 'odyssey',
+    title: 'Odyssey',
+    description: 'A decoder-only transformer specializing in long-horizon reasoning, software architecture, and autonomous software engineering.',
+    logo: '/odyssey.jpeg',
+    categories: ['AI / ML'],
+    status: ['construction', 'not-live'],
+  },
+  {
+    slug: 'phalanx',
+    title: 'Phalanx',
+    description: 'A high-performance Rust runtime for modern LLM inference.',
+    logo: '/phalanx.jpg',
+    categories: ['AI / ML'],
+    status: ['construction', 'not-live'],
+  },
+  {
     slug: 'keihatsu',
     title: 'Keihatsu',
     description: 'The cross-platform social manwha reader app',
@@ -58,21 +74,21 @@ export const PROJECTS: ProjectMeta[] = [
     categories: ['Other'],
     status: ['coming-soon' ,'construction'],
   },
-  {
-    slug: 'rift',
-    title: 'Rift',
-    description: 'Intent-based OS orchestrator',
-    // description: 'Intent-based OS execution layer',
-    logo: '/rift.png',
-    categories: ['AI / ML'],
-    status: ['coming-soon', 'construction'],
-  },
+  // {
+  //   slug: 'rift',
+  //   title: 'Rift',
+  //   description: 'Intent-based OS orchestrator',
+  //   // description: 'Intent-based OS execution layer',
+  //   logo: '/rift.png',
+  //   categories: ['AI / ML'],
+  //   status: ['coming-soon', 'construction'],
+  // },
   // {
   //   slug: 'supabricx',
   //   title: 'Supabricx',
-  //   description: 'The AI documentation agent',
+  //   description: 'Programmable robotic matter',
   //   logo: '/supabricx.png',
-  //   categories: ['AI / ML'],
+  //   categories: ['AI / ML', 'Other'],
   //   status: ['coming-soon', 'construction'],
   // },
   {
@@ -86,7 +102,7 @@ export const PROJECTS: ProjectMeta[] = [
   {
     slug: 'hirecraft',
     title: 'HireCraft',
-    description: 'Domestic Service Marketplace.',
+    description: 'Domestic service marketplace.',
     logo: '/hirecraft.jpeg',
     categories: ['Fullstack'],
     status: ['completed' ,'not-live'],
