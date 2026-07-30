@@ -292,7 +292,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </div>
                 <div>
                   <div className="text-white font-medium">Khai</div>
-                  <div className="text-zinc-500 text-sm">Creative Systems Engineer</div>
+                  <div className="text-zinc-500 text-sm">Software Engineer | ML | AI Agents | Flutter</div>
                 </div>
               </div>
             </div>

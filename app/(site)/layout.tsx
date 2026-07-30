@@ -58,7 +58,7 @@ const unbounded = Unbounded({
 
 export const metadata: Metadata = {
   title: "404KHAI.DEV",
-  description: "Creative Systems Engineer.",
+  description: "Software Engineer | ML | AI Agents | Flutter.",
   icons: {
     icon: '/404khai.jpeg',
   },
