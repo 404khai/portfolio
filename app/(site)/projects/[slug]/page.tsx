@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, CheckCircleFill, ArrowLeft, ArrowRight, RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff } from 'react-bootstrap-icons';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { PROJECTS, ProjectMeta } from '../page';
+import { PROJECTS, type ProjectMeta } from '@/lib/projects';
 import { ProjectStatus } from '@/components/ProjectListItem';
 
 type ProjectDetail = ProjectMeta & {
