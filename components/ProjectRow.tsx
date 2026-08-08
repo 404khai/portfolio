@@ -20,6 +20,9 @@ const GlobeIcon = () => (
 );
 
 export function ProjectRow({ project }: ProjectRowProps) {
+  const visibleStack = project.stack.slice(0, 3);
+  const remainingStackCount = Math.max(project.stack.length - visibleStack.length, 0);
+
   return (
     <article className="group relative border-b border-[#27272a]/80 py-6 transition-colors hover:border-zinc-600">
       <Link
@@ -28,21 +31,27 @@ export function ProjectRow({ project }: ProjectRowProps) {
         className="absolute inset-0 z-0"
       />
 
-      <div className="relative z-10 flex items-center justify-between gap-5 pointer-events-none">
-        <div className="flex min-w-0 flex-col gap-3">
+      <div className="relative z-10 flex items-start justify-between gap-5 pointer-events-none">
+        <div className="flex min-w-0 flex-col gap-2">
           <h3 className="font-figtree text-lg text-white transition-colors duration-200 group-hover:text-[#a8e64c]">
             {project.title}
           </h3>
-          <ul className="flex flex-wrap gap-2" aria-label={`${project.title} stack`}>
-            {project.stack.map((technology) => (
-              <li
-                key={technology}
-                className="border border-[#27272a] px-2 py-1 font-figtree text-[11px] text-zinc-500 transition-colors group-hover:border-zinc-600 group-hover:text-zinc-400"
-              >
-                {technology}
-              </li>
+          <p className="flex flex-wrap items-center gap-x-2 font-figtree text-xs text-zinc-600" aria-label={`${project.title} stack`}>
+            {visibleStack.map((technology, index) => (
+              <React.Fragment key={technology}>
+                <span className="transition-colors group-hover:text-zinc-400">{technology}</span>
+                {index < visibleStack.length - 1 && <span aria-hidden="true">·</span>}
+              </React.Fragment>
             ))}
-          </ul>
+            {remainingStackCount > 0 && (
+              <span className="border border-[#27272a] px-1.5 py-0.5 text-[11px] text-zinc-500 transition-colors group-hover:border-zinc-600 group-hover:text-zinc-400">
+                +{remainingStackCount}
+              </span>
+            )}
+          </p>
+          <p className="max-w-xl font-figtree text-sm leading-relaxed text-zinc-500">
+            {project.description}
+          </p>
         </div>
 
         <div className="relative z-20 flex shrink-0 items-center gap-3 text-zinc-500 pointer-events-auto">
