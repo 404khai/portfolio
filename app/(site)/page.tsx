@@ -11,6 +11,7 @@ import { WritingRow } from '@/components/WritingRow';
 import { OpenSourceEntry } from '@/components/OpenSourceEntry';
 import { HackathonEntry } from '@/components/HackathonEntry';
 import { HACKATHONS } from '@/lib/hackathon';
+import { SkillsSection } from '@/app/(site)/skills/page';
 
 const SOCIAL_LINKS = [
   { label: 'GitHub', href: 'https://github.com/404khai', handle: '404khai' },
@@ -135,6 +136,11 @@ export default async function Home() {
           {HACKATHONS.map((entry) => ( <HackathonEntry key={entry.name} entry={entry} /> ))} 
         </div> 
       </Section> 
+
+      {/* Skills */}
+      <Section id="skills" label="Toolkit" title="Skills">
+        <SkillsSection />
+      </Section>
 
       {/* Open Source */}
       <Section id="open-source" label="Open Source" title="Contributions">

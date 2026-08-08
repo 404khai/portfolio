@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const NAV_ITEMS = [
-  { name: 'About', href: '#about' },
-  { name: 'OSS', href: '#open-source' },
-  { name: 'Work', href: '#work' },
-  { name: 'Exp', href: '#experience' },
-  { name: 'Blog', href: '#blog' },
+  { name: 'About', id: 'about', href: '/#about' },
+  { name: 'Skills', id: 'skills', href: '/#skills' },
+  { name: 'OSS', id: 'open-source', href: '/#open-source' },
+  { name: 'Work', id: 'work', href: '/#work' },
+  { name: 'Exp', id: 'experience', href: '/#experience' },
+  { name: 'Blog', id: 'blog', href: '/#blog' },
 ];
 
 export const Navbar = () => {
@@ -15,7 +17,7 @@ export const Navbar = () => {
   const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const sectionIds = NAV_ITEMS.map((item) => item.href.slice(1));
+    const sectionIds = NAV_ITEMS.map((item) => item.id);
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -42,26 +44,26 @@ export const Navbar = () => {
     <>
       <nav className="sticky top-0 z-50 w-full bg-[#09090b]/90 backdrop-blur-sm border-b border-[#27272a]/60">
         <div className="max-w-2xl mx-auto px-5 sm:px-6 md:px-8 h-14 flex items-center justify-between">
-          <a
-            href="#intro"
+          <Link
+            href="/#intro"
             className="font-unbounded text-sm sm:text-base font-black tracking-tighter text-white hover:text-[#a8e64c] transition-colors duration-200"
           >
             404KHAI
-          </a>
+          </Link>
 
           <div className="hidden sm:flex items-center gap-6">
             {NAV_ITEMS.map((item) => (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className={`font-doto font-extrabold text-md uppercase tracking-[0.15em] transition-colors duration-200 ${
-                  activeSection === item.href.slice(1)
+                  activeSection === item.id
                     ? 'text-[#a8e64c]'
                     : 'text-zinc-500 hover:text-zinc-300'
                 }`}
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -83,14 +85,14 @@ export const Navbar = () => {
       {isMenuOpen && (
         <div className="fixed inset-0 top-14 z-40 bg-[#09090b] sm:hidden flex flex-col px-5 py-6 gap-1">
           {NAV_ITEMS.map((item) => (
-            <a
+            <Link
               key={item.name}
               href={item.href}
               onClick={handleNavClick}
               className="font-unbounded text-lg text-zinc-400 hover:text-white py-3 border-b border-[#27272a]/60 transition-colors"
             >
               /{item.name}
-            </a>
+            </Link>
           ))}
         </div>
       )}
