@@ -24,9 +24,12 @@ export function OpenSourceEntry({ entry }: OpenSourceEntryProps) {
       <p className="font-figtree text-sm text-zinc-500 mb-3 leading-relaxed">
         {entry.description}
       </p>
-      <ul className="flex list-disc flex-col gap-2 pl-4 marker:text-zinc-700">
+      <ul className="flex flex-col gap-2">
         {entry.contributions.map((item) => (
-          <li key={item.prUrl} className="flex flex-col gap-1 pl-1 sm:flex-row sm:items-baseline sm:gap-3">
+          <li
+            key={item.prUrl}
+            className="relative flex flex-col gap-1 pl-5 before:absolute before:left-0 before:top-0 before:font-figtree before:text-zinc-600 before:content-['•'] sm:flex-row sm:items-baseline sm:gap-3"
+          >
             <span className="font-figtree text-sm text-zinc-400 leading-relaxed sm:flex-1">
               {item.title}
             </span>

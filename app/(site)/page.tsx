@@ -159,7 +159,7 @@ export default async function Home() {
           ))}
         </div>
         <p className="font-figtree text-xs text-zinc-600 pt-2">
-          Select a project for case studies and technical write-ups.
+          Each project opens its full page with context and accomplishments.
         </p>
       </Section>
 
