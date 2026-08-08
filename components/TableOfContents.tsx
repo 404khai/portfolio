@@ -129,7 +129,7 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
         </div>
 
         <Link
-          href="/blog"
+          href="/#blog"
           className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mt-8"
         >
           <ArrowLeft className="w-4 h-4" />

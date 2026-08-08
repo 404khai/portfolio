@@ -46,7 +46,7 @@ export default async function Home() {
       {/* Introduction */}
       <header id="intro" className="scroll-mt-24 flex flex-col gap-8 md:gap-10 pb-16 md:pb-20">
         <div className="flex flex-col gap-4">
-          <p className="font-doto text-xs text-zinc-600 uppercase tracking-[0.2em]">
+          <p className="font-doto text-xs text-zinc-400 uppercase tracking-[0.2em]">
             Software Engineer
           </p>
           <h1 className="font-unbounded text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tighter leading-none">
@@ -152,7 +152,7 @@ export default async function Home() {
       </Section>
 
       {/* Work / Projects */}
-      <Section id="work" label="Work" title="Projects">
+      <Section id="projects" label="Featured" title="Projects">
         <div>
           {PROJECTS.map((project) => (
             <ProjectRow key={project.slug} project={project} />

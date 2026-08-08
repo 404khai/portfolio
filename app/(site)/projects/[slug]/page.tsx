@@ -84,6 +84,45 @@ const PROJECT_DETAILS: ProjectDetail[] = [
     ],
   },
   {
+    ...PROJECTS.find((p) => p.slug === 'meridian')!,
+    longDescription:
+      'Meridian is a high-performance C++ limit order book and matching engine with concurrent order processing, price-time priority, and latency benchmarking.',
+    skills: ['C++','Systems Programming'],
+    githubUrl: 'https://github.com/404khai/phalanx',
+    liveUrl: '#',
+    images: [
+      '/phalanx.jpg',
+    ],
+  },
+  {
+    ...PROJECTS.find((p) => p.slug === 'ledger')!,
+    longDescription:
+      'Stripe-inspired payment processing engine with idempotency, event ledger, and webhook delivery built with Java + Spring Boot',
+    skills: [
+        'Java 21',
+        'Spring Boot 3.3',
+        'Spring Data JPA',
+        'Hibernate',
+        'PostgreSQL 16',
+        'Flyway',
+        'REST APIs',
+        'OpenAPI',
+        'Docker Compose',
+        'Maven',
+        'JUnit 5',
+        'Mockito',
+        'Testcontainers',
+        'MockWebServer',
+        'HMAC-SHA256',
+    ],
+    githubUrl: 'https://github.com/404khai/phalanx',
+    liveUrl: '#',
+    images: [
+      '/phalanx.jpg',
+    ],
+  },
+  
+  {
     ...PROJECTS.find((p) => p.slug === 'keihatsu')!,
     longDescription:
       'Keihatsu is a cross-platform social manwha reader app with a vibrant community of readers that provide a platform for manwha, manga and manhua fans to connect over their favorite series, while supporting offline downloads.',
@@ -330,7 +369,7 @@ export default function ProjectDetailPage() {
         <div className="text-center space-y-4">
           <p className="font-doto text-sm text-zinc-500">Project not found</p>
           <Link
-            href="/projects"
+            href="/#projects"
             className="inline-flex items-center gap-2 border border-zinc-700 px-4 py-2 text-sm text-zinc-200 hover:bg-zinc-900"
           >
             Back to projects
@@ -345,7 +384,7 @@ export default function ProjectDetailPage() {
       <div className="w-full max-w-5xl flex flex-col gap-10">
         <div className="flex flex-col gap-3">
           <Link
-            href="/projects"
+            href="/#projects"
             className="inline-flex w-fit items-center gap-2 border border-zinc-800 px-3 py-1 text-xs font-mono text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
           >
             <span>←</span>
@@ -360,7 +399,7 @@ export default function ProjectDetailPage() {
                  className="h-full w-full object-cover"
                />
             </div>
-            <h1 className="font-irish-grover text-4xl md:text-6xl font-bold tracking-tight text-white">
+            <h1 className="font-unbounded text-4xl md:text-4xl font-bold tracking-tight text-white">
               {project.title}
             </h1>
           </div>

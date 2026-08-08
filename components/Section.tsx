@@ -16,7 +16,7 @@ export function Section({ id, label, title, children, className = '' }: SectionP
     >
       <div className="flex flex-col gap-8 md:gap-10">
         <header className="flex flex-col gap-2">
-          <span className="font-doto text-xs text-zinc-600 uppercase tracking-[0.2em]">
+          <span className="font-doto text-xs text-zinc-400 uppercase tracking-[0.2em]">
             {label}
           </span>
           {title && (
