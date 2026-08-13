@@ -295,6 +295,14 @@ const SpringBootIcon = () => (
   />
 )
 
+const AzureIcon = () => (
+  <img
+    src="/icons/AZURE.png"
+    alt="Microsoft Azure"
+    className="h-8 w-8 object-contain"
+  />
+)
+
 const CharacterArtIcon = () => (
   <img
     src="/icons/character.jpeg"
@@ -430,6 +438,7 @@ const sections: SkillSection[] = [
     skills: [
       { name: 'AWS', icon: <AWSIcon /> },
       { name: 'GCP', icon: <GCPIcon /> },
+      { name: 'Azure', icon: <AzureIcon/>},
       { name: 'Supabase', icon: <SupabaseIcon /> },
       { name: 'Firebase', icon: <FirebaseIcon /> },
       { name: 'Docker', icon: <DockerIcon /> },
