@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { X, ChevronLeft, ChevronRight, ZoomIn, CheckCircleFill, ArrowLeft, ArrowRight, RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff } from 'react-bootstrap-icons';
+import React from 'react';
+import { CheckCircleFill, RocketTakeoffFill, Hammer, PeopleFill, HourglassSplit, WifiOff } from 'react-bootstrap-icons';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { PROJECTS, ProjectMeta } from '../page';
+import { PROJECTS, type ProjectMeta } from '@/lib/projects';
 import { ProjectStatus } from '@/components/ProjectListItem';
 
 type ProjectDetail = ProjectMeta & {
@@ -83,6 +83,45 @@ const PROJECT_DETAILS: ProjectDetail[] = [
       '/phalanx.jpg',
     ],
   },
+  {
+    ...PROJECTS.find((p) => p.slug === 'meridian')!,
+    longDescription:
+      'Meridian is a high-performance C++ limit order book and matching engine with concurrent order processing, price-time priority, and latency benchmarking.',
+    skills: ['C++','Systems Programming'],
+    githubUrl: 'https://github.com/404khai/phalanx',
+    liveUrl: '#',
+    images: [
+      '/phalanx.jpg',
+    ],
+  },
+  {
+    ...PROJECTS.find((p) => p.slug === 'ledger')!,
+    longDescription:
+      'Stripe-inspired payment processing engine with idempotency, event ledger, and webhook delivery built with Java + Spring Boot',
+    skills: [
+        'Java 21',
+        'Spring Boot 3.3',
+        'Spring Data JPA',
+        'Hibernate',
+        'PostgreSQL 16',
+        'Flyway',
+        'REST APIs',
+        'OpenAPI',
+        'Docker Compose',
+        'Maven',
+        'JUnit 5',
+        'Mockito',
+        'Testcontainers',
+        'MockWebServer',
+        'HMAC-SHA256',
+    ],
+    githubUrl: 'https://github.com/404khai/phalanx',
+    liveUrl: '#',
+    images: [
+      '/phalanx.jpg',
+    ],
+  },
+  
   {
     ...PROJECTS.find((p) => p.slug === 'keihatsu')!,
     longDescription:
@@ -324,16 +363,14 @@ export default function ProjectDetailPage() {
 
   const project = PROJECT_DETAILS.find((p) => p.slug === slug);
 
-  const [activeIndex, setActiveIndex] = useState(0);
-
   if (!project) {
     return (
       <div className="min-h-screen bg-[#09090b] text-white flex items-center justify-center">
         <div className="text-center space-y-4">
           <p className="font-doto text-sm text-zinc-500">Project not found</p>
           <Link
-            href="/projects"
-            className="inline-flex items-center gap-2 rounded-full border border-zinc-700 px-4 py-2 text-sm text-zinc-200 hover:bg-zinc-900"
+            href="/#projects"
+            className="inline-flex items-center gap-2 border border-zinc-700 px-4 py-2 text-sm text-zinc-200 hover:bg-zinc-900"
           >
             Back to projects
           </Link>
@@ -342,29 +379,19 @@ export default function ProjectDetailPage() {
     );
   }
 
-  const images = project.images;
-
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % images.length);
-  };
-
   return (
     <div className="min-h-screen bg-[#09090b] text-white px-4 py-10 md:px-8 md:py-16 flex flex-col items-center">
       <div className="w-full max-w-5xl flex flex-col gap-10">
         <div className="flex flex-col gap-3">
           <Link
-            href="/projects"
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-zinc-800 px-3 py-1 text-xs font-mono text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+            href="/#projects"
+            className="inline-flex w-fit items-center gap-2 border border-zinc-800 px-3 py-1 text-xs font-mono text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
           >
             <span>←</span>
             <span>Back to projects</span>
           </Link>
           <div className="flex items-center gap-4 md:gap-6">
-            <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
+            <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0 overflow-hidden border border-zinc-800 bg-zinc-900">
                {/* eslint-disable-next-line @next/next/no-img-element */}
                <img
                  src={project.logo}
@@ -372,7 +399,7 @@ export default function ProjectDetailPage() {
                  className="h-full w-full object-cover"
                />
             </div>
-            <h1 className="font-irish-grover text-4xl md:text-6xl font-bold tracking-tight text-white">
+            <h1 className="font-unbounded text-4xl md:text-4xl font-bold tracking-tight text-white">
               {project.title}
             </h1>
           </div>
@@ -381,53 +408,21 @@ export default function ProjectDetailPage() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-[minmax(0,2.1fr)_minmax(0,1.3fr)] items-start">
-          <div className="flex flex-col gap-3">
-            <div className="relative overflow-hidden rounded-2xl border border-zinc-800 bg-black">
-              <div className="aspect-video w-full">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={images[activeIndex]}
-                  alt={`${project.title} screenshot ${activeIndex + 1}`}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-2">
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  className="pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-zinc-200 hover:bg-black"
-                >
-                  <span className="sr-only">Previous image</span>
-                  <ArrowLeft />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-zinc-200 hover:bg-black"
-                >
-                  <span className="sr-only">Next image</span>
-                 <ArrowRight/>
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-2 flex items-center gap-2">
-              {images.map((_, index) => (
-                <span
-                  key={index}
-                  className={`h-1 flex-1 rounded-full ${
-                    index === activeIndex ? 'bg-zinc-200' : 'bg-zinc-700'
-                  }`}
-                />
+        <div className="grid items-start gap-10 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+          <section>
+            <h2 className="font-calistoga text-xs text-zinc-400 uppercase tracking-[0.2em]">
+              Accomplishments
+            </h2>
+            <ul className="mt-4 flex list-disc flex-col gap-3 pl-5 marker:text-zinc-600">
+              {project.highlights.map((highlight) => (
+                <li key={highlight} className="font-figtree text-sm leading-relaxed text-zinc-300">
+                  {highlight}
+                </li>
               ))}
-            </div>
-          </div>
+            </ul>
+          </section>
 
-          <div className="flex flex-col gap-6">
-
-            <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-8">
               <div>
                 <h2 className="font-calistoga text-xs text-zinc-400 uppercase tracking-[0.2em]">
                   Links
@@ -438,18 +433,18 @@ export default function ProjectDetailPage() {
                       href={project.githubUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-[#050509] px-3 py-2 text-xs font-figtree text-zinc-200 hover:border-zinc-400"
+                      className="inline-flex items-center gap-2 border border-zinc-700 bg-[#050509] px-3 py-2 text-xs font-figtree text-zinc-200 hover:border-zinc-400"
                     >
                       <GithubIcon />
                       <span>GitHub</span>
                     </a>
                   )}
-                  {project.liveUrl && (
+                  {project.liveUrl && project.liveUrl !== '#' && (
                     <a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-[#050509] px-3 py-2 text-xs font-figtree text-zinc-200 hover:border-zinc-400"
+                      className="inline-flex items-center gap-2 border border-zinc-700 bg-[#050509] px-3 py-2 text-xs font-figtree text-zinc-200 hover:border-zinc-400"
                     >
                       <GlobeIcon />
                       <span>Live site</span>
@@ -466,7 +461,7 @@ export default function ProjectDetailPage() {
                   {project.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-full border border-zinc-700 bg-[#050509] px-3 py-1 text-xs font-figtree text-zinc-200"
+                      className="border border-zinc-700 bg-[#050509] px-3 py-1 text-xs font-figtree text-zinc-200"
                     >
                       {skill}
                     </span>
@@ -486,7 +481,7 @@ export default function ProjectDetailPage() {
                       return (
                         <div
                           key={status}
-                          className={`flex items-center gap-3 rounded-full border ${config.border} ${config.bg} px-3 py-2.5`}
+                          className={`flex items-center gap-3 border ${config.border} ${config.bg} px-3 py-2.5`}
                         >
                           <Icon className={`h-4 w-4 ${config.color}`} />
                           <span className={`text-xs font-medium ${config.color}`}>
@@ -499,11 +494,9 @@ export default function ProjectDetailPage() {
                 </div>
               )}
 
-            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

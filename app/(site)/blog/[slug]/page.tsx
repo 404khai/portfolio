@@ -252,7 +252,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
              <div className="hidden md:block">
                 <div className="sticky top-24">
                   <Link 
-                    href="/blog"
+                    href="/#blog"
                     className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-8"
                   >
                     <ArrowLeft className="w-4 h-4" />
@@ -266,7 +266,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {/* Mobile Back Link */}
              <div className="md:hidden mb-8">
               <Link 
-                href="/blog"
+                href="/#blog"
                 className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />

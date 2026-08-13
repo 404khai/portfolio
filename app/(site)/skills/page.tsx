@@ -1,7 +1,6 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import { Fire } from 'react-bootstrap-icons';
 
 type Skill = {
   name: string;
@@ -466,16 +465,40 @@ const sections: SkillSection[] = [
   },
 ];
 
-const SkillBadge: React.FC<Skill> = ({ name, icon }) => {
+export function SkillsSection() {
   return (
-    <div className="inline-flex items-center gap-3 rounded-xl bg-[#101010] px-3 py-2 shadow-sm">
-      <div className="flex h-8 w-8 items-center justify-center rounded-md">
-        {icon ?? <JavascriptIcon />}
-      </div>
-      <span className="font-figtree text-sm text-zinc-200">{name}</span>
+    <div className="flex flex-col">
+      {sections.map((section) => (
+        <section
+          key={section.title}
+          className="grid grid-cols-1 gap-5 border-b border-[#27272a]/80 py-7 first:pt-0 last:border-b-0 md:grid-cols-[12rem_1fr] md:gap-8"
+        >
+          <div className="flex flex-col gap-2">
+            <h3 className="font-doto text-xs font-extrabold uppercase tracking-[0.16em] text-zinc-300">
+              {section.title}
+            </h3>
+            <p className="font-figtree text-xs leading-relaxed text-zinc-600">
+              {section.description}
+            </p>
+          </div>
+          <ul className="flex flex-wrap content-start gap-x-5 gap-y-3">
+            {section.skills.map((skill) => (
+              <li
+                key={skill.name}
+                className="inline-flex items-center gap-2 font-figtree text-sm text-zinc-400 transition-colors duration-200 hover:text-white [&_img]:h-5 [&_img]:w-5 [&_svg]:h-5 [&_svg]:w-5"
+              >
+                <span className="flex h-5 w-5 items-center justify-center opacity-80">
+                  {skill.icon ?? <JavascriptIcon />}
+                </span>
+                {skill.name}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </div>
   );
-};
+}
 
 export default function SkillsPage() {
   return (
@@ -490,32 +513,7 @@ export default function SkillsPage() {
           </p>
         </div>
 
-        <div className="w-full border border-dashed border-[#27272a] bg-[#050509] p-6 md:p-8 flex flex-col gap-10">
-          {sections.map((section, index) => (
-            <section
-              key={section.title}
-              className={index === 0 ? '' : 'pt-8 border-t border-dashed border-[#27272a]'}
-            >
-              <div className="flex flex-col gap-2 mb-4">
-                <h2 className="font-calistoga text-lg md:text-xl text-zinc-100">
-                  {section.title}
-                </h2>
-                <p className="font-figtree text-sm md:text-base text-zinc-400">
-                  {section.description}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {section.skills.map((skill) => (
-                  <SkillBadge
-                    key={skill.name}
-                    name={skill.name}
-                    icon={skill.icon}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
+        <SkillsSection />
       </div>
     </div>
   );

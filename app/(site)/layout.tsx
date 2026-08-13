@@ -70,9 +70,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body
-        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} ${irishGrover.variable} ${calistoga.variable} ${denkOne.variable} ${hennyPenny.variable} ${exo2.variable} ${unbounded.variable} antialiased flex flex-col items-center`}
+        className={`${figtree.variable} ${doto.variable} ${micro_5.variable} ${irishGrover.variable} ${calistoga.variable} ${denkOne.variable} ${hennyPenny.variable} ${exo2.variable} ${unbounded.variable} antialiased flex flex-col items-center bg-[#09090b] text-white min-h-screen`}
       >
         <Navbar/>
         {children}
