@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileEarmarkArrowDownFill } from 'react-bootstrap-icons';
 import { reader } from '@/lib/keystatic';
 import { PROJECTS } from '@/lib/projects';
@@ -90,7 +89,7 @@ export default async function Home() {
             className="inline-flex items-center gap-1.5 font-figtree text-sm text-zinc-500 hover:text-[#a8e64c] transition-colors duration-200 group"
           >
             <FileEarmarkArrowDownFill className="w-3.5 h-3.5" />
-            CV
+            Resume
           </a>
         </div>
       </header>
