@@ -47,7 +47,7 @@ export default function Home() {
                    />
                  </svg>
                  <span className="absolute right-23 top-5 font-figtree text-sm text-zinc-400 group-hover:text-[#a8e64c] transition-colors duration-300 whitespace-nowrap leading-none">
-                   download cv
+                   download resume
                  </span>
                </div>
                <FileEarmarkArrowDownFill className="w-6 h-6 flex-shrink-0 text-zinc-400 group-hover:text-[#a8e64c] transition-colors duration-300" />
