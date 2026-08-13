@@ -196,7 +196,8 @@ export default async function Home() {
       <footer className="pt-16 md:pt-20 border-t border-[#27272a]/60">
         <div className="flex flex-col gap-6">
           <p className="font-figtree text-sm text-zinc-500 leading-relaxed">
-            Let&apos;s get straight to the point. Always building, always learning.
+            Never give up because great things take time . 09/08/26
+            {/*Let&apos;s get straight to the point. Always building, always learning.*/}
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {SOCIAL_LINKS.map((link) => (
@@ -206,7 +207,7 @@ export default async function Home() {
             ))}
           </div>
           <p className="font-doto text-xs text-zinc-700 tracking-wider">
-            © {new Date().getFullYear()} 404KHAI
+            &copy; {new Date().getFullYear()} 404KHAI
           </p>
         </div>
       </footer>
